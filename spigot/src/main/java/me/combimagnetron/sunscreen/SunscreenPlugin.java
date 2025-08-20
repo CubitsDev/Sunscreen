@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
+import io.papermc.paper.datacomponent.DataComponentType;
 import me.combimagnetron.passport.Passport;
 import me.combimagnetron.passport.event.EventBus;
 import me.combimagnetron.sunscreen.action.RunCommandAction;
@@ -30,6 +31,7 @@ import me.combimagnetron.sunscreen.util.Range;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -49,6 +51,7 @@ public class SunscreenPlugin extends JavaPlugin {
         PacketEvents.getAPI().load();
         PacketEvents.getAPI().getEventManager().registerListener(new MenuListener(), PacketListenerPriority.LOWEST);
         PacketEvents.getAPI().getEventManager().registerListener(new AnvilListener(), PacketListenerPriority.LOWEST);
+
     }
 
     @Override

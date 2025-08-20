@@ -81,12 +81,12 @@ public sealed interface OpenedMenu permits OpenedMenu.Base, AspectRatioMenu {
                     for (RuntimeDefinableGeometry.GeometryBuilder<?> definable : div.definables()) {
                         div.geometry(definable.finish(viewer.screenSize().pixel(), div.size()));
                     }
-                    for (RuntimeDefinable.Type<?, ?> definable : element.definables().stream().sorted(Comparator.comparingInt(RuntimeDefinable.Type::priority)).toList()) {
+                    for (RuntimeDefinable.Builder<?, ?> definable : element.definables().stream().sorted(Comparator.comparingInt(RuntimeDefinable.Builder::priority)).toList()) {
                         if (definable instanceof RuntimeDefinableGeometry.GeometryBuilder<?> geometry) {
                             element.geometry(geometry.finish(div.size(), div.size()));
                         }
                         if (definable.type() == InputHandler.class) {
-                            RuntimeDefinable.Type<InputHandler, OpenedMenu> inputHandler = (RuntimeDefinable.Type<InputHandler, OpenedMenu>) definable;
+                            RuntimeDefinable.Builder<InputHandler, OpenedMenu> inputHandler = (RuntimeDefinable.Builder<InputHandler, OpenedMenu>) definable;
                             TextInputElement textInputElement = (TextInputElement) element;
                             textInputElement.inputHandler(inputHandler.finish(this));
                         }

@@ -1,5 +1,5 @@
 PlanetMenu {
-    type = "hover"
+    builder = "hover"
     simulate {
         title = "Auction House"
         command = "/ah"
@@ -45,7 +45,7 @@ PlanetMenu {
                     click_listener {
                         listen = click
                         execute {
-                            type = slot_press
+                            builder = slot_press
                             slot = 27
                             click_type = right
                         }
@@ -53,7 +53,7 @@ PlanetMenu {
                     bla_listener {
                         listen = hover
                         execute {
-                            type = command
+                            builder = command
                             console = true
                             command = "announce hello"
                         }

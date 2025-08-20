@@ -5,19 +5,21 @@ import me.combimagnetron.sunscreen.menu.RuntimeDefinableGeometry;
 import me.combimagnetron.sunscreen.menu.Size;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @SuppressWarnings("rawtypes")
-public interface RuntimeDefinable<T, B extends RuntimeDefinable.Type, V> {
+public interface RuntimeDefinable<T, B extends RuntimeDefinable.Builder, V, L> {
     Values<Class<? extends RuntimeDefinableGeometry>> Types = Values.of(Position.class, Size.class);
 
     T build(V var);
 
-    B builder();
+    B builder(L l);
 
-    void builder(B builder);
+    void builder(L l, B builder);
 
-    interface Type<T, V> {
+    interface Builder<T, V> {
 
         int priority();
 
@@ -29,20 +31,20 @@ public interface RuntimeDefinable<T, B extends RuntimeDefinable.Type, V> {
 
     interface Holder {
 
-        Collection<RuntimeDefinable.Type<?, ?>> definables();
+        Collection<Builder<?, ?>> definables();
 
-        void add(RuntimeDefinable.Type<?, ?> definable);
+        void add(Builder<?, ?> definable);
 
     }
 
-    class Impl<T, B extends RuntimeDefinable.Type, V> implements RuntimeDefinable<T, B, V> {
+    class Impl<T, B extends Builder, V, L> implements RuntimeDefinable<T, B, V, L> {
         private final Class<? extends RuntimeDefinableGeometry> type;
-        private B builder;
+        private final Map<L, B> lbMap = new LinkedHashMap<>();
         private final T instance;
 
-        public Impl(Class<? extends RuntimeDefinableGeometry> type, B builder, T instance) {
+        public Impl(Class<? extends RuntimeDefinableGeometry> type, Map<L, B> lbMap, T instance) {
             this.type = type;
-            this.builder = builder;
+            this.lbMap.putAll(lbMap);
             this.instance = instance;
         }
 
@@ -52,20 +54,20 @@ public interface RuntimeDefinable<T, B extends RuntimeDefinable.Type, V> {
         }
 
         @Override
-        public B builder() {
-            return builder;
+        public B builder(L l) {
+            return lbMap.get(l);
         }
 
         @Override
-        public void builder(B builder) {
-            this.builder = builder;
+        public void builder(L l, B builder) {
+            lbMap.put(l, builder);
         }
 
-        public static class Type<T, V> implements RuntimeDefinable.Type<T, V> {
+        public static class SimpleBuilder<T, V> implements Builder<T, V> {
             private final Class<?> type;
             private final Function<V, T> function;
 
-            public Type(Class<?> type, Function<V, T> function) {
+            public SimpleBuilder(Class<?> type, Function<V, T> function) {
                 this.type = type;
                 this.function = function;
             }

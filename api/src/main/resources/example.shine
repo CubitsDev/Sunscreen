@@ -39,7 +39,7 @@ class ShopItem(Item item, Number value) { // Classes use the java records style 
         return registry.get(name)
     }
 
-    func(Player player) give : Item { // Declaring the return type is optional.
+    func(Player player) give : Item { // Declaring the return builder is optional.
         player.inventory.item(9, item)
     }
 

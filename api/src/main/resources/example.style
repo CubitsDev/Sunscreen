@@ -1,5 +1,5 @@
 background {
-  type: solid
+  builder: solid
   color {
     default: "#FF1122"
     hover: "#000000"
@@ -7,7 +7,7 @@ background {
   }
 }
 background {
-  type: nine_slice
+  builder: nine_slice
   layout: [A, A, A, A, A, A
     A, B, B, B, B, A
     A, B, C, C, B, A
@@ -21,7 +21,7 @@ background {
   }
 }
 background {
-  type: tiled
+  builder: tiled
   file: "styles/tiled_1.png"
 }
 text_input {
