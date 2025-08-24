@@ -2,24 +2,25 @@ package me.combimagnetron.sunscreen.session;
 
 import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.menu.OpenedMenu;
+import me.combimagnetron.sunscreen.ui.ModernMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 
 public sealed interface Session permits Session.Impl {
 
-    OpenedMenu menu();
+    ModernMenu menu();
 
     SunscreenUser<?> user();
 
     boolean close();
 
-    static Session session(OpenedMenu openedMenu, SunscreenUser<?> user) {
+    static Session session(ModernMenu openedMenu, SunscreenUser<?> user) {
         return new Impl(openedMenu, user);
     }
 
-    record Impl(OpenedMenu openedMenu, SunscreenUser<?> user) implements Session {
+    record Impl(ModernMenu openedMenu, SunscreenUser<?> user) implements Session {
 
         @Override
-        public OpenedMenu menu() {
+        public ModernMenu menu() {
             return openedMenu;
         }
 

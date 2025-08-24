@@ -1,11 +1,14 @@
 package me.combimagnetron.sunscreen.user;
 
+import com.github.retrooper.packetevents.wrapper.PacketWrapper;
+import com.github.retrooper.packetevents.wrapper.common.client.WrapperCommonClientCustomClickAction;
 import me.combimagnetron.passport.user.User;
-import me.combimagnetron.sunscreen.menu.MenuTemplate;
-import me.combimagnetron.sunscreen.menu.OpenedMenu;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.session.Session;
+import me.combimagnetron.sunscreen.ui.ModernLayout;
 import net.kyori.adventure.audience.Audience;
+
+import java.util.Arrays;
 
 public interface SunscreenUser<T extends Audience> extends User<T> {
 
@@ -21,6 +24,10 @@ public interface SunscreenUser<T extends Audience> extends User<T> {
 
     Session session();
 
-    Session open(MenuTemplate template);
+    Session open(ModernLayout template);
+
+    default void send(PacketWrapper<?>... packetWrappers) {
+        Arrays.stream(packetWrappers).forEach(wrapper -> connection().send(wrapper));
+    }
 
 }

@@ -31,7 +31,7 @@ public interface Canvas {
 
     Canvas text(Text text, Vec2i coords, Color color);
 
-    Canvas text(Text text, Vec2i coords);
+    Canvas text(Text text, Vec2i coords);,4,
 
     Vec2i size();
 

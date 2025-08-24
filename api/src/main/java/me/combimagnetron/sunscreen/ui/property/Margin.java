@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class Margin extends RelativeMeasure.Vec2iRelativeMeasureGroup<Margin> implements Property<Vec2i, Margin> {
-    private static final PropertyHandler<Vec2i, Margin> PROPERTY_HANDLER = (element, property) -> null;
+    private static final PropertyHandler<Vec2i, Margin> PROPERTY_HANDLER = (element, context) -> null;
 
     private final Map<RelativeMeasure.Axis, Vec2iRelativeBuilder<@NotNull Margin>> axisMap = new LinkedHashMap<>();
 
