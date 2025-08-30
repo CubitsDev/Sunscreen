@@ -5,7 +5,7 @@ import me.combimagnetron.sunscreen.logic.action.Action;
 import me.combimagnetron.sunscreen.logic.action.Argument;
 import me.combimagnetron.sunscreen.logic.action.ArgumentType;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
-import me.combimagnetron.sunscreen.util.Identifier;
+import me.combimagnetron.sunscreen.util.data.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

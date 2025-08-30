@@ -1,8 +1,9 @@
 package me.combimagnetron.sunscreen.ui.property;
 
 import me.combimagnetron.sunscreen.menu.ScreenSize;
-import me.combimagnetron.sunscreen.util.RuntimeDefinable;
-import me.combimagnetron.sunscreen.util.Vec2i;
+import me.combimagnetron.sunscreen.util.data.RuntimeDefinable;
+import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.sunscreen.util.math.Vec4i;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,7 @@ import java.util.function.Function;
  * @param <R> measure again, to return for builder methods
  * @param <L> segment types
  */
-public interface RelativeMeasure<C, K, B extends RuntimeDefinable.Builder<K, K>, V, R extends RelativeMeasure<C, K, B, V, R, L>, L> extends RuntimeDefinable<C, B, V, L> {
+public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, I>, V, R extends RelativeMeasure<C, K, I, B, V, R, L>, L> extends RuntimeDefinable<C, B, V, L> {
 
     default @NotNull R percentage(double percentage) {
         return offset(OffsetType.percentage(percentage));
@@ -30,8 +31,12 @@ public interface RelativeMeasure<C, K, B extends RuntimeDefinable.Builder<K, K>,
 
     <N extends Number> @NotNull R offset(@NotNull OffsetType<@NotNull N> offsetType);
 
-    static <C> @NotNull Vec2iRelativeMeasureGroup<@NotNull C> relative() {
+    static <C> @NotNull Vec2iRelativeMeasureGroup<@NotNull C> vec2d() {
         return new DummyVec2iRelativeMeasureGroup<>();
+    }
+
+    static <C> @NotNull Vec4iRelativeMeasureGroup<@NotNull C> vec4d() {
+        return new DummyVec4iRelativeMeasureGroup<>();
     }
 
     final class DummyVec2iRelativeMeasureGroup<C> extends Vec2iRelativeMeasureGroup<@NotNull C> {
@@ -43,8 +48,17 @@ public interface RelativeMeasure<C, K, B extends RuntimeDefinable.Builder<K, K>,
 
     }
 
-    abstract class Vec2iRelativeMeasureGroup<C> implements RelativeMeasureGroup<C, Integer, Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<C>, Vec2i, Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<C>, Axis> {
-        private final Map<Axis, Vec2iRelativeBuilder<C>> axisBuilderMap = Map.of(Axis.X, new Vec2iRelativeBuilder<>(this), Axis.Y, new Vec2iRelativeBuilder<>(this));
+    final class DummyVec4iRelativeMeasureGroup<C> extends Vec4iRelativeMeasureGroup<@NotNull C> {
+
+        @Override
+        public void finish(@NotNull ScreenSize unused) {
+
+        }
+
+    }
+
+    abstract class Vec2iRelativeMeasureGroup<C> implements RelativeMeasureGroup<C, Integer, Integer, Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<C>, Vec2i, Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<C>, Axis2d> {
+        private final Map<Axis2d, Vec2iRelativeBuilder<C>> axisBuilderMap = Map.of(Axis2d.X, new Vec2iRelativeBuilder<>(this), Axis2d.Y, new Vec2iRelativeBuilder<>(this));
         private final Function<Vec2iRelativeMeasureGroup<C>, C> constructor;
         protected Vec2i vec2i;
 
@@ -57,16 +71,16 @@ public interface RelativeMeasure<C, K, B extends RuntimeDefinable.Builder<K, K>,
             constructor = (cVec2iRelativeMeasureGroup -> null);
         }
 
-        public @NotNull Map<@NotNull Axis, @NotNull Vec2iRelativeBuilder<C>> axisBuilderMap() {
+        public @NotNull Map<@NotNull Axis2d, @NotNull Vec2iRelativeBuilder<C>> axisBuilderMap() {
             return axisBuilderMap;
         }
 
         public @NotNull Vec2iRelativeBuilder<C> x() {
-            return axisBuilderMap.get(Axis.X);
+            return axisBuilderMap.get(Axis2d.X);
         }
 
         public @NotNull Vec2iRelativeBuilder<C> y() {
-            return axisBuilderMap.get(Axis.Y);
+            return axisBuilderMap.get(Axis2d.Y);
         }
 
         public @Nullable Vec2i vec2i() {
@@ -76,11 +90,11 @@ public interface RelativeMeasure<C, K, B extends RuntimeDefinable.Builder<K, K>,
         public abstract void finish(@NotNull ScreenSize screenSize);
 
         @Override
-        public void add(@Nullable Vec2iRelativeBuilder<@Nullable C> cVec2iRelativeBuilder, @Nullable Axis axis) {
+        public void add(@Nullable Vec2iRelativeBuilder<@Nullable C> cVec2iRelativeBuilder, @Nullable RelativeMeasure.Axis2d axis2d) {
 
         }
 
-        public static final class Vec2iRelativeBuilder<C> implements Builder<Integer, Integer>, RelativeMeasure<C, Integer, Vec2iRelativeBuilder<C>, Vec2i, Vec2iRelativeBuilder<C>, Axis> {
+        public static final class Vec2iRelativeBuilder<C> implements Builder<Integer, Integer>, RelativeMeasure<C, Integer, Integer, Vec2iRelativeBuilder<C>, Vec2i, Vec2iRelativeBuilder<C>, Axis2d> {
             private final Vec2iRelativeMeasureGroup<C> parent;
 
             private Vec2iRelativeBuilder(Vec2iRelativeMeasureGroup<C> parent) {
@@ -102,12 +116,12 @@ public interface RelativeMeasure<C, K, B extends RuntimeDefinable.Builder<K, K>,
             }
 
             @Override
-            public @NotNull Vec2iRelativeBuilder<@NotNull C> builder(@NotNull Axis axis) {
+            public @NotNull Vec2iRelativeBuilder<@NotNull C> builder(@NotNull RelativeMeasure.Axis2d axis2d) {
                 return this;
             }
 
             @Override
-            public void builder(@NotNull Axis axis, @NotNull Vec2iRelativeBuilder<@NotNull C> builder) {
+            public void builder(@NotNull RelativeMeasure.Axis2d axis2d, @NotNull Vec2iRelativeBuilder<@NotNull C> builder) {
 
             }
 
@@ -129,14 +143,115 @@ public interface RelativeMeasure<C, K, B extends RuntimeDefinable.Builder<K, K>,
 
     }
 
-    interface RelativeMeasureGroup<C, K, B extends RuntimeDefinable.Builder<K, K>, V, M extends RelativeMeasure<C, K, B, V, M, L>, L> {
+
+
+    interface RelativeMeasureGroup<C, K, I, B extends RuntimeDefinable.Builder<K, I>, V, M extends RelativeMeasure<C, K, I, B, V, M, L>, L> {
 
         void add(M m, L l);
 
     }
 
-    enum Axis {
+    abstract class Vec4iRelativeMeasureGroup<C> implements RelativeMeasureGroup<C, Vec4i, Vec2i, Vec4iRelativeMeasureGroup.Vec4iRelativeBuilder<C>, Vec2i, Vec4iRelativeMeasureGroup.Vec4iRelativeBuilder<C>, Axis4d> {
+        private final Map<Axis4d, Vec4iRelativeBuilder<C>> axisBuilderMap = Map.of(Axis4d.UP, new Vec4iRelativeBuilder<>(this), Axis4d.DOWN, new Vec4iRelativeBuilder<>(this), Axis4d.LEFT, new Vec4iRelativeBuilder<>(this), Axis4d.RIGHT, new Vec4iRelativeBuilder<>(this));
+        private final Function<Vec4iRelativeMeasureGroup<C>, C> constructor;
+        protected Vec4i vec4i;
+
+        public Vec4iRelativeMeasureGroup(@NotNull Vec4i vec4i) {
+            this.vec4i = vec4i;
+            constructor = (cVec2iRelativeMeasureGroup -> null);
+        }
+
+        public Vec4iRelativeMeasureGroup() {
+            constructor = (cVec2iRelativeMeasureGroup -> null);
+        }
+
+        public @NotNull Map<@NotNull Axis4d, @NotNull Vec4iRelativeBuilder<C>> axisBuilderMap() {
+            return axisBuilderMap;
+        }
+
+        public @NotNull Vec4iRelativeBuilder<C> up() {
+            return axisBuilderMap.get(Axis4d.UP);
+        }
+
+        public @NotNull Vec4iRelativeBuilder<C> down() {
+            return axisBuilderMap.get(Axis4d.DOWN);
+        }
+
+        public @NotNull Vec4iRelativeBuilder<C> left() {
+            return axisBuilderMap.get(Axis4d.LEFT);
+        }
+
+        public @NotNull Vec4iRelativeBuilder<C> right() {
+            return axisBuilderMap.get(Axis4d.RIGHT);
+        }
+
+        public @Nullable Vec4i vec4i() {
+            return vec4i;
+        }
+
+        public abstract void finish(@NotNull ScreenSize screenSize);
+
+        @Override
+        public void add(@Nullable Vec4iRelativeBuilder<@Nullable C> cVec2iRelativeBuilder, @Nullable Axis4d axis) {
+
+        }
+
+        public static final class Vec4iRelativeBuilder<C> implements Builder<Vec4i, Vec2i>, RelativeMeasure<C, Vec4i, Vec2i, Vec4iRelativeBuilder<C>, Vec2i, Vec4iRelativeBuilder<C>, Axis4d> {
+            private final Vec4iRelativeMeasureGroup<C> parent;
+
+            private Vec4iRelativeBuilder(Vec4iRelativeMeasureGroup<C> parent) {
+                this.parent = parent;
+            }
+
+            public Vec4iRelativeMeasureGroup<C> back() {
+                return parent;
+            }
+
+            @Override
+            public <N extends Number> @NotNull Vec4iRelativeBuilder<@NotNull C> offset(@NotNull OffsetType<@NotNull N> offsetType) {
+                return this;
+            }
+
+            @Override
+            public @NotNull C build(@NotNull Vec2i var) {
+                return null;
+            }
+
+            @Override
+            public @NotNull Vec4iRelativeBuilder<@NotNull C> builder(@NotNull Axis4d axis) {
+                return this;
+            }
+
+            @Override
+            public void builder(@NotNull Axis4d axis, @NotNull Vec4iRelativeBuilder<@NotNull C> builder) {
+
+            }
+
+            @Override
+            public int priority() {
+                return 0;
+            }
+
+            @Override
+            public @NotNull Class<?> type() {
+                return null;
+            }
+
+            @Override
+            public Vec4i finish(Vec2i vec2i) {
+                return null;
+            }
+
+        }
+
+    }
+
+    enum Axis2d {
         X, Y
+    }
+
+    enum Axis4d {
+        UP, DOWN, LEFT, RIGHT
     }
 
     interface OffsetType<T extends Number> {

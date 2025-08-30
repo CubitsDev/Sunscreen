@@ -1,6 +1,6 @@
 package me.combimagnetron.sunscreen.resourcepack.meta;
 
-import me.combimagnetron.sunscreen.util.Range;
+import me.combimagnetron.sunscreen.util.data.Range;
 
 public interface PackVersion {
 

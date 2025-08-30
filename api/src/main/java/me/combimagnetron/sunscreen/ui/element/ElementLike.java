@@ -1,7 +1,7 @@
 package me.combimagnetron.sunscreen.ui.element;
 
 import me.combimagnetron.sunscreen.ui.property.*;
-import me.combimagnetron.sunscreen.util.Identifier;
+import me.combimagnetron.sunscreen.util.data.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public interface ElementLike<E extends ElementLike<E>> {

@@ -2,8 +2,7 @@ package me.combimagnetron.sunscreen.resourcepack.feature.font;
 
 import me.combimagnetron.sunscreen.resourcepack.Asset;
 import me.combimagnetron.sunscreen.resourcepack.CodeBlock;
-import me.combimagnetron.sunscreen.resourcepack.ResourcePackFeature;
-import me.combimagnetron.sunscreen.util.Identifier;
+import me.combimagnetron.sunscreen.util.data.Identifier;
 
 import java.util.Collection;
 

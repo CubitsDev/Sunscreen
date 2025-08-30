@@ -1,6 +1,6 @@
 package me.combimagnetron.sunscreen.ui.element;
 
-import me.combimagnetron.sunscreen.util.Identifier;
+import me.combimagnetron.sunscreen.util.data.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

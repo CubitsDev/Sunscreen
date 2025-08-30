@@ -5,6 +5,6 @@ import org.jetbrains.annotations.NotNull;
 public class TestModernTemplate implements MenuTemplate {
     @Override
     public void build(@NotNull ModernLayout root) {
-        root.
+
     }
 }

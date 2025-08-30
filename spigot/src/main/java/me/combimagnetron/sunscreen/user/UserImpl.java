@@ -1,7 +1,6 @@
 package me.combimagnetron.sunscreen.user;
 
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
@@ -12,7 +11,6 @@ import me.combimagnetron.passport.PacketEventsConnectionImpl;
 import me.combimagnetron.passport.config.Config;
 import me.combimagnetron.passport.config.element.Node;
 import me.combimagnetron.passport.internal.entity.Entity;
-import me.combimagnetron.passport.internal.entity.impl.passive.horse.Horse;
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.internal.network.Connection;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
@@ -22,11 +20,9 @@ import me.combimagnetron.sunscreen.menu.OpenedMenu;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.menu.timing.MenuTicker;
 import me.combimagnetron.sunscreen.session.Session;
-import me.combimagnetron.sunscreen.util.Pair;
-import me.combimagnetron.sunscreen.util.Vec2d;
-import me.combimagnetron.sunscreen.util.Vec2i;
-import net.kyori.adventure.inventory.Book;
-import net.kyori.adventure.text.Component;
+import me.combimagnetron.sunscreen.util.data.Pair;
+import me.combimagnetron.sunscreen.util.math.Vec2d;
+import me.combimagnetron.sunscreen.util.math.Vec2i;
 import org.bukkit.entity.Player;
 
 import java.util.List;

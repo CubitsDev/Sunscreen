@@ -1,8 +1,7 @@
 package me.combimagnetron.sunscreen.resourcepack.feature.font;
 
 import me.combimagnetron.sunscreen.resourcepack.Asset;
-import me.combimagnetron.sunscreen.resourcepack.sprite.Sprite;
-import me.combimagnetron.sunscreen.util.Pair;
+import me.combimagnetron.sunscreen.util.data.Pair;
 
 public interface Glyph extends Asset {
 

@@ -1,9 +1,8 @@
 package me.combimagnetron.sunscreen.logic.action;
 
 import me.combimagnetron.passport.util.condition.Condition;
-import me.combimagnetron.sunscreen.logic.action.impl.*;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
-import me.combimagnetron.sunscreen.util.Identifier;
+import me.combimagnetron.sunscreen.util.data.Identifier;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,11 +25,11 @@ public interface Action {
 
         static {
             ACTION_MAP.putAll(Map.of(
-                    EditElementAction.ActionIdentifier, new EditElementAction(),
+                    /*EditElementAction.ActionIdentifier, new EditElementAction(),
                     ShowElementAction.ActionIdentifier, new ShowElementAction(),
                     HideElementAction.ActionIdentifier, new HideElementAction(),
                     ShowDivAction.ActionIdentifier, new ShowDivAction(),
-                    HideDivAction.ActionIdentifier, new HideDivAction()
+                    HideDivAction.ActionIdentifier, new HideDivAction()*/
             ));
         }
 

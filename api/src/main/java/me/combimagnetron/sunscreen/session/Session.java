@@ -1,7 +1,6 @@
 package me.combimagnetron.sunscreen.session;
 
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.menu.OpenedMenu;
 import me.combimagnetron.sunscreen.ui.ModernMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 
