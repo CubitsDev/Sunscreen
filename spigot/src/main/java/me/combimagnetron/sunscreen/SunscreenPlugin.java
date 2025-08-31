@@ -2,40 +2,54 @@ package me.combimagnetron.sunscreen;
 
 import co.aikar.commands.PaperCommandManager;
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import com.github.retrooper.packetevents.PacketEventsAPI;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMapData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.combimagnetron.passport.Passport;
-import me.combimagnetron.sunscreen.action.RunCommandAction;
-import me.combimagnetron.sunscreen.command.SunscreenCommand;
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
 import me.combimagnetron.sunscreen.hook.betterhud.BetterHudSunscreenHook;
 import me.combimagnetron.sunscreen.hook.mythichud.MythicHudSunscreenHook;
 import me.combimagnetron.sunscreen.hook.tab.TABSunscreenHook;
 import me.combimagnetron.sunscreen.logic.action.Action;
-import me.combimagnetron.sunscreen.menu.MenuTemplate;
-import me.combimagnetron.sunscreen.menu.listener.AnvilListener;
-import me.combimagnetron.sunscreen.menu.listener.MenuListener;
 import me.combimagnetron.sunscreen.placeholder.PapiPlaceholderProvider;
 import me.combimagnetron.sunscreen.resourcepack.ResourcePack;
 import me.combimagnetron.sunscreen.resourcepack.feature.shader.Shader;
 import me.combimagnetron.sunscreen.resourcepack.feature.shader.ShaderFeature;
 import me.combimagnetron.sunscreen.resourcepack.meta.PackMeta;
 import me.combimagnetron.sunscreen.resourcepack.meta.PackVersion;
+import me.combimagnetron.sunscreen.ui.graphic.GraphicLike;
+import me.combimagnetron.sunscreen.ui.graphic.modifier.GraphicModifier;
+import me.combimagnetron.sunscreen.ui.render.engine.encode.MapEncoder;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.user.UserManager;
 import me.combimagnetron.sunscreen.util.data.Identifier;
 import me.combimagnetron.sunscreen.util.data.Range;
 import org.apache.commons.io.IOUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.map.MapCanvas;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Path;
-import java.util.Collection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class SunscreenPlugin extends JavaPlugin {
+public class SunscreenPlugin extends JavaPlugin implements Listener {
     private SunscreenLibrary<SunscreenPlugin, Player> library;
     private UserManager userManager;
 
@@ -43,9 +57,35 @@ public class SunscreenPlugin extends JavaPlugin {
     public void onLoad() {
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
         PacketEvents.getAPI().load();
-        PacketEvents.getAPI().getEventManager().registerListener(new MenuListener(), PacketListenerPriority.LOWEST);
-        PacketEvents.getAPI().getEventManager().registerListener(new AnvilListener(), PacketListenerPriority.LOWEST);
+        //PacketEvents.getAPI().getEventManager().registerListener(new MenuListener(), PacketListenerPriority.LOWEST);
+        //PacketEvents.getAPI().getEventManager().registerListener(new AnvilListener(), PacketListenerPriority.LOWEST);
 
+    }
+
+    @EventHandler
+    public void onSneak(PlayerSwapHandItemsEvent sneakEvent) throws IOException {
+        BufferedImage image = ImageIO.read(new URL("https://i.imgur.com/4zDrYvx.png"));
+        GraphicLike<?> graphicLike = new GraphicLike() {
+            @Override
+            public @NotNull GraphicLike<?> modifier(@NotNull GraphicModifier modifier) {
+                return this;
+            }
+
+            @Override
+            public @NotNull BufferedImage image() {
+                return image;
+            }
+        };
+        MapEncoder mapEncoder = new MapEncoder(graphicLike);
+        WrapperPlayServerMapData serverMapData = new WrapperPlayServerMapData(99, (byte) 0, false, false, null, 128, 128, 0, 0, mapEncoder.bytes().toByteArray());
+        PacketEvents.getAPI().getPlayerManager().sendPacket(sneakEvent.getPlayer(), serverMapData);
+        ItemStack itemStack = new ItemStack(Material.FILLED_MAP);
+        itemStack.editMeta(MapMeta.class, mapMeta -> {
+            mapMeta.setMapId(99);
+        });
+        File file = getDataPath().resolve("bytes.txt").toFile();
+        mapEncoder.write(file);
+        sneakEvent.getPlayer().getInventory().addItem(itemStack);
     }
 
     @Override
@@ -58,9 +98,10 @@ public class SunscreenPlugin extends JavaPlugin {
         this.userManager = new UserManager(this);
         unzip();
         commands();
-        menus();
+        //menus();
         platformSpecific();
         resourcePack();
+        Bukkit.getPluginManager().registerEvents(this, this);
     }
 
     private void unzip() {
@@ -120,20 +161,20 @@ public class SunscreenPlugin extends JavaPlugin {
     }
 
     private void platformSpecific() {
-        Action.ACTION_MAP.put(RunCommandAction.ActionIdentifier, new RunCommandAction());
+        //Action.ACTION_MAP.put(RunCommandAction.ActionIdentifier, new RunCommandAction());
         SunscreenHook.HOOKS.add(new MythicHudSunscreenHook());
         SunscreenHook.HOOKS.add(new BetterHudSunscreenHook());
         SunscreenHook.HOOKS.add(new TABSunscreenHook());
         library.passport().placeholders().register(new PapiPlaceholderProvider());
     }
 
-    private void menus() {
+    /*private void menus() {
         Collection<MenuTemplate> templates = library.menuConfigTransformer().read(getDataFolder().toPath().resolve(Path.of("menus")));
         library.logger().info("Loaded {} menu(s).", templates.size());
         for (MenuTemplate template : templates) {
             library.menuRegistry().register(template);
         }
-    }
+    }*/
 
     private void commands() {
         PaperCommandManager manager = new PaperCommandManager(this);
@@ -144,8 +185,8 @@ public class SunscreenPlugin extends JavaPlugin {
         });
         manager.enableUnstableAPI("brigadier");
         manager.getCommandCompletions().registerAsyncCompletion("users", (bukkitCommandCompletionContext) -> userManager.users().stream().map(SunscreenUser::name).filter(name -> name.startsWith(bukkitCommandCompletionContext.getInput())).toList());
-        manager.getCommandCompletions().registerAsyncCompletion("menus", (bukkitCommandCompletionContext) -> library.menuRegistry().all().stream().map(menu -> menu.identifier().string()).filter(name -> name.startsWith(bukkitCommandCompletionContext.getInput())).toList());
-        manager.registerCommand(new SunscreenCommand());
+        ///manager.getCommandCompletions().registerAsyncCompletion("menus", (bukkitCommandCompletionContext) -> library.menuRegistry().all().stream().map(menu -> menu.identifier().string()).filter(name -> name.startsWith(bukkitCommandCompletionContext.getInput())).toList());
+        //manager.registerCommand(new SunscreenCommand());
     }
 
     @Override

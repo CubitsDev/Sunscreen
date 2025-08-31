@@ -9,13 +9,17 @@ import me.combimagnetron.sunscreen.ui.render.engine.exception.FatalEncodeExcepti
 import me.combimagnetron.sunscreen.ui.render.engine.map.SendableMapMenu;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MapEncoder {
-    private final static int MAGIC_ID = 0x5611E & ((1 << 28) - 1);
-    private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(14336);
+    private final static int MAGIC_ID = 0x1234567;
+    private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(16384);
     private final Object lock = new Object();
     private final AtomicInteger paletteId = new AtomicInteger(0);
     private final ThreadLocal<BitOutputStream> bytes = ThreadLocal.withInitial(() -> new BitOutputStream(byteArrayOutputStream));
@@ -120,7 +124,7 @@ public class MapEncoder {
             if (localPalette.colors().size() != 16) {
                 int missing = 16 - localPalette.colors.size();
                 for (int i1 = 0; i1 < missing; i1++) {
-                    localPalette.colors().add(0);
+                    localPalette.colors().add(6);
                 }
             }
         }
@@ -128,7 +132,6 @@ public class MapEncoder {
 
     private IntArrayList containsAll(IntArrayList colors, IntArrayList subset) {
         IntArrayList indices = new IntArrayList(subset.size());
-
         int i = 0, j = 0;
         while (i < colors.size() && j < subset.size()) {
             int a = colors.getInt(i);
@@ -140,7 +143,6 @@ public class MapEncoder {
             }
             i++;
         }
-
         return (j == subset.size()) ? indices : null;
     }
 
@@ -148,10 +150,21 @@ public class MapEncoder {
         return byteArrayOutputStream;
     }
 
+    public void write(File file) throws IOException {
+        int index = 0;
+        try (FileWriter fileWriter = new FileWriter(file)) {
+            for (byte b : byteArrayOutputStream.toByteArray()) {
+                fileWriter.append(String.valueOf(index++)).append(" ").append(String.valueOf(b)).append("\n");
+            }
+        }
+    }
+
     private void write() {
         synchronized (lock) {
             BitOutputStream bitOutputStream = bytes.get();
             bitOutputStream.writeBits(28, MAGIC_ID);
+            System.out.println(new Color(localPalettes.get()[0].colors.getInt(0)));
+            bitOutputStream.writeBits(32, 69420);
             for (LocalPalette localPalette : localPalettes.get()) {
                 //bitOutputStream.writeBits(6, localPalette.serializedId());
                 for (int color : localPalette.colors) {
@@ -166,6 +179,15 @@ public class MapEncoder {
             }
             bitOutputStream.flush();
             bitOutputStream.close();
+            int size = byteArrayOutputStream.size();
+            System.out.println(size);
+            if (!(size < 16384)) return;
+            try {
+                byteArrayOutputStream.write(new byte[16384 - size]);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println(size);
         }
     }
 

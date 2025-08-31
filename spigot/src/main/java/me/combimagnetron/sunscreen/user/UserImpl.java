@@ -14,12 +14,10 @@ import me.combimagnetron.passport.internal.entity.Entity;
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.internal.network.Connection;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.menu.AspectRatioMenu;
-import me.combimagnetron.sunscreen.menu.MenuTemplate;
-import me.combimagnetron.sunscreen.menu.OpenedMenu;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
-import me.combimagnetron.sunscreen.menu.timing.MenuTicker;
 import me.combimagnetron.sunscreen.session.Session;
+import me.combimagnetron.sunscreen.ui.ModernLayout;
+import me.combimagnetron.sunscreen.ui.ModernMenu;
 import me.combimagnetron.sunscreen.util.data.Pair;
 import me.combimagnetron.sunscreen.util.math.Vec2d;
 import me.combimagnetron.sunscreen.util.math.Vec2i;
@@ -45,7 +43,7 @@ public class UserImpl implements SunscreenUser<Player> {
         this.connection = new PacketEventsConnectionImpl<>(player);
         Node<String> node = Config.file(SunscreenLibrary.library().path().resolve("data.dt")).reader().node(uniqueIdentifier().toString());
         this.version = PacketEvents.getAPI().getPlayerManager().getUser(player).getClientVersion();
-        if (node == null) {
+        /*if (node == null) {
             AspectRatioMenu menu = new AspectRatioMenu(this);
             SunscreenLibrary.library().menuTicker().start(menu);
             SunscreenLibrary.library().sessionHandler().session(Session.session(menu, this));
@@ -55,7 +53,7 @@ public class UserImpl implements SunscreenUser<Player> {
             //SunscreenLibrary.library().menuTicker().start(new UserSetupMenu(this));
             return;
         }
-        this.screenSize = ScreenSize.fromString(node.value());
+        this.screenSize = ScreenSize.fromString(node.value());*/
     }
 
     @Override
@@ -143,12 +141,13 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public Session open(MenuTemplate template) {
-        OpenedMenu.FloatImpl menu = new OpenedMenu.Float(this, template);
+    public Session open(ModernLayout template) {
+        /*OpenedMenu.FloatImpl menu = new OpenedMenu.Float(this, template);
         SunscreenLibrary.library().menuTicker().start(menu);
         menu.open(this);
         Session session = Session.session(menu, this);
-        return SunscreenLibrary.library().sessionHandler().session(session);
+        return SunscreenLibrary.library().sessionHandler().session(session);*/
+        return null;
     }
 
     @Override

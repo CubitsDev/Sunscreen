@@ -1,7 +1,7 @@
 package me.combimagnetron.sunscreen.hook.mythichud;
 
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
-import me.combimagnetron.sunscreen.menu.OpenedMenu;
+import me.combimagnetron.sunscreen.ui.ModernMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import org.bukkit.event.Listener;
 
@@ -22,12 +22,12 @@ public class MythicHudSunscreenHook implements SunscreenHook, Listener {
     }
 
     @Override
-    public void onMenuEnter(SunscreenUser<?> user, OpenedMenu menu) {
+    public void onMenuEnter(SunscreenUser<?> user, ModernMenu menu) {
 
     }
 
     @Override
-    public void onMenuLeave(SunscreenUser<?> user, OpenedMenu menu) {
+    public void onMenuLeave(SunscreenUser<?> user, ModernMenu menu) {
 
     }
     /*private final Map<UUID, List<String>> previouslyActive = new HashMap<>();
