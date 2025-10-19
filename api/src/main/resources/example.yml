@@ -18,7 +18,7 @@ menus:
               condition: "player.name != herobrine & player.health < 10"
               do:
                 - "@self.tooltip = list(hello, world)"
-                - "player.sendMessage(text(not herobrine!))"
+                - "player.sendMessage(label(not herobrine!))"
           element1:
             pos:
               x: "4px"

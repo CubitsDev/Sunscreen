@@ -1,7 +1,7 @@
 package me.combimagnetron.sunscreen.hook.tab;
 
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
-import me.combimagnetron.sunscreen.ui.ModernMenu;
+import me.combimagnetron.sunscreen.neo.ModernMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.TabPlayer;

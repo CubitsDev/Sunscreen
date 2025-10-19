@@ -1,6 +1,7 @@
-import me.combimagnetron.sunscreen.ui.graphic.GraphicLike;
-import me.combimagnetron.sunscreen.ui.graphic.modifier.GraphicModifier;
-import me.combimagnetron.sunscreen.ui.render.engine.encode.MapEncoder;
+import me.combimagnetron.sunscreen.neo.graphic.BufferedColorSpace;
+import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
+import me.combimagnetron.sunscreen.neo.graphic.modifier.GraphicModifier;
+import me.combimagnetron.sunscreen.neo.render.engine.encode.MapEncoder;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.suite.api.SelectClasses;
@@ -30,6 +31,11 @@ public class MapEncoderTest {
             @Override
             public @NotNull BufferedImage image() {
                 return image;
+            }
+
+            @Override
+            public @NotNull BufferedColorSpace bufferedColorSpace() {
+                return null;
             }
         };
         ArrayList<Float> times = new ArrayList<>();

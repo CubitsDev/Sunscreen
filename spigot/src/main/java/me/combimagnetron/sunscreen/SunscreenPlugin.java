@@ -2,7 +2,6 @@ package me.combimagnetron.sunscreen;
 
 import co.aikar.commands.PaperCommandManager;
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMapData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.combimagnetron.passport.Passport;
@@ -10,16 +9,16 @@ import me.combimagnetron.sunscreen.hook.SunscreenHook;
 import me.combimagnetron.sunscreen.hook.betterhud.BetterHudSunscreenHook;
 import me.combimagnetron.sunscreen.hook.mythichud.MythicHudSunscreenHook;
 import me.combimagnetron.sunscreen.hook.tab.TABSunscreenHook;
-import me.combimagnetron.sunscreen.logic.action.Action;
 import me.combimagnetron.sunscreen.placeholder.PapiPlaceholderProvider;
 import me.combimagnetron.sunscreen.resourcepack.ResourcePack;
 import me.combimagnetron.sunscreen.resourcepack.feature.shader.Shader;
 import me.combimagnetron.sunscreen.resourcepack.feature.shader.ShaderFeature;
 import me.combimagnetron.sunscreen.resourcepack.meta.PackMeta;
 import me.combimagnetron.sunscreen.resourcepack.meta.PackVersion;
-import me.combimagnetron.sunscreen.ui.graphic.GraphicLike;
-import me.combimagnetron.sunscreen.ui.graphic.modifier.GraphicModifier;
-import me.combimagnetron.sunscreen.ui.render.engine.encode.MapEncoder;
+import me.combimagnetron.sunscreen.neo.graphic.BufferedColorSpace;
+import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
+import me.combimagnetron.sunscreen.neo.graphic.modifier.GraphicModifier;
+import me.combimagnetron.sunscreen.neo.render.engine.encode.MapEncoder;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.user.UserManager;
 import me.combimagnetron.sunscreen.util.data.Identifier;
@@ -31,21 +30,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapCanvas;
-import org.bukkit.map.MapRenderer;
-import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -74,6 +67,11 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
             @Override
             public @NotNull BufferedImage image() {
                 return image;
+            }
+
+            @Override
+            public @NotNull BufferedColorSpace bufferedColorSpace() {
+                return null;
             }
         };
         MapEncoder mapEncoder = new MapEncoder(graphicLike);

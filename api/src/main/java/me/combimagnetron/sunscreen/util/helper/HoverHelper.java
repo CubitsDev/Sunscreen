@@ -15,7 +15,7 @@ public class HoverHelper {
         return cursor.x() > position.x() && cursor.x() < position.x() + size.x() && cursor.y() > position.y() && cursor.y() < position.y() + size.y();
     }
 
-    public static boolean isHovered(Vec2i cursor, Vec2i position, me.combimagnetron.sunscreen.ui.property.Size size) {
+    public static boolean isHovered(Vec2i cursor, Vec2i position, me.combimagnetron.sunscreen.neo.property.Size size) {
         return cursor.x() > position.x() && cursor.x() < position.x() + size.x().finish(0) && cursor.y() > position.y() && cursor.y() < position.y() + size.y().finish(0);
     }
 

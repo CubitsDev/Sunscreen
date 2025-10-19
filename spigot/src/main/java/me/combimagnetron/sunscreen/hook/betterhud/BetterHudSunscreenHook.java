@@ -3,7 +3,7 @@ package me.combimagnetron.sunscreen.hook.betterhud;
 import kr.toxicity.hud.api.BetterHudAPI;
 import kr.toxicity.hud.api.player.HudPlayer;
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
-import me.combimagnetron.sunscreen.ui.ModernMenu;
+import me.combimagnetron.sunscreen.neo.ModernMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import org.bukkit.Bukkit;
 

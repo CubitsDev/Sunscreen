@@ -1,0 +1,13 @@
+package me.combimagnetron.sunscreen.neo.graphic.color;
+
+import net.kyori.adventure.text.format.TextColor;
+import org.jetbrains.annotations.NotNull;
+
+record SimpleArgbColor(int red, int green, int blue, int alpha) implements Color {
+
+    @Override
+    public @NotNull TextColor textColor() {
+        return TextColor.color(red, green, blue);
+    }
+
+}

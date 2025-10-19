@@ -6,7 +6,6 @@ import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnEntity;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTimeUpdate;
 import me.combimagnetron.passport.PacketEventsConnectionImpl;
 import me.combimagnetron.passport.config.Config;
 import me.combimagnetron.passport.config.element.Node;
@@ -16,8 +15,7 @@ import me.combimagnetron.passport.internal.network.Connection;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.session.Session;
-import me.combimagnetron.sunscreen.ui.ModernLayout;
-import me.combimagnetron.sunscreen.ui.ModernMenu;
+import me.combimagnetron.sunscreen.neo.MenuRoot;
 import me.combimagnetron.sunscreen.util.data.Pair;
 import me.combimagnetron.sunscreen.util.math.Vec2d;
 import me.combimagnetron.sunscreen.util.math.Vec2i;
@@ -116,21 +114,6 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public float fov() {
-        return fov;
-    }
-
-    @Override
-    public void fov(float fov) {
-        this.fov = fov;
-        if (fov == -1) {
-            connection().send(new WrapperPlayServerTimeUpdate(0, player.getWorld().getTime()));
-        } else {
-            connection().send(new WrapperPlayServerTimeUpdate((long) Math.floor((fov + 0.5F) / 180.0F * 24000.0F), player.getWorld().getTime()));
-        }
-    }
-
-    @Override
     public boolean permission(String permission) {
         return player.hasPermission(permission);
     }
@@ -141,7 +124,7 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public Session open(ModernLayout template) {
+    public Session open(MenuRoot template) {
         /*OpenedMenu.FloatImpl menu = new OpenedMenu.Float(this, template);
         SunscreenLibrary.library().menuTicker().start(menu);
         menu.open(this);

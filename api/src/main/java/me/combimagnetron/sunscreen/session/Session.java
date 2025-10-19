@@ -1,7 +1,7 @@
 package me.combimagnetron.sunscreen.session;
 
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.ui.ModernMenu;
+import me.combimagnetron.sunscreen.neo.ModernMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 
 public sealed interface Session permits Session.Impl {

@@ -1,6 +1,6 @@
 package me.combimagnetron.sunscreen.hook;
 
-import me.combimagnetron.sunscreen.ui.ModernMenu;
+import me.combimagnetron.sunscreen.neo.ModernMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 
 import java.util.ArrayList;
