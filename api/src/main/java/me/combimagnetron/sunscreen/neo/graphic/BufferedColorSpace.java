@@ -33,15 +33,27 @@ public final class BufferedColorSpace {
 
     }
 
-    public void color(int x, int y, ColorLike colorLike) {
+    public void erase(int x, int y) {
+        buffer[pixelIndex(x, y, size.x())] = 0;
+    }
+
+    public void erase(Vec2i pixel) {
+        erase(pixel.x(), pixel.y());
+    }
+
+    public void colorDirect(int index, ColorLike colorLike) {
         if (colorLike.alpha() == 0) return;
+    }
+
+    public void color(int x, int y, ColorLike colorLike) {
+        colorDirect(pixelIndex(x, y, size.x()), colorLike);
     }
 
     public void color(Vec2i pixel, ColorLike colorLike) {
         color(pixel.x(), pixel.y(), colorLike);
     }
 
-    private static int pixelIndex(Vec2i pixel, Vec2i size) {
+    public static int pixelIndex(Vec2i pixel, Vec2i size) {
         return pixelIndex(pixel.x(), pixel.y(), size.x());
     }
 

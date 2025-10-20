@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 public interface GraphicLike<G extends GraphicLike<G>> {
 
-    @NotNull G modifier(@NotNull GraphicModifier modifier);
+    @NotNull <M> G modifier(@NotNull GraphicModifier<M> modifier);
 
     @NotNull BufferedImage image();
 

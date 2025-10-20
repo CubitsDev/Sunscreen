@@ -10,7 +10,13 @@ import java.util.Map;
 
 public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Position> implements Property<Vec2i, Position> {
     private static final PropertyHandler<Vec2i, Position> PROPERTY_HANDLER = (element, property) -> null;
+    private static final Position ZERO = Position.fixed(Vec2i.zero());
+
     private final Map<RelativeMeasure.Axis2d, Vec2iRelativeBuilder<Position>> axisMap = new LinkedHashMap<>();
+
+    public static Position nil() {
+        return ZERO;
+    }
 
     public Position(@NotNull Vec2i vec2i) {
         super(vec2i);

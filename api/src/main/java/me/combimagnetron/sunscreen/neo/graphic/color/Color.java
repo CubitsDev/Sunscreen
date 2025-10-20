@@ -6,12 +6,16 @@ import org.jetbrains.annotations.Nullable;
 
 public interface Color extends ColorLike {
 
+    static Color none() {
+        return SimpleArgbColor.NONE;
+    }
+
     /**
      * @param color the label color to convert to a color
      * @return TextColor converted to a Color
      */
     static @NotNull Color of(@NotNull TextColor color) {
-        return SimpleArgbColor.of(color);
+        return new SimpleArgbColor(color.red(), color.green(), color.blue(), 255);
     }
 
     static @Nullable Color hex(@NotNull String hexColor) {
@@ -47,7 +51,7 @@ public interface Color extends ColorLike {
      * @return a new color with the given red, green, blue, and alpha values
      */
     static @NotNull Color of(int red, int green, int blue, int alpha) {
-        return SimpleArgbColor.of(red, green, blue, alpha);
+        return new SimpleArgbColor(red, green, blue, alpha);
     }
 
     /**
@@ -57,7 +61,7 @@ public interface Color extends ColorLike {
      * @return a new color with the given red, green, and blue values
      */
     static @NotNull Color of(int red, int green, int blue) {
-        return SimpleArgbColor.of(red, green, blue);
+        return new SimpleArgbColor(red, green, blue, 255);
     }
 
     /**
@@ -65,7 +69,7 @@ public interface Color extends ColorLike {
      * @return a new color with the given red, green, and blue values
      */
     static @NotNull Color of(int rgb) {
-        return SimpleArgbColor.of(rgb);
+        return of(rgb, 255);
     }
 
     /**
@@ -74,7 +78,7 @@ public interface Color extends ColorLike {
      * @return a new color with the given red, green, blue, and alpha values
      */
     static @NotNull Color of(int rgb, int alpha) {
-        return SimpleArgbColor.of(rgb, alpha);
+        return new SimpleArgbColor((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF, alpha);
     }
 
 

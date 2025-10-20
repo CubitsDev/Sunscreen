@@ -7,9 +7,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
+@SuppressWarnings("unchecked")
 public abstract class GenericModernElement<E extends ModernElement<E>> implements ModernElement<E> {
-    private final List<Property<?, ?>> properties = new ArrayList<>();
+    private final Map<Class<? extends Property<?,?>>, Property<?, ?>> properties = new WeakHashMap<>();
     private final Identifier identifier;
 
     protected GenericModernElement(@Nullable Identifier identifier) {
@@ -23,8 +26,13 @@ public abstract class GenericModernElement<E extends ModernElement<E>> implement
 
     @Override
     public @NotNull <T, C> E property(@NotNull Property<T, C> property) {
-        properties.add(property);
+        properties.put((Class<? extends Property<?, ?>>) property.getClass(), property);
         return (E) this;
+    }
+
+    @Override
+    public <T, C, P extends Property<T, C>> @NotNull P property(@NotNull Class<P> propertyClass) {
+        return (P) properties.get(propertyClass);
     }
 
 }

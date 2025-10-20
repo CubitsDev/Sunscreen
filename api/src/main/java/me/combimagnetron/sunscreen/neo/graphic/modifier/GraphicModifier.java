@@ -1,9 +1,14 @@
 package me.combimagnetron.sunscreen.neo.graphic.modifier;
 
-import me.combimagnetron.sunscreen.neo.graphic.BufferedColorSpace;
+import me.combimagnetron.sunscreen.neo.graphic.modifier.handler.GraphicModifierHandler;
+import org.jetbrains.annotations.NotNull;
 
 public interface GraphicModifier<M> {
 
-    void apply(BufferedColorSpace current, M modifier, ModifierContext modifierContext);
+    @NotNull GraphicModifierHandler<@NotNull M> handler();
+
+    @NotNull M modifier();
+
+    @NotNull ModifierContext context();
 
 }
