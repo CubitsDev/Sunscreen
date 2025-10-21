@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
+
 public final class ElementTree<E extends ElementLike<E>> implements Iterable<E> {
 
     public <F extends ElementLike<F>> @NotNull ElementTree<E> add(@NotNull F element) {

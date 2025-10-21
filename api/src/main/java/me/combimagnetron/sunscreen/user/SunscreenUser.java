@@ -6,22 +6,24 @@ import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.session.Session;
 import me.combimagnetron.sunscreen.neo.MenuRoot;
 import net.kyori.adventure.audience.Audience;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
 public interface SunscreenUser<T extends Audience> extends User<T> {
 
-    ScreenSize screenSize();
+    @NotNull ScreenSize screenSize();
 
-    void screenSize(ScreenSize screenSize);
+    void screenSize(@NotNull ScreenSize screenSize);
 
-    boolean permission(String permission);
+    boolean permission(@NotNull String permission);
 
-    Session session();
+    @Nullable Session session();
 
-    Session open(MenuRoot template);
+    Session open(@NotNull MenuRoot template);
 
-    default void send(PacketWrapper<?>... packetWrappers) {
+    default void send(@NotNull PacketWrapper<?>... packetWrappers) {
         Arrays.stream(packetWrappers).forEach(wrapper -> connection().send(wrapper));
     }
 

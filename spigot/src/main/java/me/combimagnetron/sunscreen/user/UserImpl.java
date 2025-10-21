@@ -20,6 +20,7 @@ import me.combimagnetron.passport.util.data.Pair;
 import me.combimagnetron.passport.util.math.Vec2d;
 import me.combimagnetron.passport.util.math.Vec2i;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -104,17 +105,17 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public ScreenSize screenSize() {
+    public @NotNull ScreenSize screenSize() {
         return screenSize;
     }
 
     @Override
-    public void screenSize(ScreenSize pos2D) {
+    public void screenSize(@NotNull ScreenSize pos2D) {
         this.screenSize = pos2D;
     }
 
     @Override
-    public boolean permission(String permission) {
+    public boolean permission(@NotNull String permission) {
         return player.hasPermission(permission);
     }
 
@@ -124,7 +125,7 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public Session open(MenuRoot template) {
+    public Session open(@NotNull MenuRoot template) {
         /*OpenedMenu.FloatImpl menu = new OpenedMenu.Float(this, template);
         SunscreenLibrary.library().menuTicker().start(menu);
         menu.open(this);

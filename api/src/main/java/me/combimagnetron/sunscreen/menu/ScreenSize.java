@@ -24,16 +24,4 @@ public record ScreenSize(Vec2i pixel, Pair<Vec2d, Vec2d> coordinates) {
         return buffer.bytes();
     }
 
-    public static ScreenSize fromString(String data) {
-        String[] parts = data.split(";");
-        if (parts.length != 6 || data.isEmpty()) {
-            return null;
-        }
-        return new ScreenSize(new Vec2i(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])), new Pair<>(new Vec2d(Double.parseDouble(parts[2]), Double.parseDouble(parts[3])), new Vec2d(Double.parseDouble(parts[4]), Double.parseDouble(parts[5]))));
-    }
-
-    public String compress() {
-        return pixel.x() + ";" + pixel.y() + ";" + coordinates.k().x() + ";" + coordinates.k().y() + ";" + coordinates.v().x() + ";" + coordinates.v().y();
-    }
-
 }

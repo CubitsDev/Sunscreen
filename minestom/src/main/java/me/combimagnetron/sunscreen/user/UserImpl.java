@@ -16,6 +16,7 @@ import me.combimagnetron.passport.util.data.Pair;
 import me.combimagnetron.passport.util.math.Vec2d;
 import me.combimagnetron.passport.util.math.Vec2i;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,12 +38,12 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public ScreenSize screenSize() {
+    public @NotNull ScreenSize screenSize() {
         return screenSize;
     }
 
     @Override
-    public void screenSize(ScreenSize screenSize) {
+    public void screenSize(@NotNull ScreenSize screenSize) {
         this.screenSize = screenSize;
     }
 
@@ -57,7 +58,7 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public boolean permission(String permission) {
+    public boolean permission(@NotNull String permission) {
         return player.hasPermission(permission);
     }
 
