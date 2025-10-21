@@ -1,9 +1,9 @@
 package me.combimagnetron.sunscreen.neo.property;
 
 import me.combimagnetron.sunscreen.menu.ScreenSize;
-import me.combimagnetron.sunscreen.util.data.RuntimeDefinable;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
-import me.combimagnetron.sunscreen.util.math.Vec4i;
+import me.combimagnetron.passport.util.data.RuntimeDefinable;
+import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.passport.util.math.Vec4i;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

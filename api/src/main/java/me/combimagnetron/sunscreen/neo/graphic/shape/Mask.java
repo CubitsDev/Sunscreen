@@ -4,7 +4,7 @@ import me.combimagnetron.sunscreen.neo.graphic.modifier.GraphicModifier;
 import me.combimagnetron.sunscreen.neo.graphic.modifier.ModifierContext;
 import me.combimagnetron.sunscreen.neo.graphic.modifier.handler.GraphicModifierHandler;
 import me.combimagnetron.sunscreen.neo.property.Position;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.passport.util.math.Vec2i;
 import org.jetbrains.annotations.NotNull;
 
 public record Mask(@NotNull Shape modifier, @NotNull ModifierContext context) implements GraphicModifier<Shape> {

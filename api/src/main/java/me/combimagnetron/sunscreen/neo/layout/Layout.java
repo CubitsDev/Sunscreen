@@ -3,7 +3,7 @@ package me.combimagnetron.sunscreen.neo.layout;
 import me.combimagnetron.sunscreen.neo.element.ElementGroup;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.property.Property;
-import me.combimagnetron.sunscreen.util.data.Identifier;
+import me.combimagnetron.passport.util.data.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

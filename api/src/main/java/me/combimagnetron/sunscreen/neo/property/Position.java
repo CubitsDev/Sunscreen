@@ -2,7 +2,7 @@ package me.combimagnetron.sunscreen.neo.property;
 
 import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.neo.property.handler.PropertyHandler;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.passport.util.math.Vec2i;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;

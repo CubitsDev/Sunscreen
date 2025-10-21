@@ -2,7 +2,7 @@ package me.combimagnetron.sunscreen.util.helper;
 
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.passport.util.math.Vec2i;
 
 public class HoverHelper {
 

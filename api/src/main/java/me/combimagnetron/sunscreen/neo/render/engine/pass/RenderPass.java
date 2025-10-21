@@ -2,7 +2,7 @@ package me.combimagnetron.sunscreen.neo.render.engine.pass;
 
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.sunscreen.neo.render.RenderAction;
-import me.combimagnetron.sunscreen.util.data.Identifier;
+import me.combimagnetron.passport.util.data.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public record RenderPass<T, G extends GraphicLike<G>>(@NotNull Origin<T> origin, @NotNull RenderAction<G> renderAction) {

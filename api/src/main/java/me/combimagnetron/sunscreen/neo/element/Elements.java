@@ -3,7 +3,7 @@ package me.combimagnetron.sunscreen.neo.element;
 import me.combimagnetron.sunscreen.neo.element.impl.ImageElement;
 import me.combimagnetron.sunscreen.neo.element.impl.LabelElement;
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
-import me.combimagnetron.sunscreen.util.data.Identifier;
+import me.combimagnetron.passport.util.data.Identifier;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,6 +1,6 @@
 package me.combimagnetron.sunscreen.util.helper;
 
-import me.combimagnetron.sunscreen.util.math.Vec2d;
+import me.combimagnetron.passport.util.math.Vec2d;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;

@@ -1,6 +1,6 @@
 package me.combimagnetron.sunscreen.resourcepack;
 
-import me.combimagnetron.sunscreen.util.data.Identifier;
+import me.combimagnetron.passport.util.data.Identifier;
 
 public interface Asset {
 

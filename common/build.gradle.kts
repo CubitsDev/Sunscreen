@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "me.combimagnetro"
+group = "me.combimagnetron"
 version = "unspecified"
 
 repositories {

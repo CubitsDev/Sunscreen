@@ -2,7 +2,7 @@ package me.combimagnetron.sunscreen.neo.graphic;
 
 import me.combimagnetron.sunscreen.neo.graphic.color.Color;
 import me.combimagnetron.sunscreen.neo.graphic.color.ColorLike;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.passport.util.math.Vec2i;
 import org.jetbrains.annotations.NotNull;
 
 public final class BufferedColorSpace {

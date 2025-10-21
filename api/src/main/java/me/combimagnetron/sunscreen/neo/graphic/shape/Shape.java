@@ -1,7 +1,7 @@
 package me.combimagnetron.sunscreen.neo.graphic.shape;
 
 import me.combimagnetron.sunscreen.neo.graphic.color.ColorLike;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.passport.util.math.Vec2i;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.BitSet;

@@ -1,9 +1,9 @@
 package me.combimagnetron.sunscreen.menu;
 
 import me.combimagnetron.passport.internal.network.ByteBuffer;
-import me.combimagnetron.sunscreen.util.data.Pair;
-import me.combimagnetron.sunscreen.util.math.Vec2d;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.passport.util.data.Pair;
+import me.combimagnetron.passport.util.math.Vec2d;
+import me.combimagnetron.passport.util.math.Vec2i;
 
 import java.util.*;
 

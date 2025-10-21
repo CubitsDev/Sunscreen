@@ -1,8 +1,8 @@
 package me.combimagnetron.sunscreen.neo.selector.filter;
 
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
-import me.combimagnetron.sunscreen.util.data.Identifiable;
-import me.combimagnetron.sunscreen.util.data.Identifier;
+import me.combimagnetron.passport.util.data.Identifiable;
+import me.combimagnetron.passport.util.data.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public interface Filter<E extends ElementLike<E>> {

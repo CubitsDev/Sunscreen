@@ -12,9 +12,9 @@ import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.menu.MenuTemplate;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.session.Session;
-import me.combimagnetron.sunscreen.util.data.Pair;
-import me.combimagnetron.sunscreen.util.math.Vec2d;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.passport.util.data.Pair;
+import me.combimagnetron.passport.util.math.Vec2d;
+import me.combimagnetron.passport.util.math.Vec2i;
 import net.minestom.server.entity.Player;
 
 import java.util.List;

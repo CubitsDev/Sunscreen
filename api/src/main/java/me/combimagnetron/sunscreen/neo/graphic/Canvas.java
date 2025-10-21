@@ -4,7 +4,7 @@ import me.combimagnetron.sunscreen.neo.graphic.color.ColorLike;
 import me.combimagnetron.sunscreen.neo.graphic.modifier.GraphicModifier;
 import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.Size;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.passport.util.math.Vec2i;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 

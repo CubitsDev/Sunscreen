@@ -11,8 +11,8 @@ import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.RelativeMeasure;
 import me.combimagnetron.sunscreen.neo.selector.Selector;
 import me.combimagnetron.sunscreen.neo.selector.filter.Filter;
-import me.combimagnetron.sunscreen.util.data.Identifier;
-import me.combimagnetron.sunscreen.util.math.Vec2i;
+import me.combimagnetron.passport.util.data.Identifier;
+import me.combimagnetron.passport.util.math.Vec2i;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
