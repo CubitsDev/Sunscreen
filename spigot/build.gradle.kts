@@ -6,15 +6,6 @@ plugins {
     //id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
 }
 
-group = "me.combimagnetron"
-version = "0.1.0"
-
-configurations {
-    create("excludeShadowJar") {
-        extendsFrom(project(":api").configurations["compileOnly"])
-    }
-}
-
 repositories {
     mavenCentral()
     maven("https://mvn.lumine.io/repository/maven-public/")
