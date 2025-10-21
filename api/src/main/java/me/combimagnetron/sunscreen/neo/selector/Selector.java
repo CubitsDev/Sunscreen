@@ -57,6 +57,11 @@ public interface Selector<E extends ElementLike<E>> extends ElementLike<E> {
         }
 
         @Override
+        public <T, C, P extends Property<T, C>> @NotNull P property(@NotNull Class<P> propertyClass) {
+            return null;
+        }
+
+        @Override
         public <T, C> @NotNull E property(@NotNull Property<@NotNull T, @NotNull C> property) {
             return null;
         }
@@ -78,6 +83,11 @@ public interface Selector<E extends ElementLike<E>> extends ElementLike<E> {
         public @NotNull ElementLike property(@NotNull Property property) {
             return null;
         }
+
+        @Override
+        public @NotNull Property property(@NotNull Class propertyClass) {
+            return null;
+        }
     }
 
     final class Result<E extends ElementLike<E>> implements ElementLike<E> {
@@ -92,6 +102,11 @@ public interface Selector<E extends ElementLike<E>> extends ElementLike<E> {
         @Override
         public @Nullable Identifier identifier() {
             return identifier;
+        }
+
+        @Override
+        public <T, C, P extends Property<T, C>> @NotNull P property(@NotNull Class<P> propertyClass) {
+            return null;
         }
 
         @Override

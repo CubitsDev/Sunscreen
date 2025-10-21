@@ -10,14 +10,17 @@ import org.jetbrains.annotations.Nullable;
 public interface Layout<E extends ElementLike<E>> extends ElementGroup<E> {
 
      E root();
-
      static <E extends ElementLike<E>> FlowLayout<E> flow() {
          return new FlowLayout<>();
      }
 
-    static <E extends ElementLike<E>> FlowLayout<E> flow(ElementLike<?> elementLike) {
-        return new FlowLayout<>(elementLike);
-    }
+     static <E extends ElementLike<E>> FlowLayout<?> flow(ElementLike<?> elementLike) {
+         return new FlowLayout<>(elementLike);
+     }
+
+     static <E extends ElementLike<E>> FlowLayout<?> flow(ElementLike<?>... elementLike) {
+         return new FlowLayout<>(elementLike);
+     }
 
      class FlowLayout<E extends ElementLike<E>> implements Layout<E> {
 
@@ -52,6 +55,11 @@ public interface Layout<E extends ElementLike<E>> extends ElementGroup<E> {
 
          @Override
          public @Nullable Identifier identifier() {
+             return null;
+         }
+
+         @Override
+         public <T, C, P extends Property<T, C>> @NotNull P property(@NotNull Class<P> propertyClass) {
              return null;
          }
 

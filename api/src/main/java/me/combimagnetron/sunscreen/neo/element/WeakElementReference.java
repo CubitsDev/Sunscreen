@@ -22,6 +22,11 @@ public class WeakElementReference<E extends ElementLike<E>> implements ElementLi
     }
 
     @Override
+    public <T, C, P extends Property<T, C>> @NotNull P property(@NotNull Class<P> propertyClass) {
+        return null;
+    }
+
+    @Override
     public <T, C> @NotNull E property(@NotNull Property<@NotNull T, @NotNull C> property) {
         return null;
     }

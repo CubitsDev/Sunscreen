@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record Mask(@NotNull Shape modifier, @NotNull ModifierContext context) implements GraphicModifier<Shape> {
     private static final GraphicModifierHandler<Shape> HANDLER = ((current, modifier, modifierContext) -> {
-        modifier.shape().stream().forEachOrdered(i -> {
+        modifier.shape().stream().parallel().forEach(i -> {
             Vec2i pos = position(i, modifier.squareSize());
             Vec2i position = modifierContext.propOr(Position.class, Position.nil()).vec2i();
             if (position == null) return;

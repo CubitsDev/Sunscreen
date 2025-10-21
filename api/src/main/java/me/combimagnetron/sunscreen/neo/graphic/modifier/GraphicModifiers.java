@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface GraphicModifiers {
 
-    static @NotNull Mask mask(@NotNull Shape mask) {
-        return new Mask(mask);
+    static @NotNull Mask mask(@NotNull Shape mask, @NotNull ModifierContext modifierContext) {
+        return new Mask(mask, modifierContext);
     }
 
 }

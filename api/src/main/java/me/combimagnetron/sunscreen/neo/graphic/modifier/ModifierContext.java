@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public record ModifierContext(@NotNull Map<Class<? extends Property<?, ?>>, Property<?, ?>> propertyMap) implements PropertyContainer<ModifierContext> {
 
-    public static ModifierContext from(Property<?, ?>... properties) {
+    public static ModifierContext of(Property<?, ?>... properties) {
         return new ModifierContext(streamToMap(Arrays.stream(properties)));
     }
 
