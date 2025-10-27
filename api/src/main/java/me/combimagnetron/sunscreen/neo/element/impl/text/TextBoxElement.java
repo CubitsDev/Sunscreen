@@ -11,6 +11,9 @@ import me.combimagnetron.sunscreen.neo.render.engine.pass.RenderPass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * {@link TextElement} implementation for multilined text input
+ */
 public class TextBoxElement extends TextElement<TextBoxElement> {
 
     public TextBoxElement(@Nullable Identifier identifier) {

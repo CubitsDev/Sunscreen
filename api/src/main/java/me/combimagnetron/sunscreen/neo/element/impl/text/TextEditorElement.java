@@ -8,6 +8,9 @@ import me.combimagnetron.sunscreen.neo.render.engine.pass.RenderPass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * {@link TextElement} implementation for multilined text input with editor functions, think bold, italic font etc.
+ */
 public class TextEditorElement extends TextElement<TextEditorElement> {
 
     protected TextEditorElement(@Nullable Identifier identifier) {

@@ -8,6 +8,9 @@ import me.combimagnetron.sunscreen.neo.render.engine.pass.RenderPass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * {@link TextElement} implementation for single-lined/limited, small text inputs.
+ */
 public class TextFieldElement extends TextElement<TextFieldElement> {
 
     protected TextFieldElement(@Nullable Identifier identifier) {
