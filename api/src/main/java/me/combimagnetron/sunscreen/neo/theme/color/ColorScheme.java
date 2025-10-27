@@ -1,7 +1,9 @@
 package me.combimagnetron.sunscreen.neo.theme.color;
 
+import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.sunscreen.neo.graphic.color.Color;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface ColorScheme {
 
@@ -12,6 +14,8 @@ public interface ColorScheme {
     @NotNull Color background();
 
     @NotNull Color accent();
+
+    @Nullable Color type(@NotNull Identifier identifier);
 
     enum ColorMode {
         DARK, LIGHT
@@ -32,6 +36,11 @@ public interface ColorScheme {
             return ColorMode.DARK;
         }
 
+        @Override
+        public @Nullable Color type(@NotNull Identifier identifier) {
+            return null;
+        }
+
     }
 
     record BasicLightColorScheme(Color main, Color background, Color accent) implements ColorScheme {
@@ -39,6 +48,11 @@ public interface ColorScheme {
         @Override
         public @NotNull ColorMode mode() {
             return ColorMode.LIGHT;
+        }
+
+        @Override
+        public @Nullable Color type(@NotNull Identifier identifier) {
+            return null;
         }
 
     }
