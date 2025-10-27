@@ -1,6 +1,7 @@
 package me.combimagnetron.sunscreen.event;
 
 import me.combimagnetron.passport.event.Event;
+import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.passport.util.math.Vec2d;
@@ -12,9 +13,11 @@ import me.combimagnetron.passport.util.math.Vec2d;
  * @param coords coordinates at which the element was hovered, relative to the element.
  * @param <E> generic representing the element type.
  */
-public record HoverElementEvent<E extends ElementLike<E>>(E element, SunscreenUser<?> user, Vec2d coords) implements Event {
+public record HoverElementEvent<E extends ElementLike<E>>(SunscreenUser<?> user, E element, Vec2i coords) implements UserEvent {
+
     @Override
     public Class<? extends Event> eventType() {
         return HoverElementEvent.class;
     }
+
 }
