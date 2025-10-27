@@ -7,7 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 public record RenderPass<T, G extends GraphicLike<G>>(@NotNull Origin<T> origin, @NotNull RenderAction<G> renderAction) {
 
-    public record Origin<T>(@NotNull T type, @NotNull Identifier identifier) {
+    public static <T, G extends GraphicLike<G>> @NotNull RenderPass<T, G> pass(@NotNull Origin<T> origin, @NotNull RenderAction<G> renderAction) {
+        return new RenderPass<>(origin, renderAction);
+    }
+
+    public record Origin<T>(@NotNull T type, int hash) {
+
+        public static <T> @NotNull Origin<T> origin(@NotNull T type) {
+            return new Origin<>(type, type.hashCode());
+        }
 
     }
 

@@ -17,6 +17,10 @@ public interface RenderAction<G extends GraphicLike<G>> {
         return new NoneRenderAction<>(current);
     }
 
+    static <L extends GraphicLike<L>> @NotNull RenderAction<L> simple(@NotNull L target) {
+        return  new SimpleRenderAction<>();
+    }
+
     final class SimpleRenderAction<G extends GraphicLike<G>> implements RenderAction<G> {
 
         @Override

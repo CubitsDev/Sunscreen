@@ -155,7 +155,7 @@ public class MapEncoder {
         int index = 0;
         try (FileWriter fileWriter = new FileWriter(file)) {
             for (LocalPalette localPalette : localPalettes.get()) {
-                fileWriter.append(String.valueOf(index++)).append(" ").append(localPalette.colors().stream().map(Color::new).map(color -> color.toString() + " " + color.getAlpha()).collect(Collectors.toSet()).toString()).append("\n");
+                fileWriter.append(String.valueOf(index++)).append(" ").append(localPalette.colors().stream().map(Color::new).map(color -> color + " " + color.getAlpha()).collect(Collectors.toSet()).toString()).append("\n");
             }
         }
     }
@@ -168,8 +168,10 @@ public class MapEncoder {
             }
             for (LocalPalette localPalette : localPalettes.get()) {
                 for (int color : localPalette.colors) {
-                    int argbColor = 0xFF000000 | color;
-                    bitOutputStream.writeBits(32, argbColor);
+                    bitOutputStream.writeBits(8, (color) & 0xFF);
+                    bitOutputStream.writeBits(8, (color >>> 8) & 0xFF);
+                    bitOutputStream.writeBits(8, (color >>> 16) & 0xFF);
+                    bitOutputStream.writeBits(8, 255);
                 }
             }
             for (BitTile bitTile : bitTiles.get()) {
