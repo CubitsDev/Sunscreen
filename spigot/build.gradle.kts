@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.2.2"
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id("de.eldoria.plugin-yml.bukkit") version "0.7.1"
     //id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
@@ -27,16 +27,12 @@ configurations.all {
     }
 }
 
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-}
-
 tasks {
     runServer {
-        minecraftVersion("1.21.7")
-        jvmArgs("-Dcom.mojang.eula.agree=true", "-Dfile.encoding=UTF-8", "--nogui")
+        minecraftVersion("1.21.8")
+        jvmArgs("-Dcom.mojang.eula.agree=true", "-Dfile.encoding=UTF-8")
         downloadPlugins {
-            github("retrooper", "packetevents", "v2.9.1", "packetevents-spigot-2.9.1.jar")
+            github("retrooper", "packetevents", "v2.10.0", "packetevents-spigot-2.10.0.jar")
             hangar("PlaceholderAPI", "2.11.6")
         }
     }
@@ -47,6 +43,7 @@ tasks {
 
     shadowJar {
         archiveBaseName.set("Sunscreen")
+        archiveClassifier.set(null)
         archiveVersion.set(this.project.version.toString())
         configurations = listOf(project.configurations.runtimeClasspath.get())
         dependencies {
@@ -62,10 +59,10 @@ tasks {
 
 tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
     javaLauncher = javaToolchains.launcherFor {
-        vendor = JvmVendorSpec.JETBRAINS
-        languageVersion = JavaLanguageVersion.of(21)
+        vendor = JvmVendorSpec.AZUL
+        languageVersion = JavaLanguageVersion.of(24)
     }
-    jvmArgs("-XX:+AllowEnhancedClassRedefinition")
+    //jvmArgs("-XX:+AllowEnhancedClassRedefinition")
 }
 
 tasks.withType<JavaCompile> {
@@ -78,7 +75,6 @@ val adventureVersion = "4.20.0"
 dependencies {
     implementation(project(":api"))
     implementation("me.combimagnetron:Passport:1.0-SNAPSHOT")
-    implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
     library("commons-io:commons-io:2.18.0")
     library("com.google.guava:guava:31.1-jre")
     library("org.apache.commons:commons-lang3:3.17.0")
