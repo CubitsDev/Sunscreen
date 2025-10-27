@@ -1,8 +1,9 @@
+<img alt="minestom" height="40" src="https://gistcdn.githack.com/Combimagnetron/3ecb0a233233d30cf5b4acd7acf110e6/raw/b044af1e1de4aeac67e95add00563e8623b8e59e/minestom.svg">
+<img alt="paper" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/supported/paper_vector.svg">
 <a href="https://discord.gg/PJFAGTCyyk" target="_blank">
   <img alt="discord-plural" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/social/discord-plural_vector.svg">
 </a>
 
-<img alt="paper" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact/supported/paper_vector.svg">
 
 # Sunscreen
 Sunscreen is a (very) WIP GUI library, built with ultimate platform compatability in mind. It removes the limitations of chest GUIs, meaning you can place any element anywhere! Input is also ahead of chest GUIs, with inputs ranging from clicking and hovering to text input, anywhere on the screen!
