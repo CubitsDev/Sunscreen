@@ -1,5 +1,7 @@
 package me.combimagnetron.sunscreen;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import me.combimagnetron.passport.Passport;
 import me.combimagnetron.passport.user.UserHandler;
 import me.combimagnetron.passport.util.placeholder.PlaceholderRegistry;
@@ -36,6 +38,11 @@ public class SunscreenLibrarySpigot implements SunscreenLibrary<SunscreenPlugin,
             @Override
             public PlaceholderRegistry placeholders() {
                 return placeholderRegistry;
+            }
+
+            @Override
+            public PacketEventsAPI<?> packetEventsApi() {
+                return PacketEvents.getAPI();
             }
 
             @Override

@@ -4,11 +4,9 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnEntity;
-import me.combimagnetron.passport.PacketEventsConnectionImpl;
-import me.combimagnetron.passport.config.Config;
-import me.combimagnetron.passport.config.element.Node;
 import me.combimagnetron.passport.internal.entity.Entity;
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.internal.network.Connection;
@@ -40,7 +38,6 @@ public class UserImpl implements SunscreenUser<Player> {
     private UserImpl(Player player) {
         this.player = player;
         this.connection = new PacketEventsConnectionImpl<>(player);
-        Node<String> node = Config.file(SunscreenLibrary.library().path().resolve("data.dt")).reader().node(uniqueIdentifier().toString());
         this.version = PacketEvents.getAPI().getPlayerManager().getUser(player).getClientVersion();
         /*if (node == null) {
             AspectRatioMenu menu = new AspectRatioMenu(this);
@@ -147,6 +144,19 @@ public class UserImpl implements SunscreenUser<Player> {
     @Override
     public ClientVersion clientVersion() {
         return version;
+    }
+
+    public static class PacketEventsConnectionImpl<T> implements Connection {
+        private final T player;
+
+        public PacketEventsConnectionImpl(T player) {
+            this.player = player;
+        }
+
+        @Override
+        public void send(PacketWrapper<?> packetHolder) {
+            PacketEvents.getAPI().getPlayerManager().sendPacket(player, packetHolder);
+        }
     }
 
 }

@@ -1,7 +1,7 @@
 package me.combimagnetron.sunscreen.placeholder;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.combimagnetron.passport.data.Identifier;
+import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.matcher.Token;
 import me.combimagnetron.passport.util.placeholder.Placeholder;
 import me.combimagnetron.passport.util.placeholder.PlaceholderProvider;

@@ -1,6 +1,5 @@
 package me.combimagnetron.sunscreen.neo.graphic.shape;
 
-import me.combimagnetron.sunscreen.neo.graphic.color.ColorLike;
 import me.combimagnetron.passport.util.math.Vec2i;
 import org.jetbrains.annotations.NotNull;
 

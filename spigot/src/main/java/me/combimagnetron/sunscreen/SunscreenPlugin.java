@@ -1,6 +1,5 @@
 package me.combimagnetron.sunscreen;
 
-import co.aikar.commands.PaperCommandManager;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMapData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
@@ -19,9 +18,7 @@ import me.combimagnetron.sunscreen.neo.graphic.BufferedColorSpace;
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.sunscreen.neo.graphic.modifier.GraphicModifier;
 import me.combimagnetron.sunscreen.neo.render.engine.encode.MapEncoder;
-import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.user.UserManager;
-import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.data.Range;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
@@ -57,7 +54,7 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onSneak(PlayerSwapHandItemsEvent sneakEvent) throws IOException {
-        BufferedImage image = ImageIO.read(new URL("https://i.imgur.com/4zDrYvx.png"));
+        BufferedImage image = ImageIO.read(new URL("https://i.imgur.com/mSoP5Va.png"));
         GraphicLike<?> graphicLike = new GraphicLike() {
             @Override
             public @NotNull GraphicLike<?> modifier(@NotNull GraphicModifier modifier) {
@@ -175,7 +172,7 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
     }*/
 
     private void commands() {
-        PaperCommandManager manager = new PaperCommandManager(this);
+        /*PaperCommandManager manager = new PaperCommandManager(this);
         manager.getCommandContexts().registerContext(Identifier.class, (bukkitCommandExecutionContext -> Identifier.split(bukkitCommandExecutionContext.popFirstArg())));
         manager.getCommandContexts().registerContext(SunscreenUser.class, (bukkitCommandExecutionContext) -> {
             String name = bukkitCommandExecutionContext.popFirstArg();
@@ -183,7 +180,8 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
         });
         manager.enableUnstableAPI("brigadier");
         manager.getCommandCompletions().registerAsyncCompletion("users", (bukkitCommandCompletionContext) -> userManager.users().stream().map(SunscreenUser::name).filter(name -> name.startsWith(bukkitCommandCompletionContext.getInput())).toList());
-        ///manager.getCommandCompletions().registerAsyncCompletion("menus", (bukkitCommandCompletionContext) -> library.menuRegistry().all().stream().map(menu -> menu.identifier().string()).filter(name -> name.startsWith(bukkitCommandCompletionContext.getInput())).toList());
+
+        *////manager.getCommandCompletions().registerAsyncCompletion("menus", (bukkitCommandCompletionContext) -> library.menuRegistry().all().stream().map(menu -> menu.identifier().string()).filter(name -> name.startsWith(bukkitCommandCompletionContext.getInput())).toList());
         //manager.registerCommand(new SunscreenCommand());
     }
 

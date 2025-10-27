@@ -10,8 +10,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Represents a background for a {@link me.combimagnetron.sunscreen.neo.MenuRoot}.
+ */
 public interface Background extends Renderable<Background, Size>, Component {
 
+    /**
+     * Solid color background representation.
+     */
     class Solid implements Background {
 
         @Override
@@ -25,6 +31,9 @@ public interface Background extends Renderable<Background, Size>, Component {
         }
     }
 
+    /**
+     * Tiles a given canvas to fill the full menu background.
+     */
     class Tiled implements Background {
 
         @Override

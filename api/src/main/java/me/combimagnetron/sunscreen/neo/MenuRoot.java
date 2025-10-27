@@ -18,6 +18,6 @@ public interface MenuRoot {
 
     @NotNull MenuRoot theme(@NotNull ModernTheme theme);
 
-    @Nullable ElementTree elementTree();
+    @Nullable ElementTree<?> elementTree();
 
 }

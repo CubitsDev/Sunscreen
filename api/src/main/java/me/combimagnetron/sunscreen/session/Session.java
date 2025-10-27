@@ -28,8 +28,9 @@ public sealed interface Session permits Session.Impl {
             if (openedMenu != null) {
                 menu().close();
                 SunscreenLibrary.library().sessionHandler().session(Session.session(null, user));
+                return true;
             }
-            return true;
+            return false;
         }
     }
 

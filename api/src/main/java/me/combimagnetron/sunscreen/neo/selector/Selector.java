@@ -12,15 +12,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface Selector<E extends ElementLike<E>> extends ElementLike<E> {
+public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E> permits Selector.FilteredSelector, Selector.AllSelector {
 
     <E extends ElementLike<E>> @NotNull Result<E> result(@NotNull MenuRoot menuRoot);
 
-    static <E extends ElementLike<E>> @NotNull Selector<?> filtered(@NotNull Predicate<? extends ElementLike<?>> elementLikePredicate) {
+    static @NotNull Selector<?> filtered(@NotNull Predicate<? extends ElementLike<?>> elementLikePredicate) {
         return new FilteredSelector(elementLikePredicate);
     }
 
-    static <E extends ElementLike<E>> @NotNull Selector<?> filtered(@NotNull Filter<?> elementLikePredicate) {
+    static @NotNull Selector<?> filtered(@NotNull Filter<?> elementLikePredicate) {
         return new FilteredSelector<>(elementLikePredicate);
     }
 
@@ -28,7 +28,7 @@ public interface Selector<E extends ElementLike<E>> extends ElementLike<E> {
         return new AllSelector();
     }
 
-    class FilteredSelector<E extends ElementLike<E>> implements Selector<E> {
+    final class FilteredSelector<E extends ElementLike<E>> implements Selector<E> {
         private Object filter;
 
         public FilteredSelector(Predicate<ElementLike<E>> elementLikePredicate) {
@@ -41,7 +41,7 @@ public interface Selector<E extends ElementLike<E>> extends ElementLike<E> {
 
         @Override
         public @NotNull Result<E> result(@NotNull MenuRoot menuRoot) {
-            ElementTree elementTree = menuRoot.elementTree();
+            ElementTree<?> elementTree = menuRoot.elementTree();
             if (elementTree == null) return (Result<E>) Result.EMPTY;
             if (filter instanceof Predicate<?> elementLikePredicate) {
 
@@ -67,7 +67,7 @@ public interface Selector<E extends ElementLike<E>> extends ElementLike<E> {
         }
     }
 
-    class AllSelector implements Selector {
+    final class AllSelector implements Selector {
 
         @Override
         public @NotNull Result result(@NotNull MenuRoot menuRoot) {

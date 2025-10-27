@@ -1,11 +1,16 @@
+import me.combimagnetron.passport.logic.state.MutableState;
+import me.combimagnetron.passport.logic.state.State;
+import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
 import me.combimagnetron.sunscreen.neo.MenuRoot;
 import me.combimagnetron.sunscreen.neo.element.Elements;
+import me.combimagnetron.sunscreen.neo.element.impl.text.TextBoxElement;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.graphic.modifier.GraphicModifiers;
 import me.combimagnetron.sunscreen.neo.graphic.modifier.ModifierContext;
 import me.combimagnetron.sunscreen.neo.graphic.shape.Shape;
 import me.combimagnetron.sunscreen.neo.input.keybind.Keybind;
+import me.combimagnetron.sunscreen.neo.input.text.TextInput;
 import me.combimagnetron.sunscreen.neo.layout.Layout;
 import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.RelativeMeasure;
@@ -17,18 +22,34 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class TestModernTemplate implements MenuTemplate {
+
     @Override
     public void build(@NotNull MenuRoot root) {
         //Defining an Element
-        root.element(Elements.label(Identifier.of("test_modern:label"), Component.empty()));
+        MutableState<Component> changingText = State.mutable(Component.text("Hello!"));
+        root.element(Elements.label(Identifier.split("test_modern:label"), changingText));
+        changingText.state(Component.text("Bye!"));
 
         //Building an automatically flowing layout (FlowLayout) with the earlier defined element and a new one
         root.element(
                 Layout.flow(
-                    Selector.filtered(Filter.identifiable(Identifier.Namespace.of("test_modern"))),
-                    Elements.image(Identifier.of("test_image"), Canvas.empty(Vec2i.of(100, 200)))
+                        Selector.filtered(Filter.identifiable(Identifier.Namespace.of("test_modern"))),
+                        Elements.image(Identifier.of("test_image"), Canvas.empty(Vec2i.of(100, 200))),
+                        Elements.textBox(Identifier.split("test:textbox"))
+                                .textInput().state().modify(
+                                state -> {
+                                    state.observe((old, current) -> SunscreenLibrary.library().logger().debug("Input changed from {} to {}!", old, current));
+                                }
                 )
-        );
+        ));
+
+
+        //Conventional way
+        TextBoxElement textBoxElement = Elements.textBox(Identifier.split("test:textbox_2"));
+        TextInput<?> textInput = textBoxElement.textInput();
+        if (textInput.finished()) {
+            SunscreenLibrary.library().logger().debug("Input finished and is {}!",textInput.state().value());
+        }
 
         //Making a new canvas and applying a GraphicModifier
         Canvas canvas = Canvas.empty(Vec2i.of(100, 300));
@@ -49,4 +70,5 @@ public class TestModernTemplate implements MenuTemplate {
         Position fixed = Position.fixed(Vec2i.of(0, 0));
         Position relative = Position.relative(RelativeMeasure.vec2i().x().percentage(50).back().y().pixel(2).back());
     }
+
 }

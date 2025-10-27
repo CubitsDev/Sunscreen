@@ -53,7 +53,7 @@ public record Keybind(Registered registered, Collection<Modifier> modifiers) {
     /** Enum class containing all detectable keys in Minecraft.
      */
     public enum Registered {
-        FORWARD, BACKWARD, LEFT, RIGHT, DROP_ITEM, ADVANCEMENTS, SWAP_HAND, SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8, SLOT_9
+        FORWARD, BACKWARD, LEFT, RIGHT, DROP_ITEM, ADVANCEMENTS, SWAP_HAND, SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8, SLOT_9, OPEN_INVENTORY
     }
 
     /**
@@ -62,7 +62,7 @@ public record Keybind(Registered registered, Collection<Modifier> modifiers) {
      * @apiNote Do not expect these keys to be the actual key mentioned, in case of mentioning it in label please use {@link KeybindTextMapping}.
      */
     public enum NamedKey {
-        W(Registered.FORWARD), S(Registered.BACKWARD), A(Registered.LEFT), D(Registered.RIGHT), Q(Registered.DROP_ITEM), L(Registered.ADVANCEMENTS), F(Registered.SWAP_HAND), KEY_1(Registered.SLOT_1), KEY_2(Registered.SLOT_2), KEY_3(Registered.SLOT_3), KEY_4(Registered.SLOT_4), KEY_5(Registered.SLOT_5), KEY_6(Registered.SLOT_6), KEY_7(Registered.SLOT_7), KEY_8(Registered.SLOT_8), KEY_9(Registered.SLOT_9);
+        W(Registered.FORWARD), S(Registered.BACKWARD), A(Registered.LEFT), D(Registered.RIGHT), Q(Registered.DROP_ITEM), L(Registered.ADVANCEMENTS), F(Registered.SWAP_HAND), KEY_1(Registered.SLOT_1), KEY_2(Registered.SLOT_2), KEY_3(Registered.SLOT_3), KEY_4(Registered.SLOT_4), KEY_5(Registered.SLOT_5), KEY_6(Registered.SLOT_6), KEY_7(Registered.SLOT_7), KEY_8(Registered.SLOT_8), KEY_9(Registered.SLOT_9), E(Registered.OPEN_INVENTORY);
 
         private final Registered registered;
 

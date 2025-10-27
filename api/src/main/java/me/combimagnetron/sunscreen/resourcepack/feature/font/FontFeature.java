@@ -1,16 +1,38 @@
 package me.combimagnetron.sunscreen.resourcepack.feature.font;
 
+import me.combimagnetron.sunscreen.resourcepack.FeatureWriter;
+import me.combimagnetron.sunscreen.resourcepack.PackSection;
 import me.combimagnetron.sunscreen.resourcepack.ResourcePackFeature;
 import me.combimagnetron.passport.util.data.Identifier;
 
 import java.util.Collection;
+import java.util.List;
 
-public interface FontFeature extends ResourcePackFeature<FontFeature, Font> {
+public class FontFeature implements ResourcePackFeature<FontFeature, Font> {
 
-    Identifier identifier();
+    @Override
+    public Class<Font> assetClass() {
+        return null;
+    }
 
-    int size();
+    @Override
+    public ResourcePackFeature<FontFeature, Font> asset(Font asset) {
+        return null;
+    }
 
-    Collection<Glyph> glyphs();
+    @Override
+    public Collection<Font> assets() {
+        return List.of();
+    }
+
+    @Override
+    public FeatureWriter<FontFeature> writer() {
+        return null;
+    }
+
+    @Override
+    public PackSection write() {
+        return null;
+    }
 
 }
