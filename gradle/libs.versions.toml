@@ -26,6 +26,7 @@ commons3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.
 commons-io = { group = "commons-io", name = "commons-io", version = "2.18.0" }
 caffeine = { group =  "com.github.ben-manes.caffeine", name = "caffeine", version ="3.2.0" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.16" }
+jackson = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.20.0" }
 
 # --- Build Logic Hacks ---
 build-system-license = { group = "com.github.hierynomus.license", name = "com.github.hierynomus.license.gradle.plugin", version = "0.16.1" }
@@ -33,4 +34,4 @@ build-system-license-base = { group = "com.github.hierynomus.license-base", name
 
 [bundles]
 minecraft = ["lamp-common", "adventure-api", "adventure-gson", "adventure-plain", "packetevents"]
-utils = ["guava", "commons3", "commons-io", "caffeine", "fastutil"]
+utils = ["guava", "commons3", "commons-io", "caffeine", "fastutil", "jackson"]

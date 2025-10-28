@@ -24,6 +24,11 @@ import org.jetbrains.annotations.NotNull;
 public class TestModernTemplate implements MenuTemplate {
 
     @Override
+    public @NotNull Identifier identifier() {
+        return null;
+    }
+
+    @Override
     public void build(@NotNull MenuRoot root) {
         //Defining an Element
         MutableState<Component> changingText = State.mutable(Component.text("Hello!"));
