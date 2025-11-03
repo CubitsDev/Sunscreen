@@ -52,9 +52,9 @@ public class TestModernTemplate implements MenuTemplate {
 
         //Conventional way
         TextBoxElement textBoxElement = Elements.textBox(Identifier.split("test:textbox_2"));
-        EventBus.subscribe(TextInputFinishedEvent.class, event -> {
+        textBoxElement.listen().finished(event -> {
             SunscreenLibrary.library().logger().debug("Input finished and is {}!", event.input().state().value());
-        });
+        }).back().textInput().state().modify(state -> state.state("a"));
 
         //Making a new canvas and applying a GraphicModifier
         Canvas canvas = Canvas.empty(Vec2i.of(100, 300));
