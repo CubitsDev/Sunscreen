@@ -162,6 +162,8 @@ gradle-app.setting
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
 
+!gradle/wrapper/
+
 # Avoid ignore Gradle wrappper properties
 !gradle-wrapper.properties
 
@@ -179,7 +181,6 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij
-/gradle/
 
 # .DS-STORE
 **/.DS_Store
