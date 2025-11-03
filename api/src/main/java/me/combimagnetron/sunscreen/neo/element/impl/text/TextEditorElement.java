@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TextEditorElement extends TextElement<TextEditorElement> {
 
-    protected TextEditorElement(@Nullable Identifier identifier) {
+    public TextEditorElement(@Nullable Identifier identifier) {
         super(identifier);
     }
 

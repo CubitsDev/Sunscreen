@@ -25,7 +25,7 @@ import java.io.*;
  */
 public class BitOutputStream extends OutputStream {
 
-    private OutputStream  myOutput;
+    private final OutputStream  myOutput;
     private int           myBuffer;
     private int           myBitsToGo;
 

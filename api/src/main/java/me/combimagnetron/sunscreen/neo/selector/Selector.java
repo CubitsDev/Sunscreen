@@ -29,7 +29,7 @@ public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E
     }
 
     final class FilteredSelector<E extends ElementLike<E>> implements Selector<E> {
-        private Object filter;
+        private final Object filter;
 
         public FilteredSelector(Predicate<ElementLike<E>> elementLikePredicate) {
             this.filter = elementLikePredicate;

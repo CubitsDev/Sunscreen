@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TextFieldElement extends TextElement<TextFieldElement> {
 
-    protected TextFieldElement(@Nullable Identifier identifier) {
+    public TextFieldElement(@Nullable Identifier identifier) {
         super(identifier);
     }
 

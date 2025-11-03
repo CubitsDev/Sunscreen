@@ -6,8 +6,8 @@ import me.combimagnetron.sunscreen.neo.element.ModernElement;
 
 public class TextInput<E extends ModernElement<E>> {
     private final InlinedMutableState<String, E> input = State.inlined("", (_, _) -> {});
-    private boolean active = false;
-    private boolean finished = false;
+    private final boolean active = false;
+    private final boolean finished = false;
 
     public boolean active() {
         return active;

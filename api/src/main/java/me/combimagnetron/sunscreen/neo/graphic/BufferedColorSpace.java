@@ -42,7 +42,8 @@ public final class BufferedColorSpace {
     }
 
     public void colorDirect(int index, ColorLike colorLike) {
-        if (colorLike.alpha() == 0) return;
+        if (colorLike.alpha() == 0) {
+        }
     }
 
     public void color(int x, int y, ColorLike colorLike) {

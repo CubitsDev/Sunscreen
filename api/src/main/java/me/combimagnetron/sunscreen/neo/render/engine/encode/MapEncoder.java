@@ -6,7 +6,6 @@ import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.sunscreen.neo.render.engine.binary.BinaryMasks;
 import me.combimagnetron.sunscreen.neo.render.engine.binary.BitOutputStream;
 import me.combimagnetron.sunscreen.neo.render.engine.exception.FatalEncodeException;
-import me.combimagnetron.sunscreen.neo.render.engine.map.SendableMapMenu;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -39,12 +38,6 @@ public class MapEncoder {
         packPalettesAndTiles();
         write();
     }
-
-    public static SendableMapMenu encode(@NotNull GraphicLike<? extends GraphicLike<?>> graphicLike) {
-        new MapEncoder(graphicLike);
-        return SendableMapMenu.of();
-    }
-
     private void formTiles() {
         final int tilesX = image.getWidth() / 2;
         final int tilesY = image.getHeight() / 2;

@@ -41,7 +41,7 @@ public class ViewportHelper {
     }
 
     public static Vec2i fromPosition(Position position) {
-        return Vec2i.of((int) position.x().finish(0), (int) position.y().finish(0));
+        return Vec2i.of(position.x().finish(0), position.y().finish(0));
     }
 
 }

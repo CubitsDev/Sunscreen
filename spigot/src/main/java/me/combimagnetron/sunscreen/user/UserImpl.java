@@ -29,7 +29,7 @@ public class UserImpl implements SunscreenUser<Player> {
     private final Connection connection;
     private final ClientVersion version;
     private ScreenSize screenSize = ScreenSize.of(Vec2i.of(200, 200), Pair.of(Vec2d.of(-0.11083211535, -0.11083211535), Vec2d.of(0.11083211535, 0.11083211535)));
-    private float fov = 70;
+    private final float fov = 70;
 
     public static UserImpl of(Player player) {
         return new UserImpl(player);

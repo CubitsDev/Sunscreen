@@ -1,12 +1,8 @@
 package me.combimagnetron.sunscreen.neo.theme.decorator;
 
-import me.combimagnetron.passport.util.data.Identifier;
-import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
-import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.sunscreen.neo.property.Size;
-import me.combimagnetron.sunscreen.neo.render.RenderAction;
 import me.combimagnetron.sunscreen.neo.render.Renderable;
 import me.combimagnetron.sunscreen.neo.render.engine.pass.RenderPass;
 import org.jetbrains.annotations.NotNull;

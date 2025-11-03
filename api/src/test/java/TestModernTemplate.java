@@ -1,6 +1,8 @@
+import me.combimagnetron.passport.event.EventBus;
 import me.combimagnetron.passport.logic.state.MutableState;
 import me.combimagnetron.passport.logic.state.State;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
+import me.combimagnetron.sunscreen.event.TextInputFinishedEvent;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
 import me.combimagnetron.sunscreen.neo.MenuRoot;
 import me.combimagnetron.sunscreen.neo.element.Elements;
@@ -10,7 +12,6 @@ import me.combimagnetron.sunscreen.neo.graphic.modifier.GraphicModifiers;
 import me.combimagnetron.sunscreen.neo.graphic.modifier.ModifierContext;
 import me.combimagnetron.sunscreen.neo.graphic.shape.Shape;
 import me.combimagnetron.sunscreen.neo.input.keybind.Keybind;
-import me.combimagnetron.sunscreen.neo.input.text.TextInput;
 import me.combimagnetron.sunscreen.neo.layout.Layout;
 import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.RelativeMeasure;
@@ -51,10 +52,9 @@ public class TestModernTemplate implements MenuTemplate {
 
         //Conventional way
         TextBoxElement textBoxElement = Elements.textBox(Identifier.split("test:textbox_2"));
-        TextInput<?> textInput = textBoxElement.textInput();
-        if (textInput.finished()) {
-            SunscreenLibrary.library().logger().debug("Input finished and is {}!",textInput.state().value());
-        }
+        EventBus.subscribe(TextInputFinishedEvent.class, event -> {
+            SunscreenLibrary.library().logger().debug("Input finished and is {}!", event.input().state().value());
+        });
 
         //Making a new canvas and applying a GraphicModifier
         Canvas canvas = Canvas.empty(Vec2i.of(100, 300));

@@ -34,7 +34,7 @@ public class FontUtil {
     }
 
     public static TextComponent offset(int pixels) {
-        return (TextComponent) Component.text(textOffset(pixels)).font(Key.key(OFFSET_FONT_NAME));
+        return Component.text(textOffset(pixels)).font(Key.key(OFFSET_FONT_NAME));
     }
 
     public static Component multiOffset(Component text, Vec2d addedPos) {

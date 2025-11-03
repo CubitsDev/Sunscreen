@@ -4,6 +4,8 @@ import me.combimagnetron.passport.logic.state.State;
 import me.combimagnetron.sunscreen.neo.element.impl.ImageElement;
 import me.combimagnetron.sunscreen.neo.element.impl.LabelElement;
 import me.combimagnetron.sunscreen.neo.element.impl.text.TextBoxElement;
+import me.combimagnetron.sunscreen.neo.element.impl.text.TextEditorElement;
+import me.combimagnetron.sunscreen.neo.element.impl.text.TextFieldElement;
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.passport.util.data.Identifier;
 import net.kyori.adventure.text.Component;
@@ -29,6 +31,22 @@ public interface Elements {
 
     static @NotNull TextBoxElement textBox(@NotNull Identifier identifier) {
         return new TextBoxElement(identifier);
+    }
+
+    static @NotNull TextFieldElement textField(@NotNull Identifier identifier, @NotNull Component initialMessage) {
+        return new TextFieldElement(identifier);
+    }
+
+    static @NotNull TextFieldElement textField(@NotNull Identifier identifier) {
+        return new TextFieldElement(identifier);
+    }
+
+    static @NotNull TextEditorElement textEditor(@NotNull Identifier identifier, @NotNull Component initialMessage) {
+        return new TextEditorElement(identifier);
+    }
+
+    static @NotNull TextEditorElement textEditor(@NotNull Identifier identifier) {
+        return new TextEditorElement(identifier);
     }
 
 }

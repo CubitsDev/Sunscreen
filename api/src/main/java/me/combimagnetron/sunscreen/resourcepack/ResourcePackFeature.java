@@ -16,7 +16,7 @@ public interface ResourcePackFeature<F extends ResourcePackFeature<F, A>, A exte
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    };
+    }
 
     Class<A> assetClass();
 
