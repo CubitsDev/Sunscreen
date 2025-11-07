@@ -60,7 +60,7 @@ tasks {
 tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
     javaLauncher = javaToolchains.launcherFor {
         vendor = JvmVendorSpec.AZUL
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion = JavaLanguageVersion.of(25)
     }
     //jvmArgs("-XX:+AllowEnhancedClassRedefinition")
 }

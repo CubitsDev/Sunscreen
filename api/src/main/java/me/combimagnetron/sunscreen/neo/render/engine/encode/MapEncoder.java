@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.sunscreen.neo.render.engine.binary.BinaryMasks;
-import me.combimagnetron.sunscreen.neo.render.engine.binary.BitOutputStream;
+import me.combimagnetron.sunscreen.neo.render.engine.binary.MapOutputStream;
 import me.combimagnetron.sunscreen.neo.render.engine.exception.FatalEncodeException;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,11 +18,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MapEncoder {
-    private final static int[] MAGIC_ID = new int[]{32, 49, 72, 13};
-    private final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(16384);
+    private final static int MAGIC_ID = 0x53554E53;
+    private final ByteArrayOutputStream buffer = new ByteArrayOutputStream(16384);
     private final Object lock = new Object();
     private final AtomicInteger paletteId = new AtomicInteger(0);
-    private final ThreadLocal<BitOutputStream> bytes = ThreadLocal.withInitial(() -> new BitOutputStream(byteArrayOutputStream));
     private final ThreadLocal<LocalPalette[]> localPalettes = ThreadLocal.withInitial(() -> new LocalPalette[47]);
     private final ThreadLocal<ImageTile[]> imageTiles = ThreadLocal.withInitial(() -> new ImageTile[4096]);
     private final ThreadLocal<BitTile[]> bitTiles = ThreadLocal.withInitial(() -> new BitTile[4096]);
@@ -141,7 +140,7 @@ public class MapEncoder {
     }
 
     public ByteArrayOutputStream bytes() {
-        return byteArrayOutputStream;
+        return buffer;
     }
 
     public void write(File file) throws IOException {
@@ -155,35 +154,25 @@ public class MapEncoder {
 
     private void write() {
         synchronized (lock) {
-            BitOutputStream bitOutputStream = bytes.get();
-            for (int i : MAGIC_ID) {
-                bitOutputStream.writeBits(7, i & BinaryMasks.SEVEN_BIT_MASK);
-            }
-            for (LocalPalette localPalette : localPalettes.get()) {
-                for (int color : localPalette.colors) {
-                    bitOutputStream.writeBits(8, (color) & 0xFF);
-                    bitOutputStream.writeBits(8, (color >>> 8) & 0xFF);
-                    bitOutputStream.writeBits(8, (color >>> 16) & 0xFF);
-                    bitOutputStream.writeBits(8, 255);
+            try (MapOutputStream out = MapOutputStream.create(buffer)) {
+                out.writeBits(32, MAGIC_ID);
+                for (LocalPalette localPalette : localPalettes.get()) {
+                    for (int color : localPalette.colors) {
+                        out.writeBits(8, (color) & 0xFF);
+                        out.writeBits(8, (color >>> 8) & 0xFF);
+                        out.writeBits(8, (color >>> 16) & 0xFF);
+                        out.writeBits(8, 255);
+                    }
                 }
-            }
-            for (BitTile bitTile : bitTiles.get()) {
-                bitOutputStream.writeBits(6, bitTile.palette().serializedId() & BinaryMasks.SIX_BIT_MASK);
-                for (int index : bitTile.indices) {
-                    bitOutputStream.writeBits(4, index & BinaryMasks.FOUR_BIT_MASK);
+                for (BitTile bitTile : bitTiles.get()) {
+                    out.writeBits(6, bitTile.palette().serializedId() & BinaryMasks.SIX_BIT_MASK);
+                    for (int index : bitTile.indices) {
+                        out.writeBits(4, index & BinaryMasks.FOUR_BIT_MASK);
+                    }
                 }
-            }
-            bitOutputStream.flush();
-            bitOutputStream.close();
-            int size = byteArrayOutputStream.size();
-            System.out.println(size);
-            if (!(size < 16384)) return;
-            try {
-                byteArrayOutputStream.write(new byte[16384 - size]);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println(byteArrayOutputStream.size());
         }
     }
 
