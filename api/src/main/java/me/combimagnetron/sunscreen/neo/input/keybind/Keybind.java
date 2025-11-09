@@ -1,12 +1,26 @@
 package me.combimagnetron.sunscreen.neo.input.keybind;
 
+import me.combimagnetron.passport.event.EventBus;
+import me.combimagnetron.sunscreen.event.KeybindPressedEvent;
+import me.combimagnetron.sunscreen.neo.input.Interactable;
+import me.combimagnetron.sunscreen.neo.input.ListenerReferences;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public record Keybind(Registered registered, Collection<Modifier> modifiers) {
+public final class Keybind implements Interactable<Keybind, Keybind.KeybindListenerReferences> {
+    private final KeybindListenerReferences references = new KeybindListenerReferences(this);
+    private final Registered registered;
+    private final Collection<Modifier> modifiers;
+
+    public Keybind(Registered registered, Collection<Modifier> modifiers) {
+        this.registered = registered;
+        this.modifiers = modifiers;
+    }
 
     public static Keybind of(@NotNull Keybind.NamedKey registered, @NotNull Modifier... modifiers) {
         return of(registered.registered, modifiers);
@@ -28,7 +42,43 @@ public record Keybind(Registered registered, Collection<Modifier> modifiers) {
         return of(registered, Arrays.stream(modifiers).map(namedModifier -> namedModifier.modifier).collect(Collectors.toSet()));
     }
 
-    /** Enum class containing all detectable modifier keys in Minecraft.
+    @Override
+    public @NotNull KeybindListenerReferences listen() {
+        return references;
+    }
+
+    public Registered registered() {
+        return registered;
+    }
+
+    public Collection<Modifier> modifiers() {
+        return modifiers;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (Keybind) obj;
+        return Objects.equals(this.registered, that.registered) &&
+                Objects.equals(this.modifiers, that.modifiers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(registered, modifiers);
+    }
+
+    @Override
+    public String toString() {
+        return "Keybind[" +
+                "registered=" + registered + ", " +
+                "modifiers=" + modifiers + ']';
+    }
+
+
+    /**
+     * Enum class containing all detectable modifier keys in Minecraft.
      */
     public enum Modifier {
         SPRINT, SNEAK, JUMP
@@ -50,7 +100,8 @@ public record Keybind(Registered registered, Collection<Modifier> modifiers) {
 
     }
 
-    /** Enum class containing all detectable keys in Minecraft.
+    /**
+     * Enum class containing all detectable keys in Minecraft.
      */
     public enum Registered {
         FORWARD, BACKWARD, LEFT, RIGHT, DROP_ITEM, ADVANCEMENTS, SWAP_HAND, SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8, SLOT_9, OPEN_INVENTORY
@@ -68,6 +119,15 @@ public record Keybind(Registered registered, Collection<Modifier> modifiers) {
 
         NamedKey(Registered registered) {
             this.registered = registered;
+        }
+
+    }
+
+    public record KeybindListenerReferences(@NotNull Keybind back) implements ListenerReferences<Keybind> {
+
+        public @NotNull KeybindListenerReferences pressed(@NotNull Consumer<KeybindPressedEvent> event) {
+            EventBus.subscribe(KeybindPressedEvent.class, event);
+            return this;
         }
 
     }

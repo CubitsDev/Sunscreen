@@ -14,7 +14,7 @@ public interface MenuRoot {
 
     <E extends ElementLike<E>> @NotNull MenuRoot element(@NotNull ElementLike<E> e);
 
-    @NotNull MenuRoot keybind(@NotNull Keybind keybind, @NotNull Consumer<KeybindPressedEvent> eventConsumer);
+    @NotNull MenuRoot keybind(@NotNull Keybind keybind);
 
     @NotNull MenuRoot theme(@NotNull ModernTheme theme);
 

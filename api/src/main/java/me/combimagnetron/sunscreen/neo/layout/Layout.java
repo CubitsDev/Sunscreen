@@ -1,13 +1,13 @@
 package me.combimagnetron.sunscreen.neo.layout;
 
-import me.combimagnetron.sunscreen.neo.element.ElementGroup;
+import me.combimagnetron.sunscreen.neo.element.ElementContainer;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.property.Property;
 import me.combimagnetron.passport.util.data.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface Layout<E extends ElementLike<E>> extends ElementGroup<E> {
+public interface Layout<E extends ElementLike<E>> extends ElementContainer<E> {
 
      E root();
      static <E extends ElementLike<E>> FlowLayout<E> flow() {
@@ -34,22 +34,22 @@ public interface Layout<E extends ElementLike<E>> extends ElementGroup<E> {
          }
 
          @Override
-         public @NotNull <L extends ElementLike<L>> ElementGroup<@NotNull E> add(@NotNull L elementLike) {
+         public @NotNull <L extends ElementLike<L>> ElementContainer<@NotNull E> add(@NotNull L elementLike) {
              return null;
          }
 
          @Override
-         public @NotNull <L extends ElementLike<L>> ElementGroup<@NotNull E> add(@NotNull Iterable<@NotNull L> elementLike) {
+         public @NotNull <L extends ElementLike<L>> ElementContainer<@NotNull E> add(@NotNull Iterable<@NotNull L> elementLike) {
              return null;
          }
 
          @Override
-         public @NotNull <L extends ElementLike<L>> ElementGroup<@NotNull E> remove(@NotNull L elementLike) {
+         public @NotNull <L extends ElementLike<L>> ElementContainer<@NotNull E> remove(@NotNull L elementLike) {
              return null;
          }
 
          @Override
-         public @NotNull ElementGroup<@NotNull E> remove(@Nullable Identifier identifier) {
+         public @NotNull ElementContainer<@NotNull E> remove(@Nullable Identifier identifier) {
              return null;
          }
 
