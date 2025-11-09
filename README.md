@@ -10,9 +10,6 @@ Sunscreen is a (very) WIP GUI library, built with ultimate platform compatabilit
 
 ![Showcase of the library](./assets/image/showcase-gif.gif)
 
-> [!WARNING]  
-> This library/plugin won't run without the default assets, which are kept out from source on purpose. ~~Contact ``@combimagnetron`` on Discord for a possible test run with assets.~~ Currently not handing out assets.
-
 ## Features
 - Native support for text input
 - Hover and click animations
@@ -21,3 +18,9 @@ Sunscreen is a (very) WIP GUI library, built with ultimate platform compatabilit
 - Full screen menu capability
 - Replace menus from any plugin!
 - Ingame editor (WIP)
+
+## Credits and Appreciation
+I'd like to offer special thanks to the following people for either providing public resources or helping significantly in any way.
+- `willemdev (@OmeWillem)` for helping with the map encoding system/shader and immense amounts of support.
+- `retrooper (@retrooper)` for creating and providing [packetevents](https://github.com/retrooper/packetevents) and thus saving lots of compatibility worries.
+- `pianoman911 & booky10 (@pianoman911, @booky10)` for the inspiration for my own BufferedImage alternative (BufferedColorSpace) through their code in [MapEngine](https://github.com/MinceraftMC/MapEngine)
