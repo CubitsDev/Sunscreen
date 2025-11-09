@@ -1,5 +1,6 @@
 package me.combimagnetron.sunscreen.neo.property;
 
+import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.neo.property.handler.PropertyHandler;
 import me.combimagnetron.passport.util.math.Vec4i;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class Margin extends RelativeMeasure.Vec4iRelativeMeasureGroup<Margin> implements Property<Vec4i, Margin> {
+public class Margin extends RelativeMeasure.Vec4iRelativeMeasureGroup<Margin> implements Property<Vec4i, Margin> {
     private static final PropertyHandler<Vec4i, Margin> PROPERTY_HANDLER = (element, context) -> null;
     private final Map<RelativeMeasure.Axis4d, Vec4iRelativeBuilder<@NotNull Margin>> axisMap = new LinkedHashMap<>();
 
@@ -24,8 +25,20 @@ public final class Margin extends RelativeMeasure.Vec4iRelativeMeasureGroup<Marg
         return new Margin(measureGroup);
     }
 
-    public static @NotNull Margin fixed(@NotNull Vec4i Vec4i) {
-        return new Margin(Vec4i);
+    public static @NotNull Margin fixed(@NotNull Vec4i vec4i) {
+        return new Margin(vec4i);
+    }
+
+    public static @NotNull Margin fixed(int padding) {
+        return fixed(Vec2i.of(padding, padding));
+    }
+
+    public static @NotNull Margin fixed(@NotNull Vec2i vec2i) {
+        return fixed(Vec4i.mirror(vec2i));
+    }
+
+    public static @NotNull Margin fit() {
+        return new Fit();
     }
 
     @Override
@@ -40,6 +53,19 @@ public final class Margin extends RelativeMeasure.Vec4iRelativeMeasureGroup<Marg
 
     @Override
     public void finish(@NotNull ScreenSize screenSize) {
+
+    }
+
+    public static class Fit extends Margin implements FitToContent<Margin> {
+
+        public Fit() {
+            super((Vec4i) null);
+        }
+
+        @Override
+        public @NotNull Class<Margin> parent() {
+            return Margin.class;
+        }
 
     }
 

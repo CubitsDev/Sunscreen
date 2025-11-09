@@ -4,10 +4,14 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMapData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.combimagnetron.passport.Passport;
+import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
 import me.combimagnetron.sunscreen.hook.betterhud.BetterHudSunscreenHook;
 import me.combimagnetron.sunscreen.hook.mythichud.MythicHudSunscreenHook;
 import me.combimagnetron.sunscreen.hook.tab.TABSunscreenHook;
+import me.combimagnetron.sunscreen.neo.render.engine.encode.MapData;
+import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderChunk;
+import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderScale;
 import me.combimagnetron.sunscreen.placeholder.PapiPlaceholderProvider;
 import me.combimagnetron.sunscreen.resourcepack.ResourcePack;
 import me.combimagnetron.sunscreen.resourcepack.feature.shader.Shader;
@@ -21,6 +25,7 @@ import me.combimagnetron.sunscreen.neo.render.engine.encode.MapEncoder;
 import me.combimagnetron.sunscreen.user.UserManager;
 import me.combimagnetron.passport.util.data.Range;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,6 +41,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -54,32 +60,16 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onSneak(PlayerSwapHandItemsEvent sneakEvent) throws IOException {
-        BufferedImage image = ImageIO.read(new URL("https://i.imgur.com/mSoP5Va.png"));
-        GraphicLike<?> graphicLike = new GraphicLike() {
-            @Override
-            public @NotNull GraphicLike<?> modifier(@NotNull GraphicModifier modifier) {
-                return this;
-            }
-
-            @Override
-            public @NotNull BufferedImage image() {
-                return image;
-            }
-
-            @Override
-            public @NotNull BufferedColorSpace bufferedColorSpace() {
-                return null;
-            }
-        };
-        MapEncoder mapEncoder = new MapEncoder(graphicLike);
-        WrapperPlayServerMapData serverMapData = new WrapperPlayServerMapData(99, (byte) 0, false, false, null, 128, 128, 0, 0, mapEncoder.bytes().toByteArray());
+        BufferedImage image = ImageIO.read(new URL("https://i.imgur.com/4zDrYvx.png"));
+        MapEncoder mapEncoder = new MapEncoder(new MapData(new RenderChunk(null, RenderScale.X4), Vec2i.of(1, 1), image));
+        byte[] data = mapEncoder.bytes().toByteArray();
+        //ArrayUtils.reverse(data);
+        WrapperPlayServerMapData serverMapData = new WrapperPlayServerMapData(99, (byte) 0, false, false, null, 128, 128, 0, 0, data);
         PacketEvents.getAPI().getPlayerManager().sendPacket(sneakEvent.getPlayer(), serverMapData);
         ItemStack itemStack = new ItemStack(Material.FILLED_MAP);
         itemStack.editMeta(MapMeta.class, mapMeta -> {
             mapMeta.setMapId(99);
         });
-        File file = getDataPath().resolve("bytes.txt").toFile();
-        mapEncoder.write(file);
         sneakEvent.getPlayer().getInventory().addItem(itemStack);
     }
 

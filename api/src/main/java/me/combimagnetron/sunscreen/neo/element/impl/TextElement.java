@@ -33,18 +33,18 @@ public abstract class TextElement<E extends ModernElement<E>> extends GenericMod
     }
 
     @Override
-    public TextElementListenerReferences<E> listen() {
+    public @NotNull TextElementListenerReferences<E> listen() {
         return references;
     }
 
     public record TextElementListenerReferences<F extends ModernElement<F>>(TextElement<F> back) implements ListenerReferences<TextElement<F>> {
 
-        public TextElementListenerReferences<F> finished(Consumer<TextInputFinishedEvent> event) {
+        public @NotNull TextElementListenerReferences<F> finished(@NotNull Consumer<TextInputFinishedEvent> event) {
             EventBus.subscribe(TextInputFinishedEvent.class, event);
             return this;
         }
 
-        public TextElementListenerReferences<F> updated(Consumer<TextInputUpdatedEvent> event) {
+        public @NotNull TextElementListenerReferences<F> updated(@NotNull Consumer<TextInputUpdatedEvent> event) {
             EventBus.subscribe(TextInputUpdatedEvent.class, event);
             return this;
         }

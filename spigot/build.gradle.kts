@@ -29,7 +29,7 @@ configurations.all {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.8")
+        minecraftVersion("1.21.10")
         jvmArgs("-Dcom.mojang.eula.agree=true", "-Dfile.encoding=UTF-8")
         downloadPlugins {
             github("retrooper", "packetevents", "v2.10.0", "packetevents-spigot-2.10.0.jar")
@@ -100,7 +100,7 @@ dependencies {
 bukkit {
     name = "Sunscreen"
     main = "me.combimagnetron.sunscreen.SunscreenPlugin"
-    apiVersion = "1.20"
+    apiVersion = "1.21"
     version = project.version.toString()
     authors = listOf("Combimagnetron")
     description = "Create UIs like never seen before, all from within the game!"

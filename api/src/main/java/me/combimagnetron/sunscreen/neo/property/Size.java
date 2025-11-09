@@ -1,5 +1,6 @@
 package me.combimagnetron.sunscreen.neo.property;
 
+import me.combimagnetron.passport.util.math.Vec4i;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.neo.property.handler.PropertyHandler;
 import me.combimagnetron.passport.util.math.Vec2i;
@@ -8,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class Size extends RelativeMeasure.Vec2iRelativeMeasureGroup<Size> implements Property<Vec2i, Size> {
+public class Size extends RelativeMeasure.Vec2iRelativeMeasureGroup<Size> implements Property<Vec2i, Size> {
     private static final PropertyHandler<Vec2i, Size> PROPERTY_HANDLER = (element, property) -> null;
-    private final Map<RelativeMeasure.Axis2d, Vec2iRelativeBuilder<Size>> axisMap = new LinkedHashMap<>();
+    private final Map<RelativeMeasure.Axis2d, RelativeMeasure.Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<Size>> axisMap = new LinkedHashMap<>();
 
     public Size(@NotNull Vec2i vec2i) {
         super(vec2i);
@@ -24,8 +25,12 @@ public final class Size extends RelativeMeasure.Vec2iRelativeMeasureGroup<Size> 
         return new Size(measureGroup);
     }
 
-    public static @NotNull Size fixed(Vec2i vec2i) {
+    public static @NotNull Size fixed(@NotNull Vec2i vec2i) {
         return new Size(vec2i);
+    }
+
+    public static @NotNull Size fit() {
+        return new Fit();
     }
 
     @Override
@@ -40,6 +45,19 @@ public final class Size extends RelativeMeasure.Vec2iRelativeMeasureGroup<Size> 
 
     @Override
     public void finish(@NotNull ScreenSize screenSize) {
+
+    }
+
+    public static class Fit extends Size implements FitToContent<Size> {
+
+        public Fit() {
+            super((Vec2i) null);
+        }
+
+        @Override
+        public @NotNull Class<Size> parent() {
+            return Size.class;
+        }
 
     }
 

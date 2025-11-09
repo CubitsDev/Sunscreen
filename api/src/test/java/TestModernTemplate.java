@@ -1,6 +1,9 @@
 import me.combimagnetron.passport.event.EventBus;
 import me.combimagnetron.passport.logic.state.MutableState;
 import me.combimagnetron.passport.logic.state.State;
+import me.combimagnetron.passport.util.condition.Condition;
+import me.combimagnetron.passport.util.condition.Supplier;
+import me.combimagnetron.passport.util.math.Vec4i;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.event.TextInputFinishedEvent;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
@@ -13,8 +16,10 @@ import me.combimagnetron.sunscreen.neo.graphic.modifier.ModifierContext;
 import me.combimagnetron.sunscreen.neo.graphic.shape.Shape;
 import me.combimagnetron.sunscreen.neo.input.keybind.Keybind;
 import me.combimagnetron.sunscreen.neo.layout.Layout;
+import me.combimagnetron.sunscreen.neo.property.Padding;
 import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.RelativeMeasure;
+import me.combimagnetron.sunscreen.neo.property.Size;
 import me.combimagnetron.sunscreen.neo.selector.Selector;
 import me.combimagnetron.sunscreen.neo.selector.filter.Filter;
 import me.combimagnetron.passport.util.data.Identifier;
@@ -46,7 +51,14 @@ public class TestModernTemplate implements MenuTemplate {
                                 state -> {
                                     state.observe((old, current) -> SunscreenLibrary.library().logger().debug("Input changed from {} to {}!", old, current));
                                 }
-                )
+                        )
+                                .size(Size.fit())
+                                .padding(Padding.relative(RelativeMeasure.vec4i()
+                                        .up().percentage(20).pixel(6).back()
+                                        .down().pixel(6).back()
+                                        .left().percentage(25.6).back()
+                                        .right().pixel(3).back())
+                                )
         ));
 
 
@@ -67,9 +79,9 @@ public class TestModernTemplate implements MenuTemplate {
         );
 
         //Registering a keybind
-        root.keybind(Keybind.of(Keybind.NamedKey.S, Keybind.NamedModifier.CTRL), keybindPressedEvent -> {
+        root.keybind(Keybind.of(Keybind.NamedKey.S, Keybind.NamedModifier.CTRL).listen().pressed(keybindPressedEvent -> {
 
-        });
+        }).back());
 
         //Properties (Size, Position, Margin etc.) can be either fixed or relative
         Position fixed = Position.fixed(Vec2i.of(0, 0));

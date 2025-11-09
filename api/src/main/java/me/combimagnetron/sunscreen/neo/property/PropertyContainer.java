@@ -35,20 +35,20 @@ public interface PropertyContainer<R> {
         return propOrThrow(Padding.class);
     }
 
-    default @NotNull Size size(@NotNull Size or) {
-        return propOr(Size.class, or);
+    default @NotNull R size(@NotNull Size size) {
+        return property(size);
     }
 
-    default @NotNull Position position(@NotNull Position or) {
-        return propOr(Position.class, or);
+    default @NotNull R position(@NotNull Position position) {
+        return property(position);
     }
 
-    default @NotNull Margin margin(@NotNull Margin or) {
-        return propOr(Margin.class, or);
+    default @NotNull R margin(@NotNull Margin margin) {
+        return property(margin);
     }
 
-    default @NotNull Padding padding(@NotNull Padding or) {
-        return propOr(Padding.class, or);
+    default @NotNull R padding(@NotNull Padding padding) {
+        return property(padding);
     }
 
 }

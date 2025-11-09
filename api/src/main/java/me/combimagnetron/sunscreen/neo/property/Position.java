@@ -30,7 +30,7 @@ public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Po
         return new Position(measureGroup);
     }
 
-    public static @NotNull Position fixed(Vec2i vec2i) {
+    public static @NotNull Position fixed(@NotNull Vec2i vec2i) {
         return new Position(vec2i);
     }
 
@@ -48,5 +48,7 @@ public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Po
     public void finish(@NotNull ScreenSize screenSize) {
 
     }
+
+
 
 }
