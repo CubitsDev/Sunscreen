@@ -9,8 +9,8 @@ import me.combimagnetron.passport.internal.entity.Entity;
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.internal.network.Connection;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.menu.MenuTemplate;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
+import me.combimagnetron.sunscreen.neo.MenuTemplate;
 import me.combimagnetron.sunscreen.session.Session;
 import me.combimagnetron.passport.util.data.Pair;
 import me.combimagnetron.passport.util.math.Vec2d;
@@ -45,21 +45,6 @@ public class UserImpl implements SunscreenUser<Player> {
     @Override
     public void screenSize(@NotNull ScreenSize screenSize) {
         this.screenSize = screenSize;
-    }
-
-    @Override
-    public float fov() {
-        return 0;
-    }
-
-    @Override
-    public void fov(float fov) {
-
-    }
-
-    @Override
-    public boolean permission(@NotNull String permission) {
-        return player.hasPermission(permission);
     }
 
     @Override

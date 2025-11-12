@@ -3,8 +3,8 @@ package me.combimagnetron.sunscreen.neo.element.impl;
 import me.combimagnetron.passport.event.EventBus;
 import me.combimagnetron.passport.logic.state.InlinedMutableState;
 import me.combimagnetron.passport.util.data.Identifier;
-import me.combimagnetron.sunscreen.event.TextInputFinishedEvent;
-import me.combimagnetron.sunscreen.event.TextInputUpdatedEvent;
+import me.combimagnetron.sunscreen.event.UserFinishTextInputEvent;
+import me.combimagnetron.sunscreen.event.UserUpdateTextInputEvent;
 import me.combimagnetron.sunscreen.neo.element.GenericModernElement;
 import me.combimagnetron.sunscreen.neo.element.ModernElement;
 import me.combimagnetron.sunscreen.neo.input.Interactable;
@@ -39,13 +39,13 @@ public abstract class TextElement<E extends ModernElement<E>> extends GenericMod
 
     public record TextElementListenerReferences<F extends ModernElement<F>>(TextElement<F> back) implements ListenerReferences<TextElement<F>> {
 
-        public @NotNull TextElementListenerReferences<F> finished(@NotNull Consumer<TextInputFinishedEvent> event) {
-            EventBus.subscribe(TextInputFinishedEvent.class, event);
+        public @NotNull TextElementListenerReferences<F> finished(@NotNull Consumer<UserFinishTextInputEvent> event) {
+            EventBus.subscribe(UserFinishTextInputEvent.class, event);
             return this;
         }
 
-        public @NotNull TextElementListenerReferences<F> updated(@NotNull Consumer<TextInputUpdatedEvent> event) {
-            EventBus.subscribe(TextInputUpdatedEvent.class, event);
+        public @NotNull TextElementListenerReferences<F> updated(@NotNull Consumer<UserUpdateTextInputEvent> event) {
+            EventBus.subscribe(UserUpdateTextInputEvent.class, event);
             return this;
         }
 

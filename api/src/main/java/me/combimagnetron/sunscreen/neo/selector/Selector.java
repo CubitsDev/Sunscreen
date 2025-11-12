@@ -1,6 +1,7 @@
 package me.combimagnetron.sunscreen.neo.selector;
 
 import me.combimagnetron.sunscreen.neo.MenuRoot;
+import me.combimagnetron.sunscreen.neo.ModernMenu;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.element.tree.ElementTree;
 import me.combimagnetron.sunscreen.neo.property.Property;
@@ -14,7 +15,7 @@ import java.util.function.Predicate;
 
 public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E> permits Selector.FilteredSelector, Selector.AllSelector {
 
-    <E extends ElementLike<E>> @NotNull Result<E> result(@NotNull MenuRoot menuRoot);
+    <E extends ElementLike<E>> @NotNull Result<E> result(@NotNull ModernMenu menu);
 
     static @NotNull Selector<?> filtered(@NotNull Predicate<? extends ElementLike<?>> elementLikePredicate) {
         return new FilteredSelector(elementLikePredicate);
@@ -24,7 +25,7 @@ public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E
         return new FilteredSelector<>(elementLikePredicate);
     }
 
-    static <E extends ElementLike<E>> @NotNull Selector<?> all(@NotNull MenuRoot menuRoot) {
+    static <E extends ElementLike<E>> @NotNull Selector<?> all() {
         return new AllSelector();
     }
 
@@ -40,9 +41,8 @@ public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E
         }
 
         @Override
-        public @NotNull Result<E> result(@NotNull MenuRoot menuRoot) {
-            ElementTree<?> elementTree = menuRoot.elementTree();
-            if (elementTree == null) return (Result<E>) Result.EMPTY;
+        public @NotNull Result<E> result(@NotNull ModernMenu menu) {
+            ElementTree elementTree = menu.tree();
             if (filter instanceof Predicate<?> elementLikePredicate) {
 
             } else if (filter instanceof Filter<?> filter) {
@@ -70,7 +70,7 @@ public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E
     final class AllSelector implements Selector {
 
         @Override
-        public @NotNull Result result(@NotNull MenuRoot menuRoot) {
+        public @NotNull Result result(@NotNull ModernMenu menu) {
             return null;
         }
 

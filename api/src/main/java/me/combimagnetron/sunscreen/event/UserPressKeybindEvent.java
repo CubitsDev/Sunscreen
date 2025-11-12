@@ -9,11 +9,11 @@ import me.combimagnetron.sunscreen.user.SunscreenUser;
  * @param keybind keybind that was pressed, can be a combination of multiple modifiers/keys.
  * @param user the user that pressed the keybind.
  */
-public record KeybindPressedEvent(SunscreenUser<?> user, Keybind keybind) implements UserEvent {
+public record UserPressKeybindEvent(SunscreenUser<?> user, Keybind keybind) implements UserEvent {
 
     @Override
     public Class<? extends Event> eventType() {
-        return KeybindPressedEvent.class;
+        return UserPressKeybindEvent.class;
     }
 
 }

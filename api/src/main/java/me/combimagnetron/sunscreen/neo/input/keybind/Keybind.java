@@ -1,7 +1,7 @@
 package me.combimagnetron.sunscreen.neo.input.keybind;
 
 import me.combimagnetron.passport.event.EventBus;
-import me.combimagnetron.sunscreen.event.KeybindPressedEvent;
+import me.combimagnetron.sunscreen.event.UserPressKeybindEvent;
 import me.combimagnetron.sunscreen.neo.input.Interactable;
 import me.combimagnetron.sunscreen.neo.input.ListenerReferences;
 import org.jetbrains.annotations.NotNull;
@@ -125,8 +125,8 @@ public final class Keybind implements Interactable<Keybind, Keybind.KeybindListe
 
     public record KeybindListenerReferences(@NotNull Keybind back) implements ListenerReferences<Keybind> {
 
-        public @NotNull KeybindListenerReferences pressed(@NotNull Consumer<KeybindPressedEvent> event) {
-            EventBus.subscribe(KeybindPressedEvent.class, event);
+        public @NotNull KeybindListenerReferences pressed(@NotNull Consumer<UserPressKeybindEvent> event) {
+            EventBus.subscribe(UserPressKeybindEvent.class, event);
             return this;
         }
 

@@ -22,6 +22,10 @@ public final class MapOutputStream implements AutoCloseable {
         return new MapOutputStream(out);
     }
 
+    public int size() {
+        return target.size();
+    }
+
     public void writeBits(int numBits, int value) throws IOException {
         if (closed) throw new IOException("Stream already closed");
         if (numBits < 0 || numBits > 32) throw new IllegalArgumentException("numBits must be 0–32");

@@ -9,8 +9,6 @@ public interface GraphicLike<G extends GraphicLike<G>> {
 
     @NotNull <M> G modifier(@NotNull GraphicModifier<M> modifier);
 
-    @NotNull BufferedImage image();
-
     @NotNull BufferedColorSpace bufferedColorSpace();
 
 }

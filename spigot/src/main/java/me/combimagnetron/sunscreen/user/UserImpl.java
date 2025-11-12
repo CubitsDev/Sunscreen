@@ -12,6 +12,7 @@ import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.internal.network.Connection;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
+import me.combimagnetron.sunscreen.neo.MenuTemplate;
 import me.combimagnetron.sunscreen.session.Session;
 import me.combimagnetron.sunscreen.neo.MenuRoot;
 import me.combimagnetron.passport.util.data.Pair;
@@ -19,6 +20,7 @@ import me.combimagnetron.passport.util.math.Vec2d;
 import me.combimagnetron.passport.util.math.Vec2i;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -112,17 +114,12 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public boolean permission(@NotNull String permission) {
-        return player.hasPermission(permission);
+    public @Nullable Session session() {
+        return SunscreenLibrary.library().sessionHandler().session(this);
     }
 
     @Override
-    public Session session() {
-        return SunscreenLibrary.library().sessionHandler().session(this) == null ? new Session.Impl(null, this) : SunscreenLibrary.library().sessionHandler().session(this);
-    }
-
-    @Override
-    public Session open(@NotNull MenuRoot template) {
+    public Session open(@NotNull MenuTemplate template) {
         /*OpenedMenu.FloatImpl menu = new OpenedMenu.Float(this, template);
         SunscreenLibrary.library().menuTicker().start(menu);
         menu.open(this);

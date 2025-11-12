@@ -14,6 +14,8 @@ import me.combimagnetron.sunscreen.user.UserManager;
 import net.kyori.adventure.audience.Audience;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
@@ -61,17 +63,17 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
     }
 
     @Override
-    public Object plugin() {
+    public @NotNull Object plugin() {
         return null;
     }
 
     @Override
-    public InputStream resource(String path) {
+    public @Nullable InputStream resource(String path) {
         return SunscreenLibraryMinestom.class.getResourceAsStream(path);
     }
 
     @Override
-    public SessionHandler sessionHandler() {
+    public @NotNull SessionHandler sessionHandler() {
         return sessionHandler;
     }
 
@@ -81,7 +83,7 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
     }
 
     @Override
-    public UserHandler<Player, SunscreenUser<Player>> users() {
+    public @NotNull UserHandler<Player, SunscreenUser<Player>> users() {
         return userManager;
     }
 
@@ -91,7 +93,7 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
     }
 
     @Override
-    public Logger logger() {
+    public @NotNull Logger logger() {
         return MinecraftServer.LOGGER;
     }
 

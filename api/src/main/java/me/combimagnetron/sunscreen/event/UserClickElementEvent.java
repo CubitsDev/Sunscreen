@@ -12,11 +12,11 @@ import me.combimagnetron.passport.util.math.Vec2i;
  * @param coords the coordinates at which the element was clicked, relative to the element itself.
  * @param <E> generic element type.
  */
-public record ClickElementEvent<E extends ModernElement<E>>(SunscreenUser<?> user, E element, Vec2i coords) implements UserEvent {
+public record UserClickElementEvent<E extends ModernElement<E>>(SunscreenUser<?> user, E element, Vec2i coords) implements UserEvent {
 
     @Override
     public Class<? extends Event> eventType() {
-        return ClickElementEvent.class;
+        return UserClickElementEvent.class;
     }
 
 }

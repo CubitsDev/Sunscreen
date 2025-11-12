@@ -1,11 +1,6 @@
-import me.combimagnetron.passport.event.EventBus;
 import me.combimagnetron.passport.logic.state.MutableState;
 import me.combimagnetron.passport.logic.state.State;
-import me.combimagnetron.passport.util.condition.Condition;
-import me.combimagnetron.passport.util.condition.Supplier;
-import me.combimagnetron.passport.util.math.Vec4i;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.event.TextInputFinishedEvent;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
 import me.combimagnetron.sunscreen.neo.MenuRoot;
 import me.combimagnetron.sunscreen.neo.element.Elements;
@@ -60,7 +55,6 @@ public class TestModernTemplate implements MenuTemplate {
                                         .right().pixel(3).back())
                                 )
         ));
-
 
         //Conventional way
         TextBoxElement textBoxElement = Elements.textBox(Identifier.split("test:textbox_2"));
