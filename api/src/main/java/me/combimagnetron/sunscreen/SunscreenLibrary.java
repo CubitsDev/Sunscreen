@@ -2,9 +2,12 @@ package me.combimagnetron.sunscreen;
 
 import me.combimagnetron.passport.Passport;
 import me.combimagnetron.passport.user.UserHandler;
+import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
 import me.combimagnetron.sunscreen.session.SessionHandler;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import net.kyori.adventure.audience.Audience;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
@@ -19,15 +22,17 @@ public interface SunscreenLibrary<T, P extends Audience> {
 
     Path path();
 
-    T plugin();
+    @NotNull T plugin();
 
-    InputStream resource(String path);
+    @Nullable InputStream resource(String path);
 
-    SessionHandler sessionHandler();
+    @NotNull SessionHandler sessionHandler();
 
-    UserHandler<P, SunscreenUser<P>> users();
+    @NotNull UserHandler<P, SunscreenUser<P>> users();
 
-    Logger logger();
+    @NotNull Logger logger();
+
+    @NotNull PlatformProtocolIntermediate intermediate();
 
     final class Holder {
         public static SunscreenLibrary<?, ? extends Audience> INSTANCE = null;

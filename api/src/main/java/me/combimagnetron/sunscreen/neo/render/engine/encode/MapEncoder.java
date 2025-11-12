@@ -2,10 +2,15 @@ package me.combimagnetron.sunscreen.neo.render.engine.encode;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import me.combimagnetron.passport.util.math.Vec2f;
+import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.sunscreen.neo.graphic.BufferedColorSpace;
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.sunscreen.neo.render.engine.binary.BinaryMasks;
 import me.combimagnetron.sunscreen.neo.render.engine.binary.MapOutputStream;
 import me.combimagnetron.sunscreen.neo.render.engine.exception.FatalEncodeException;
+import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderChunk;
+import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderGrid;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -25,29 +30,26 @@ public class MapEncoder {
     private final ThreadLocal<LocalPalette[]> localPalettes = ThreadLocal.withInitial(() -> new LocalPalette[47]);
     private final ThreadLocal<ImageTile[]> imageTiles = ThreadLocal.withInitial(() -> new ImageTile[4096]);
     private final ThreadLocal<BitTile[]> bitTiles = ThreadLocal.withInitial(() -> new BitTile[4096]);
-    private final BufferedImage image;
-    private final MapData mapData;
+    private final BufferedColorSpace colorSpace;
+    private final RenderChunk renderChunk;
 
-    public MapEncoder(@NotNull MapData mapData) {
-        this.image = mapData.image();
-        this.mapData = mapData;
+    public MapEncoder(@NotNull RenderChunk renderChunk) {
+        this.colorSpace = renderChunk.space();
+        this.renderChunk = renderChunk;
 
         formTiles();
         packPalettesAndTiles();
         write();
     }
     private void formTiles() {
-        final int tilesX = image.getWidth() / 2;
-        final int tilesY = image.getHeight() / 2;
         int index = 0;
-
-        for (int ty = 0; ty < tilesY; ty++) {
-            for (int tx = 0; tx < tilesX; tx++) {
+        for (int ty = 0; ty < 64; ty++) {
+            for (int tx = 0; tx < 64; tx++) {
                 imageTiles.get()[index++] = new ImageTile(IntArrayList.of(
-                        image.getRGB(tx * 2,ty * 2),
-                        image.getRGB(tx * 2 + 1, ty * 2),
-                        image.getRGB(tx * 2, ty * 2 + 1),
-                        image.getRGB(tx * 2 + 1, ty * 2 + 1)
+                        colorSpace.at(tx * 2,ty * 2),
+                        colorSpace.at(tx * 2 + 1, ty * 2),
+                        colorSpace.at(tx * 2, ty * 2 + 1),
+                        colorSpace.at(tx * 2 + 1, ty * 2 + 1)
                 ));
             }
         }
@@ -160,7 +162,7 @@ public class MapEncoder {
                         out.writeBits(8, (color) & 0xFF);
                         out.writeBits(8, (color >>> 8) & 0xFF);
                         out.writeBits(8, (color >>> 16) & 0xFF);
-                        out.writeBits(8, 255);
+                        out.writeBits(8, (color >>> 24) & 0xFF);
                     }
                 }
                 for (BitTile bitTile : bitTiles.get()) {
@@ -170,9 +172,9 @@ public class MapEncoder {
                     }
                 }
                 System.out.println(out.size());
-                out.writeBits(8, (int) (mapData.chunk().renderScale().coefficient()*8));
-                out.writeBits(8, mapData.position().x());
-                out.writeBits(8, mapData.position().y());
+                out.writeBits(8, (int) (renderChunk.renderScale().coefficient()*8));
+                out.writeBits(32, Float.floatToIntBits(renderChunk.position().x()));
+                out.writeBits(32, Float.floatToIntBits(renderChunk.position().y()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

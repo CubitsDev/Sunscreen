@@ -5,6 +5,7 @@ import me.combimagnetron.sunscreen.neo.graphic.modifier.GraphicModifier;
 import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.Size;
 import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.sunscreen.util.helper.ColorHelper;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,15 @@ public record Canvas(BufferedColorSpace bufferedColorSpace) implements GraphicLi
         this(new BufferedColorSpace(size));
     }
 
-    public static Canvas empty(Vec2i size) {
+    public static Canvas image(@NotNull BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        Canvas canvas = new Canvas(Vec2i.of(width, height));
+        canvas.bufferedColorSpace().pixels(ColorHelper.extractColorData(image), 0, 0, width, height);
+        return canvas;
+    }
+
+    public static Canvas empty(@NotNull Vec2i size) {
         return new Canvas(size);
     }
 
@@ -24,11 +33,6 @@ public record Canvas(BufferedColorSpace bufferedColorSpace) implements GraphicLi
     public @NotNull <M> Canvas modifier(@NotNull GraphicModifier<M> modifier) {
         modifier.handler().apply(bufferedColorSpace, modifier.modifier(), modifier.context());
         return this;
-    }
-
-    @Override
-    public @NotNull BufferedImage image() {
-        return null;
     }
 
     @Override
@@ -58,6 +62,10 @@ public record Canvas(BufferedColorSpace bufferedColorSpace) implements GraphicLi
     public @NotNull Canvas erase(@NotNull Vec2i position) {
         bufferedColorSpace.erase(position);
         return this;
+    }
+
+    public @NotNull Canvas sub(@NotNull Vec2i position, @NotNull Vec2i size) {
+        return new Canvas(bufferedColorSpace.sub(position.x(), position.y(), size.x(), size.y()));
     }
 
     private static void renderChildren(BufferedColorSpace bufferedColorSpace, Component component) {

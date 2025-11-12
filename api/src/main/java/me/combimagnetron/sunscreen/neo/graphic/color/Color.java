@@ -72,6 +72,10 @@ public interface Color extends ColorLike {
         return of(rgb, 255);
     }
 
+    static @NotNull Color rgba(int rgba) {
+        return new SimpleArgbColor((rgba >> 16) & 0xFF, (rgba >> 8) & 0xFF, rgba & 0xFF, (rgba >> 24) & 0xFF);
+    }
+
     /**
      * @param rgb int value representing the red, green, and blue values of the color
      * @param alpha int value between 0 and 255, representing the alpha value of the color
