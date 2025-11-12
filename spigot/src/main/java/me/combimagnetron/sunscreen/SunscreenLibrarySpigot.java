@@ -5,15 +5,20 @@ import com.github.retrooper.packetevents.PacketEventsAPI;
 import me.combimagnetron.passport.Passport;
 import me.combimagnetron.passport.user.UserHandler;
 import me.combimagnetron.passport.util.placeholder.PlaceholderRegistry;
+import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
+import me.combimagnetron.sunscreen.protocol.SpigotPlatformProtocolIntermediate;
 import me.combimagnetron.sunscreen.session.SessionHandler;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
 import java.nio.file.Path;
 
 public class SunscreenLibrarySpigot implements SunscreenLibrary<SunscreenPlugin, Player> {
+    private final SpigotPlatformProtocolIntermediate intermediate = new SpigotPlatformProtocolIntermediate();
     private final SessionHandler sessionHandler = new SessionHandler();
     private final PlaceholderRegistry placeholderRegistry = new PlaceholderRegistry.Impl();
     private final SunscreenPlugin plugin;
@@ -58,28 +63,33 @@ public class SunscreenLibrarySpigot implements SunscreenLibrary<SunscreenPlugin,
     }
 
     @Override
-    public SunscreenPlugin plugin() {
+    public @NotNull SunscreenPlugin plugin() {
         return plugin;
     }
 
     @Override
-    public InputStream resource(String path) {
+    public @Nullable InputStream resource(String path) {
         return plugin.getResource(path);
     }
 
     @Override
-    public SessionHandler sessionHandler() {
+    public @NotNull SessionHandler sessionHandler() {
         return sessionHandler;
     }
 
     @Override
-    public UserHandler<Player, SunscreenUser<Player>> users() {
+    public @NotNull UserHandler<Player, SunscreenUser<Player>> users() {
         return plugin.userManager();
     }
 
     @Override
-    public Logger logger() {
+    public @NotNull Logger logger() {
         return plugin.getComponentLogger();
+    }
+
+    @Override
+    public @NotNull PlatformProtocolIntermediate intermediate() {
+        return intermediate;
     }
 
 }
