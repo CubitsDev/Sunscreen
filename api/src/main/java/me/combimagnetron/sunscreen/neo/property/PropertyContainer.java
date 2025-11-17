@@ -1,10 +1,11 @@
 package me.combimagnetron.sunscreen.neo.property;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface PropertyContainer<R> {
 
-    <T, C, P extends Property<T, C>> @NotNull P property(@NotNull Class<P> propertyClass);
+    <T, C, P extends Property<T, C>> @Nullable P property(@NotNull Class<P> propertyClass);
 
     <T, C> @NotNull R property(@NotNull Property<@NotNull T, @NotNull C> property);
 
@@ -35,6 +36,10 @@ public interface PropertyContainer<R> {
         return propOrThrow(Padding.class);
     }
 
+    default @NotNull Scale scale() {
+        return propOrThrow(Scale.class);
+    }
+
     default @NotNull R size(@NotNull Size size) {
         return property(size);
     }
@@ -49,6 +54,10 @@ public interface PropertyContainer<R> {
 
     default @NotNull R padding(@NotNull Padding padding) {
         return property(padding);
+    }
+
+    default @NotNull R scale(@NotNull Scale scale) {
+        return property(scale);
     }
 
 }

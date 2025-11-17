@@ -171,8 +171,7 @@ public class MapEncoder {
                         out.writeBits(4, index & BinaryMasks.FOUR_BIT_MASK);
                     }
                 }
-                System.out.println(out.size());
-                out.writeBits(8, (int) (renderChunk.renderScale().coefficient()*8));
+                out.writeBits(32, Float.floatToIntBits(renderChunk.scale()));
                 out.writeBits(32, Float.floatToIntBits(renderChunk.position().x()));
                 out.writeBits(32, Float.floatToIntBits(renderChunk.position().y()));
             } catch (IOException e) {

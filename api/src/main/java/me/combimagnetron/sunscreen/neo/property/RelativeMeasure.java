@@ -246,6 +246,80 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, 
 
     }
 
+    abstract class FloatRelativeMeasureGroup<C> implements RelativeMeasureGroup<C, Float, Vec2i, FloatRelativeMeasureGroup.FloatRelativeBuilder<C>, Vec2i, FloatRelativeMeasureGroup.FloatRelativeBuilder<C>, Void> {
+        private final Function<FloatRelativeMeasureGroup<C>, C> constructor;
+        private FloatRelativeBuilder<C> relativeBuilder = new FloatRelativeBuilder<>(this);
+        protected float value;
+
+        public FloatRelativeMeasureGroup(float value) {
+            this.value = value;
+            constructor = (cFloatRelativeMeasureGroup -> null);
+        }
+
+        public FloatRelativeMeasureGroup() {
+            constructor = (cFloatRelativeMeasureGroup -> null);
+        }
+
+        public @NotNull FloatRelativeBuilder<C> set() {
+            return relativeBuilder;
+        }
+
+        public float value() {
+            return value;
+        }
+
+        public abstract void finish(@NotNull ScreenSize screenSize);
+
+        public static final class FloatRelativeBuilder<C> implements Builder<Float, Vec2i>, RelativeMeasure<C, Float, Vec2i, FloatRelativeBuilder<C>, Vec2i, FloatRelativeBuilder<C>, Void> {
+            private final FloatRelativeMeasureGroup<C> parent;
+
+            private FloatRelativeBuilder(FloatRelativeMeasureGroup<C> parent) {
+                this.parent = parent;
+            }
+
+            public FloatRelativeMeasureGroup<C> back() {
+                return parent;
+            }
+
+
+            @Override
+            public @NotNull C build(@NotNull Vec2i var) {
+                return null;
+            }
+
+            @Override
+            public FloatRelativeBuilder<C> builder(Void unused) {
+                return null;
+            }
+
+            @Override
+            public void builder(Void unused, FloatRelativeBuilder<C> cFloatRelativeBuilder) {
+
+            }
+
+            @Override
+            public int priority() {
+                return 0;
+            }
+
+            @Override
+            public @NotNull Class<?> type() {
+                return null;
+            }
+
+            @Override
+            public Float finish(Vec2i vec2i) {
+                return 0f;
+            }
+
+            @Override
+            public @NotNull <N extends Number> FloatRelativeBuilder<C> offset(@NotNull OffsetType<@NotNull N> offsetType) {
+                return null;
+            }
+        }
+
+    }
+
     enum Axis2d {
         X, Y
     }

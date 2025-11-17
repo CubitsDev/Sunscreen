@@ -1,22 +1,19 @@
 package me.combimagnetron.sunscreen;
 
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMapData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.combimagnetron.passport.Passport;
-import me.combimagnetron.passport.event.EventBus;
 import me.combimagnetron.passport.util.math.Vec2f;
 import me.combimagnetron.passport.util.math.Vec2i;
-import me.combimagnetron.sunscreen.event.UserMoveCursorEvent;
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
 import me.combimagnetron.sunscreen.hook.betterhud.BetterHudSunscreenHook;
 import me.combimagnetron.sunscreen.hook.mythichud.MythicHudSunscreenHook;
 import me.combimagnetron.sunscreen.hook.tab.TABSunscreenHook;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
+import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderChunk;
-import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderGrid;
 import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderScale;
 import me.combimagnetron.sunscreen.placeholder.PapiPlaceholderProvider;
 import me.combimagnetron.sunscreen.resourcepack.ResourcePack;
@@ -30,20 +27,16 @@ import me.combimagnetron.sunscreen.user.UserManager;
 import me.combimagnetron.passport.util.data.Range;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -57,7 +50,6 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
         PacketEvents.getAPI().load();
         //PacketEvents.getAPI().getEventManager().registerListener(new MenuListener(), PacketListenerPriority.LOWEST);
         //PacketEvents.getAPI().getEventManager().registerListener(new AnvilListener(), PacketListenerPriority.LOWEST);
-
     }
 
     @EventHandler
@@ -69,13 +61,14 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
         org.bukkit.Location eyeLocation = player.getEyeLocation();
         Location location = new Location(eyeLocation.x(), eyeLocation.y(), eyeLocation.z());
         intermediate.spawnAndSpectateDisplay(user, location);
-        intermediate.spawnAndRideHorse(user, location);
+        EntityReference<?> horse = intermediate.spawnAndRideHorse(user, location);
         final Vec2i size = Vec2i.of(128, 128);
+        final String[] cursors = new String[]{"await", "default", "magnify", "text", "resize"};
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 int oopsj = (3 - j);
                 Canvas temp = canvas.sub(Vec2i.of(i * 128, oopsj * 128), size);
-                MapEncoder mapEncoder = new MapEncoder(new RenderChunk(temp.bufferedColorSpace(), RenderScale.X0_5, Vec2f.of((float) (-0.565 * (i - 1.5)), (float) (j - 1.4999))));
+                MapEncoder mapEncoder = new MapEncoder(new RenderChunk(temp.bufferedColorSpace(), 1f, Vec2f.of((float) (-0.565 * (i - 1.5)), (float) (j - 1.4999))));
                 byte[] data = mapEncoder.bytes().toByteArray();
                 int mapId = 99 + i + 10 * j;
                 intermediate.spawnAndFillItemFrame(user, new Location(location.x(), location.y(), location.z()), data, mapId);
