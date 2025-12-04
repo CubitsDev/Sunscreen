@@ -8,6 +8,21 @@
 # Sunscreen
 Sunscreen is a (very) WIP GUI library, built with ultimate platform compatability in mind. It removes the limitations of chest GUIs, meaning you can place any element anywhere! Input is also ahead of chest GUIs, with inputs ranging from clicking and hovering to text input, anywhere on the screen!
 
+> [!IMPORTANT]
+> V2 code is actively being pushed to the main branch, be wary when cloning/forking.
+
+## V2
+I am currently working on a v2 of Sunscreen because there were too many fundamental bugs with the v1 platform. V2 will have many new features and a completely new codebase and api. I've listed some new features below. (Note that v2 will not work with Iris shaders on launch).
+- New keybind API
+- Uniform element API
+- State API to automatically update elements
+- Completely revamped Webflow-inspired editor
+- New themes system
+- Insane performance gains on client and server (dropped text displays in favor of maps and BufferedImages in favor of a custom implementation)
+- Automatic resourcepack imports
+- Unlimited cursor styles (text carets for example)
+
+### Showcase from V1
 ![Showcase of the library](./assets/image/showcase-gif.gif)
 
 ## Features
