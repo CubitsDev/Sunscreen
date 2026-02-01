@@ -1,16 +1,16 @@
 package me.combimagnetron.sunscreen.neo.property;
 
 import me.combimagnetron.passport.util.math.Vec2i;
-import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.neo.property.handler.PropertyHandler;
 import me.combimagnetron.passport.util.math.Vec4i;
+import me.combimagnetron.sunscreen.neo.render.Viewport;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Margin extends RelativeMeasure.Vec4iRelativeMeasureGroup<Margin> implements Property<Vec4i, Margin> {
-    private static final PropertyHandler<Vec4i, Margin> PROPERTY_HANDLER = (element, context) -> null;
+    private static final PropertyHandler<Margin> PROPERTY_HANDLER = (element, context, margin) -> null;
     private final Map<RelativeMeasure.Axis4d, Vec4iRelativeBuilder<@NotNull Margin>> axisMap = new LinkedHashMap<>();
 
     public Margin(@NotNull Vec4i Vec4i) {
@@ -47,12 +47,12 @@ public class Margin extends RelativeMeasure.Vec4iRelativeMeasureGroup<Margin> im
     }
 
     @Override
-    public @NotNull PropertyHandler<@NotNull Vec4i, @NotNull Margin> handler() {
+    public @NotNull PropertyHandler<@NotNull Margin> handler() {
         return PROPERTY_HANDLER;
     }
 
     @Override
-    public void finish(@NotNull ScreenSize screenSize) {
+    public void finish(@NotNull Viewport viewport) {
 
     }
 
