@@ -2,7 +2,6 @@ package me.combimagnetron.sunscreen.neo.graphic.color;
 
 import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface Color extends ColorLike {
 
@@ -11,26 +10,26 @@ public interface Color extends ColorLike {
     }
 
     /**
-     * @param color the label color to convert to a color
-     * @return TextColor converted to a Color
+     * @param textColor the label textColor to convert to a textColor
+     * @return TextColor converted to a TextColor
      */
-    static @NotNull Color of(@NotNull TextColor color) {
-        return new SimpleArgbColor(color.red(), color.green(), color.blue(), 255);
+    static @NotNull Color of(@NotNull TextColor textColor) {
+        return new SimpleArgbColor(textColor.red(), textColor.green(), textColor.blue(), 255);
     }
 
-    static @Nullable Color hex(@NotNull String hexColor) {
+    static @NotNull Color hex(@NotNull String hexColor) {
         return switch (hexColor.length()) {
             case 6 -> rgbHex(hexColor);
             case 8 -> argbHex(hexColor);
-            default -> null;
+            default -> rgbHex("#000000");
         };
     }
 
     static @NotNull Color rgbHex(@NotNull String hexColor) {
         return new SimpleArgbColor(
-                Integer.valueOf(hexColor.substring(0, 2), 16),
-                Integer.valueOf(hexColor.substring(2, 4), 16),
-                Integer.valueOf(hexColor.substring(4, 6), 16),
+                Integer.valueOf(hexColor.substring(1, 3), 16),
+                Integer.valueOf(hexColor.substring(3, 5), 16),
+                Integer.valueOf(hexColor.substring(6, 7), 16),
                 255);
     }
 
