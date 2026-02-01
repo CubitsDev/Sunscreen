@@ -1,7 +1,10 @@
 package me.combimagnetron.sunscreen.neo.loader;
 
-public interface ComponentLoader<C> {
+import org.jetbrains.annotations.NotNull;
 
+@FunctionalInterface
+public interface ComponentLoader<S extends Component<S, C>, C> {
 
+    @NotNull S load(@NotNull C context);
 
 }

@@ -1,7 +1,4 @@
 package me.combimagnetron.sunscreen.neo.loader;
 
-public interface ComponentLoaderContext {
-
-
-
+public record SystemComponentLoaderContext() {
 }

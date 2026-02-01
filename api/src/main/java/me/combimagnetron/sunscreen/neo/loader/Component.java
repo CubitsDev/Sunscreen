@@ -2,10 +2,10 @@ package me.combimagnetron.sunscreen.neo.loader;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+public interface Component<S extends Component<S, C>, C> {
 
-public interface Component {
+    @NotNull ComponentLoader<S, C> loader();
 
-    @NotNull Collection<? extends @NotNull Component> dependencies();
+    @NotNull Class<S> type();
 
 }

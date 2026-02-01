@@ -1,0 +1,4 @@
+<PageRef root="true">
+  <id>namespace:example/page/root</id>
+  <file>pages/root.xml</file>
+</PageRef>

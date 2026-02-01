@@ -1,0 +1,27 @@
+<index>
+  <metadata>
+    <identifier>namespace:example</identifier>
+    <author>Steve</author>
+    <version>
+      <min>0.0.2</min>
+      <max/>
+      <original>0.1.3</original>
+    </version>
+  </metadata>
+  <assets>
+    <asset type="image">
+      <id>namespace:example/asset/asset_1</id>
+      <file>assets/</file>
+    </asset>
+  </assets>
+  <pages>
+    <page root="true">
+      <id>namespace:example/page/root</id>
+      <file>pages/root.xml</file>
+    </page>
+    <page>
+      <id>namespace:example/page/page1</id>
+      <file>pages/nested/page1.xml</file>
+    </page>
+  </pages>
+</index>

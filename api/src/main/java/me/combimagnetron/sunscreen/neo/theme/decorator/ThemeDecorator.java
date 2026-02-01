@@ -1,29 +1,30 @@
 package me.combimagnetron.sunscreen.neo.theme.decorator;
 
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
-import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
+import me.combimagnetron.sunscreen.neo.graphic.Canvas;
+import me.combimagnetron.sunscreen.neo.graphic.NineSlice;
 import me.combimagnetron.sunscreen.neo.property.Size;
 import me.combimagnetron.sunscreen.neo.render.Renderable;
-import me.combimagnetron.sunscreen.neo.render.engine.pass.RenderPass;
+import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Interface representing theme entries to link to an element, to retexture a button in a theme for example.
  * @param <E> element target type.
  */
-public sealed interface ThemeDecorator<E extends ElementLike<E>, D extends ThemeDecorator<E, D>> extends Renderable<D, Size> permits ThemeDecorator.StaticThemeDecorator {
+public sealed interface ThemeDecorator<E extends ElementLike<E>> extends Renderable<Size, Canvas> permits Divider, ThemeDecorator.NineSliceThemeDecorator {
 
-    Class<E> target();
+    @NotNull Class<E> target();
 
-    final class StaticThemeDecorator<E extends ElementLike<E>> implements ThemeDecorator<E, StaticThemeDecorator<E>> {
+    static <E extends ElementLike<E>> @NotNull NineSliceThemeDecorator<E> nineSlice(@NotNull Class<E> target, @NotNull NineSlice nineSlice) {
+        return new NineSliceThemeDecorator<>(target, nineSlice);
+    }
+
+    record NineSliceThemeDecorator<E extends ElementLike<E>>(@NotNull Class<E> target, @NotNull NineSlice nineSlice) implements ThemeDecorator<E> {
 
         @Override
-        public Class<E> target() {
-            return null;
-        }
-
-        @Override
-        public @NotNull <G extends GraphicLike<G>> RenderPass<StaticThemeDecorator<E>, G> render(@NotNull Size property) {
+        public @NotNull Canvas render(@NotNull Size property, @Nullable RenderContext context) {
             return null;// newRenderPass<StaticThemeDecorator<E>, Canvas>(new RenderPass.Origin<>(this, Identifier.of("")), RenderAction.simple(Canvas.empty(Vec2i.zero())));
         }
 

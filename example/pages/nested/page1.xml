@@ -1,0 +1,4 @@
+<PageRef>
+  <id>namespace:example/page/page1</id>
+  <file>pages/nested/page1.xml</file>
+</PageRef>
