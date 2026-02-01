@@ -1,16 +1,15 @@
 package me.combimagnetron.sunscreen.neo.property;
 
-import me.combimagnetron.passport.util.math.Vec4i;
-import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.neo.property.handler.PropertyHandler;
 import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.sunscreen.neo.render.Viewport;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Size extends RelativeMeasure.Vec2iRelativeMeasureGroup<Size> implements Property<Vec2i, Size> {
-    private static final PropertyHandler<Vec2i, Size> PROPERTY_HANDLER = (element, property) -> null;
+    private static final PropertyHandler<Size> PROPERTY_HANDLER = (element, context, size) -> null;
     private final Map<RelativeMeasure.Axis2d, RelativeMeasure.Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<Size>> axisMap = new LinkedHashMap<>();
 
     public Size(@NotNull Vec2i vec2i) {
@@ -39,12 +38,12 @@ public class Size extends RelativeMeasure.Vec2iRelativeMeasureGroup<Size> implem
     }
 
     @Override
-    public @NotNull PropertyHandler<Vec2i, Size> handler() {
+    public @NotNull PropertyHandler<Size> handler() {
         return PROPERTY_HANDLER;
     }
 
     @Override
-    public void finish(@NotNull ScreenSize screenSize) {
+    public void finish(@NotNull Viewport viewport) {
 
     }
 

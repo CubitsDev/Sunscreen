@@ -2,11 +2,12 @@ package me.combimagnetron.sunscreen.neo.render;
 
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.sunscreen.neo.property.Property;
-import me.combimagnetron.sunscreen.neo.render.engine.pass.RenderPass;
+import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface Renderable<T, P extends Property<?, P>> {
+public interface Renderable<P extends Property<?, P>, G extends GraphicLike<G>> {
 
-    <G extends GraphicLike<G>> @NotNull RenderPass<T, G> render(@NotNull P property);
+    @NotNull G render(@NotNull P property, @Nullable RenderContext context);
 
 }

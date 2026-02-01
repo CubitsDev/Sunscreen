@@ -1,22 +1,32 @@
 package me.combimagnetron.sunscreen.util.helper;
 
-import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
-import me.combimagnetron.sunscreen.user.SunscreenUser;
+import me.combimagnetron.sunscreen.neo.element.ElementLike;
+import me.combimagnetron.sunscreen.neo.property.Position;
+import me.combimagnetron.sunscreen.neo.property.Size;
 import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.sunscreen.neo.render.Viewport;
+import org.jetbrains.annotations.NotNull;
 
 public class HoverHelper {
 
-    public static boolean isHovered(Vector3d cursorTranslation, SunscreenUser<?> viewer, Vec2i position, Vec2i size) {
-        Vec2i cursor = ViewportHelper.toScreen(cursorTranslation, viewer.screenSize());
-        return isHovered(cursor, position, size);
+    public static <E extends ElementLike<E>> boolean in(@NotNull ElementLike<E> elementLike, @NotNull Vec2i cursor) {
+        final Position position = elementLike.propOrThrow(Position.class);
+        final Size size = elementLike.propOrThrow(Size.class);
+        Vec2i vecPosition = position.value();
+        Vec2i vecSize = size.value();
+        if (vecPosition == null || vecSize == null) return false;
+        boolean xCheck = (cursor.x() >= vecPosition.x() && cursor.x() <= vecPosition.x() + vecSize.x());
+        boolean yCheck = (cursor.y() >= vecPosition.y() && cursor.y() <= vecPosition.y() + vecSize.y());
+        return xCheck && yCheck;
     }
 
-    public static boolean isHovered(Vec2i cursor, Vec2i position, Vec2i size) {
-        return cursor.x() > position.x() && cursor.x() < position.x() + size.x() && cursor.y() > position.y() && cursor.y() < position.y() + size.y();
-    }
-
-    public static boolean isHovered(Vec2i cursor, Vec2i position, me.combimagnetron.sunscreen.neo.property.Size size) {
-        return cursor.x() > position.x() && cursor.x() < position.x() + size.x().finish(0) && cursor.y() > position.y() && cursor.y() < position.y() + size.y().finish(0);
+    public static <E extends ElementLike<E>> boolean in(@NotNull ElementLike<E> elementLike, @NotNull Viewport viewport) {
+        Vec2i vecPosition = viewport.position();
+        Vec2i vecSize = viewport.currentView();
+        Vec2i elementPosition = elementLike.propOrThrow(Position.class).value();
+        boolean xCheck = (elementPosition.x() >= vecPosition.x() && elementPosition.x() <= vecPosition.x() + vecSize.x());
+        boolean yCheck = (elementPosition.y() >= vecPosition.y() && elementPosition.y() <= vecPosition.y() + vecSize.y());
+        return xCheck && yCheck;
     }
 
 }

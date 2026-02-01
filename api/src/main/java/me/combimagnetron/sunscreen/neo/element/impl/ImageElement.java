@@ -1,15 +1,15 @@
 package me.combimagnetron.sunscreen.neo.element.impl;
 
 import me.combimagnetron.sunscreen.neo.element.GenericModernElement;
-import me.combimagnetron.sunscreen.neo.element.ModernElement;
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.sunscreen.neo.property.Size;
-import me.combimagnetron.sunscreen.neo.render.RenderAction;
-import me.combimagnetron.sunscreen.neo.render.engine.pass.RenderPass;
+import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
-public class ImageElement<G extends GraphicLike<G>> extends GenericModernElement<ImageElement<G>> {
+public class ImageElement<G extends GraphicLike<G>> extends GenericModernElement<ImageElement<G>, G> {
     private final G graphic;
 
     public ImageElement(@NotNull Identifier identifier, @NotNull G graphicLike) {
@@ -18,7 +18,8 @@ public class ImageElement<G extends GraphicLike<G>> extends GenericModernElement
     }
 
     @Override
-    public @NotNull RenderPass<ImageElement<G>, G> render(@NotNull Size property) {
-        return RenderPass.pass(RenderPass.Origin.origin(this), RenderAction.simple(graphic));
+    public @NonNull G render(@NonNull Size property, @Nullable RenderContext context) {
+        return graphic;
     }
+
 }

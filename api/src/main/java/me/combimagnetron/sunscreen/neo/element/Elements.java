@@ -1,13 +1,18 @@
 package me.combimagnetron.sunscreen.neo.element;
 
 import me.combimagnetron.passport.logic.state.State;
+import me.combimagnetron.sunscreen.neo.element.impl.ButtonElement;
 import me.combimagnetron.sunscreen.neo.element.impl.ImageElement;
 import me.combimagnetron.sunscreen.neo.element.impl.LabelElement;
+import me.combimagnetron.sunscreen.neo.element.impl.ShapeElement;
 import me.combimagnetron.sunscreen.neo.element.impl.text.TextBoxElement;
 import me.combimagnetron.sunscreen.neo.element.impl.text.TextEditorElement;
 import me.combimagnetron.sunscreen.neo.element.impl.text.TextFieldElement;
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.passport.util.data.Identifier;
+import me.combimagnetron.sunscreen.neo.graphic.color.Color;
+import me.combimagnetron.sunscreen.neo.graphic.shape.Shape;
+import me.combimagnetron.sunscreen.neo.graphic.text.Text;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +26,11 @@ public interface Elements {
         return new LabelElement(identifier, text);
     }
 
-    static @NotNull LabelElement label(@NotNull Identifier identifier, @NotNull State<Component> text) {
+    static @NotNull LabelElement label(@NotNull Identifier identifier, @NotNull State<Text> text) {
+        return new LabelElement(identifier, text);
+    }
+
+    static @NotNull LabelElement label(@NotNull Identifier identifier, @NotNull Text text) {
         return new LabelElement(identifier, text);
     }
 
@@ -47,6 +56,18 @@ public interface Elements {
 
     static @NotNull TextEditorElement textEditor(@NotNull Identifier identifier) {
         return new TextEditorElement(identifier);
+    }
+
+    static @NotNull ShapeElement shape(@NotNull Identifier identifier, @NotNull Shape shape, @NotNull Color color) {
+        return new ShapeElement(identifier, shape, color);
+    }
+
+    static @NotNull ShapeElement shape(@NotNull Identifier identifier, @NotNull Shape shape) {
+        return new ShapeElement(identifier, shape);
+    }
+
+    static @NotNull ButtonElement button(@NotNull Identifier identifier) {
+        return new ButtonElement(identifier);
     }
 
 }

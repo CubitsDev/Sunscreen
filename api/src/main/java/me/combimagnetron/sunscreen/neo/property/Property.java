@@ -7,6 +7,6 @@ public interface Property<T, C> {
 
     @NotNull Class<@NotNull T> type();
 
-    @NotNull PropertyHandler<@NotNull T, @NotNull C> handler();
+    @NotNull PropertyHandler<@NotNull C> handler();
 
 }

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,6 +35,11 @@ public record ModifierContext(@NotNull Map<Class<? extends Property<?, ?>>, Prop
     public @NotNull <T, C> ModifierContext property(@NotNull Property<@NotNull T, @NotNull C> property) {
         propertyMap.put((Class<? extends Property<?, ?>>) property.getClass(), property);
         return this;
+    }
+
+    @Override
+    public @NotNull Collection<Property<?, ?>> properties() {
+        return List.of();
     }
 
 }

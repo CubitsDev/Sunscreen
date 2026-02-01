@@ -3,19 +3,21 @@ package me.combimagnetron.sunscreen.neo.element.impl;
 import me.combimagnetron.passport.event.EventBus;
 import me.combimagnetron.passport.logic.state.InlinedMutableState;
 import me.combimagnetron.passport.util.data.Identifier;
-import me.combimagnetron.sunscreen.event.UserFinishTextInputEvent;
-import me.combimagnetron.sunscreen.event.UserUpdateTextInputEvent;
+import me.combimagnetron.sunscreen.neo.event.UserFinishTextInputEvent;
+import me.combimagnetron.sunscreen.neo.event.UserUpdateTextInputEvent;
 import me.combimagnetron.sunscreen.neo.element.GenericModernElement;
 import me.combimagnetron.sunscreen.neo.element.ModernElement;
+import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.input.Interactable;
 import me.combimagnetron.sunscreen.neo.input.ListenerReferences;
+import me.combimagnetron.sunscreen.neo.input.context.InputContext;
 import me.combimagnetron.sunscreen.neo.input.text.TextInput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public abstract class TextElement<E extends ModernElement<E>> extends GenericModernElement<E> implements Interactable<TextElement<E>, TextElement.TextElementListenerReferences<E>> {
+public abstract class TextElement<E extends ModernElement<E, Canvas>> extends GenericModernElement<E, Canvas> implements Interactable<TextElement<E>, TextElement.TextElementListenerReferences<E>> {
     private final TextElementListenerReferences<E> references = new TextElementListenerReferences<>(this);
     private final TextInput<E> textInput = new TextInput<>();
 
@@ -37,7 +39,7 @@ public abstract class TextElement<E extends ModernElement<E>> extends GenericMod
         return references;
     }
 
-    public record TextElementListenerReferences<F extends ModernElement<F>>(TextElement<F> back) implements ListenerReferences<TextElement<F>> {
+    public record TextElementListenerReferences<F extends ModernElement<F, Canvas>>(TextElement<F> back) implements ListenerReferences<TextElement<F>, TextElementListenerReferences<F>> {
 
         public @NotNull TextElementListenerReferences<F> finished(@NotNull Consumer<UserFinishTextInputEvent> event) {
             EventBus.subscribe(UserFinishTextInputEvent.class, event);
@@ -51,4 +53,8 @@ public abstract class TextElement<E extends ModernElement<E>> extends GenericMod
 
     }
 
+    @Override
+    public <C extends InputContext<?>> @NotNull C input(Class<C> clazz) {
+        return null;
+    }
 }

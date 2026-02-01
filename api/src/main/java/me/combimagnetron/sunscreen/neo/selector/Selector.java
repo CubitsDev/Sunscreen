@@ -1,21 +1,21 @@
 package me.combimagnetron.sunscreen.neo.selector;
 
-import me.combimagnetron.sunscreen.neo.MenuRoot;
-import me.combimagnetron.sunscreen.neo.ModernMenu;
+import com.google.common.graph.Traverser;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
-import me.combimagnetron.sunscreen.neo.element.tree.ElementTree;
+import me.combimagnetron.sunscreen.neo.element.ModernElement;
 import me.combimagnetron.sunscreen.neo.property.Property;
 import me.combimagnetron.sunscreen.neo.selector.filter.Filter;
 import me.combimagnetron.passport.util.data.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
 public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E> permits Selector.FilteredSelector, Selector.AllSelector {
 
-    <E extends ElementLike<E>> @NotNull Result<E> result(@NotNull ModernMenu menu);
+    <L extends ElementLike<L>> @NotNull Result<L> result(@NotNull Traverser<ElementLike<E>> tree);
 
     static @NotNull Selector<?> filtered(@NotNull Predicate<? extends ElementLike<?>> elementLikePredicate) {
         return new FilteredSelector(elementLikePredicate);
@@ -41,8 +41,7 @@ public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E
         }
 
         @Override
-        public @NotNull Result<E> result(@NotNull ModernMenu menu) {
-            ElementTree elementTree = menu.tree();
+        public @NotNull <L extends ElementLike<L>> Result<L> result(@NotNull Traverser<ElementLike<E>> tree) {
             if (filter instanceof Predicate<?> elementLikePredicate) {
 
             } else if (filter instanceof Filter<?> filter) {
@@ -65,17 +64,23 @@ public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E
         public <T, C> @NotNull E property(@NotNull Property<@NotNull T, @NotNull C> property) {
             return null;
         }
-    }
-
-    final class AllSelector implements Selector {
 
         @Override
-        public @NotNull Result result(@NotNull ModernMenu menu) {
+        public @NotNull Collection<Property<?, ?>> properties() {
+            return List.of();
+        }
+
+    }
+
+    final class AllSelector<E extends ElementLike<E>> implements Selector<E> {
+
+        @Override
+        public @NotNull <L extends ElementLike<L>> Result<L> result(@NotNull Traverser<ElementLike<E>> tree) {
             return null;
         }
 
         @Override
-        public @Nullable Identifier identifier() {
+        public @NotNull Identifier identifier() {
             return null;
         }
 
@@ -87,6 +92,11 @@ public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E
         @Override
         public @NotNull Property property(@NotNull Class propertyClass) {
             return null;
+        }
+
+        @Override
+        public @NotNull Collection<Property<?, ?>> properties() {
+            return List.of();
         }
     }
 
@@ -100,7 +110,7 @@ public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E
         }
 
         @Override
-        public @Nullable Identifier identifier() {
+        public @NotNull Identifier identifier() {
             return identifier;
         }
 
@@ -112,6 +122,11 @@ public sealed interface Selector<E extends ElementLike<E>> extends ElementLike<E
         @Override
         public <T, C> @NotNull E property(@NotNull Property<@NotNull T, @NotNull C> property) {
             return (E) this;
+        }
+
+        @Override
+        public @NotNull Collection<Property<?, ?>> properties() {
+            return List.of();
         }
 
         public Iterable<E> result() {

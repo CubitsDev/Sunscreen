@@ -1,15 +1,15 @@
 package me.combimagnetron.sunscreen.neo.property;
 
-import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.neo.property.handler.PropertyHandler;
 import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.sunscreen.neo.render.Viewport;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Position> implements Property<Vec2i, Position> {
-    private static final PropertyHandler<Vec2i, Position> PROPERTY_HANDLER = (element, property) -> null;
+    private static final PropertyHandler<Position> PROPERTY_HANDLER = (element, context, position) -> null;
     private static final Position ZERO = Position.fixed(Vec2i.zero());
 
     private final Map<RelativeMeasure.Axis2d, Vec2iRelativeBuilder<Position>> axisMap = new LinkedHashMap<>();
@@ -23,7 +23,7 @@ public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Po
     }
 
     public Position(@NotNull RelativeMeasure.Vec2iRelativeMeasureGroup<?> measureGroup) {
-        //axisMap.putAll((Map<? extends RelativeMeasure.Axis2d, ? extends Vec2iRelativeBuilder<Position>>) measureGroup.axisBuilderMap());
+        //axisMap.putAll((Map<? extends RelativeMeasure.Axis2d, Vec2iRelativeBuilder<Position>>) measureGroup.axisBuilderMap());
     }
 
     public static <C> @NotNull Position relative(RelativeMeasure.Vec2iRelativeMeasureGroup<C> measureGroup) {
@@ -40,12 +40,12 @@ public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Po
     }
 
     @Override
-    public @NotNull PropertyHandler<Vec2i, Position> handler() {
+    public @NotNull PropertyHandler<Position> handler() {
         return PROPERTY_HANDLER;
     }
 
     @Override
-    public void finish(@NotNull ScreenSize screenSize) {
+    public void finish(@NotNull Viewport viewport) {
 
     }
 

@@ -6,31 +6,38 @@ import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.neo.element.GenericModernElement;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.passport.util.data.Identifier;
-import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
+import me.combimagnetron.sunscreen.neo.graphic.text.Text;
 import me.combimagnetron.sunscreen.neo.property.Size;
-import me.combimagnetron.sunscreen.neo.render.RenderAction;
-import me.combimagnetron.sunscreen.neo.render.engine.pass.RenderPass;
+import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
+import me.combimagnetron.sunscreen.util.helper.PropertyHelper;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class LabelElement extends GenericModernElement<LabelElement> {
-    private final MutableState<Component> text;
+public class LabelElement extends GenericModernElement<LabelElement, Canvas> {
+    private final MutableState<Text> text;
 
     public LabelElement(@NotNull Identifier identifier, @NotNull Component text) {
-        super(identifier);
-        this.text = State.mutable(Component.empty());
+        this(identifier, Text.adventure(text));
     }
 
-    public LabelElement(@NotNull Identifier identifier, @NotNull State<Component> componentState) {
+    public LabelElement(@NotNull Identifier identifier, @NotNull Text text) {
         super(identifier);
-        this.text = (MutableState<Component>) componentState;
-        MutableState<Component> componentMutableState = (MutableState<Component>) componentState;
+        this.text = State.mutable(text);
+    }
+
+    public LabelElement(@NotNull Identifier identifier, @NotNull State<Text> componentState) {
+        super(identifier);
+        this.text = (MutableState<Text>) componentState;
+        MutableState<Text> componentMutableState = (MutableState<Text>) componentState;
         componentMutableState.observe((old, current) -> {
         });
     }
 
     @Override
-    public @NotNull <G extends GraphicLike<G>> RenderPass<LabelElement, G> render(@NotNull Size property) {
-        return (RenderPass<LabelElement, G>) RenderPass.pass(RenderPass.Origin.origin(this), RenderAction.simple(Canvas.empty(Vec2i.of(100, 100)).text(text.value())));
+    public @NotNull Canvas render(@NotNull Size property, @Nullable RenderContext renderContext) {
+        Vec2i size = PropertyHelper.vectorOrThrow(property, Vec2i.class);
+        return Canvas.empty(size).text(text.value(), Vec2i.zero());
     }
+
 }

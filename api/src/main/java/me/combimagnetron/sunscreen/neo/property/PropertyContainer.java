@@ -3,11 +3,15 @@ package me.combimagnetron.sunscreen.neo.property;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 public interface PropertyContainer<R> {
 
     <T, C, P extends Property<T, C>> @Nullable P property(@NotNull Class<P> propertyClass);
 
     <T, C> @NotNull R property(@NotNull Property<@NotNull T, @NotNull C> property);
+
+    @NotNull Collection<Property<?, ?>> properties();
 
     default <T, C, P extends Property<T, C>> @NotNull P propOr(@NotNull Class<P> propertyClass, @NotNull P or) {
         P p = property(propertyClass);
@@ -37,7 +41,7 @@ public interface PropertyContainer<R> {
     }
 
     default @NotNull Scale scale() {
-        return propOrThrow(Scale.class);
+        return propOr(Scale.class, Scale.none());
     }
 
     default @NotNull R size(@NotNull Size size) {

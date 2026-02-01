@@ -1,16 +1,20 @@
 package me.combimagnetron.sunscreen.neo.property;
 
 import me.combimagnetron.passport.util.math.Vec2i;
-import me.combimagnetron.sunscreen.menu.ScreenSize;
+import me.combimagnetron.sunscreen.neo.element.ElementLike;
+import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.property.handler.PropertyHandler;
 import me.combimagnetron.passport.util.math.Vec4i;
+import me.combimagnetron.sunscreen.neo.render.Viewport;
+import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Padding extends RelativeMeasure.Vec4iRelativeMeasureGroup<Padding> implements Property<Vec4i, Padding> {
-    private static final PropertyHandler<Vec4i, Padding> PROPERTY_HANDLER = (element, property) -> null;
+    private static final PropertyHandler<Padding> PROPERTY_HANDLER = (element, context, padding) -> null;
     private final Map<RelativeMeasure.Axis4d, Vec4iRelativeBuilder<Padding>> axisMap = new LinkedHashMap<>();
 
     public Padding(@NotNull Vec4i Vec4i) {
@@ -47,12 +51,26 @@ public class Padding extends RelativeMeasure.Vec4iRelativeMeasureGroup<Padding> 
     }
 
     @Override
-    public @NotNull PropertyHandler<Vec4i, Padding> handler() {
+    public @NotNull PropertyHandler<Padding> handler() {
         return PROPERTY_HANDLER;
     }
 
     @Override
-    public void finish(@NotNull ScreenSize screenSize) {
+    public void finish(@NotNull Viewport viewport) {
+
+    }
+
+    public static class PropertyHandlerImpl implements PropertyHandler<Padding> {
+
+        @Override
+        public @Nullable Canvas apply(@Nullable ElementLike<? extends ElementLike<?>> parent, @NotNull RenderContext renderContext, Padding property) {
+            Vec2i parentSize = parent == null ? renderContext.viewport().currentView() : parent.size().value();
+            if (property instanceof FitToContent<?> fit) {
+
+            }
+
+            return null;
+        }
 
     }
 

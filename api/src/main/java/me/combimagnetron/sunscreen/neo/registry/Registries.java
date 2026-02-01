@@ -3,15 +3,17 @@ package me.combimagnetron.sunscreen.neo.registry;
 import me.combimagnetron.passport.internal.registry.Registry;
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
-import me.combimagnetron.sunscreen.neo.graphic.text.font.Font;
+import me.combimagnetron.sunscreen.neo.cursor.CursorStyle;
+import me.combimagnetron.sunscreen.neo.graphic.text.style.impl.font.AtlasFont;
 import me.combimagnetron.sunscreen.neo.theme.ModernTheme;
 import me.combimagnetron.sunscreen.util.IdentifierHolder;
 import org.jetbrains.annotations.NotNull;
 
 public interface Registries {
+    Registry<CursorStyle> CURSOR_STYLES = Registry.empty();
     Registry<MenuTemplate> TEMPLATES = Registry.empty();
     Registry<ModernTheme> THEMES = Registry.empty();
-    Registry<Font> FONTS = Registry.empty();
+    Registry<AtlasFont> FONTS = Registry.empty();
 
     static <T extends IdentifierHolder> boolean register(@NotNull Registry<T> registry, @NotNull T t) {
         Identifier identifier = t.identifier();
@@ -28,7 +30,7 @@ public interface Registries {
         return THEMES;
     }
 
-    static @NotNull Registry<Font> fonts() {
+    static @NotNull Registry<AtlasFont> fonts() {
         return FONTS;
     }
 

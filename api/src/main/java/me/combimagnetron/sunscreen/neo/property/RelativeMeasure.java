@@ -1,9 +1,9 @@
 package me.combimagnetron.sunscreen.neo.property;
 
-import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.passport.util.data.RuntimeDefinable;
 import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.passport.util.math.Vec4i;
+import me.combimagnetron.sunscreen.neo.render.Viewport;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +19,7 @@ import java.util.function.Function;
  * @param <R> measure again, to return for builder methods
  * @param <L> segment types
  */
-public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, I>, V, R extends RelativeMeasure<C, K, I, B, V, R, L>, L> extends RuntimeDefinable<C, B, V, L> {
+public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<?, I>, V, R extends RelativeMeasure<C, K, I, B, V, R, L>, L> extends RuntimeDefinable<C, B, V, L> {
 
     default @NotNull R percentage(double percentage) {
         return offset(OffsetType.percentage(percentage));
@@ -42,7 +42,7 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, 
     final class DummyVec2iRelativeMeasureGroup<C> extends Vec2iRelativeMeasureGroup<@NotNull C> {
 
         @Override
-        public void finish(@NotNull ScreenSize unused) {
+        public void finish(@NotNull Viewport unused) {
 
         }
 
@@ -51,13 +51,13 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, 
     final class DummyVec4iRelativeMeasureGroup<C> extends Vec4iRelativeMeasureGroup<@NotNull C> {
 
         @Override
-        public void finish(@NotNull ScreenSize unused) {
+        public void finish(@NotNull Viewport unused) {
 
         }
 
     }
 
-    abstract class Vec2iRelativeMeasureGroup<C> implements RelativeMeasureGroup<C, Integer, Integer, Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<C>, Vec2i, Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<C>, Axis2d> {
+    abstract class Vec2iRelativeMeasureGroup<C> implements RelativeMeasureGroup<C, Vec2i, Integer, Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<C>, Vec2i, Vec2iRelativeMeasureGroup.Vec2iRelativeBuilder<C>, Axis2d> {
         private final Map<Axis2d, Vec2iRelativeBuilder<C>> axisBuilderMap = Map.of(Axis2d.X, new Vec2iRelativeBuilder<>(this), Axis2d.Y, new Vec2iRelativeBuilder<>(this));
         private final Function<Vec2iRelativeMeasureGroup<C>, C> constructor;
         protected Vec2i vec2i;
@@ -83,11 +83,11 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, 
             return axisBuilderMap.get(Axis2d.Y);
         }
 
-        public @Nullable Vec2i vec2i() {
+        public @Nullable Vec2i value() {
             return vec2i;
         }
 
-        public abstract void finish(@NotNull ScreenSize screenSize);
+        public abstract void finish(@NotNull Viewport screenSize);
 
         @Override
         public void add(@Nullable Vec2iRelativeBuilder<@Nullable C> cVec2iRelativeBuilder, @Nullable RelativeMeasure.Axis2d axis2d) {
@@ -145,9 +145,11 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, 
 
 
 
-    interface RelativeMeasureGroup<C, K, I, B extends RuntimeDefinable.Builder<K, I>, V, M extends RelativeMeasure<C, K, I, B, V, M, L>, L> {
+    interface RelativeMeasureGroup<C, K, I, B extends RuntimeDefinable.Builder<?, I>, V, M extends RelativeMeasure<C, ?, I, B, V, M, L>, L> {
 
         void add(M m, L l);
+
+        @Nullable K value();
 
     }
 
@@ -185,18 +187,18 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, 
             return axisBuilderMap.get(Axis4d.RIGHT);
         }
 
-        public @Nullable Vec4i vec4i() {
+        public @Nullable Vec4i value() {
             return vec4i;
         }
 
-        public abstract void finish(@NotNull ScreenSize screenSize);
+        public abstract void finish(@NotNull Viewport screenSize);
 
         @Override
         public void add(@Nullable Vec4iRelativeBuilder<@Nullable C> cVec2iRelativeBuilder, @Nullable Axis4d axis) {
 
         }
 
-        public static final class Vec4iRelativeBuilder<C> implements Builder<Vec4i, Vec2i>, RelativeMeasure<C, Vec4i, Vec2i, Vec4iRelativeBuilder<C>, Vec2i, Vec4iRelativeBuilder<C>, Axis4d> {
+        public static final class Vec4iRelativeBuilder<C> implements Builder<Integer, Vec2i>, RelativeMeasure<C, Vec4i, Vec2i, Vec4iRelativeBuilder<C>, Vec2i, Vec4iRelativeBuilder<C>, Axis4d> {
             private final Vec4iRelativeMeasureGroup<C> parent;
 
             private Vec4iRelativeBuilder(Vec4iRelativeMeasureGroup<C> parent) {
@@ -238,7 +240,7 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, 
             }
 
             @Override
-            public Vec4i finish(Vec2i vec2i) {
+            public Integer finish(Vec2i vec2i) {
                 return null;
             }
 
@@ -264,11 +266,11 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<K, 
             return relativeBuilder;
         }
 
-        public float value() {
+        public Float value() {
             return value;
         }
 
-        public abstract void finish(@NotNull ScreenSize screenSize);
+        public abstract void finish(@NotNull Viewport screenSize);
 
         public static final class FloatRelativeBuilder<C> implements Builder<Float, Vec2i>, RelativeMeasure<C, Float, Vec2i, FloatRelativeBuilder<C>, Vec2i, FloatRelativeBuilder<C>, Void> {
             private final FloatRelativeMeasureGroup<C> parent;

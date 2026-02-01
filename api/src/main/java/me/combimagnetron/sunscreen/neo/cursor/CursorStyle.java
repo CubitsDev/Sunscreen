@@ -1,19 +1,47 @@
 package me.combimagnetron.sunscreen.neo.cursor;
 
-public enum CursorStyle {
+import me.combimagnetron.passport.util.data.Identifier;
+import org.jetbrains.annotations.NotNull;
 
-    POINTER,
+public record CursorStyle(@NotNull Identifier identifier, @NotNull String asset) {
+    private final static CursorStyle POINTER = new CursorStyle(Identifier.of("sunscreen", "cursor/pointer"), "pointer.png");
+    private final static CursorStyle TEXT_CARET = new CursorStyle(Identifier.of("sunscreen", "cursor/text_caret"), "text_caret.png");
+    private final static CursorStyle MOVE = new CursorStyle(Identifier.of("sunscreen", "cursor/move"), "move.png");
+    private final static CursorStyle RESIZE_VERTICAL = new CursorStyle(Identifier.of("sunscreen", "cursor/resize_vertical"), "resize_vertical.png");
+    private final static CursorStyle RESIZE_HORIZONTAL = new CursorStyle(Identifier.of("sunscreen", "cursor/resize_horizontal"), "resize_horizontal.png");
+    private final static CursorStyle MAGNIFY = new CursorStyle(Identifier.of("sunscreen", "cursor/magnify"), "magnify.png");
+    private final static CursorStyle BUSY = new CursorStyle(Identifier.of("sunscreen", "cursor/busy"), "busy.png");
 
-    TEXT_CARET,
+    public static @NotNull CursorStyle style(@NotNull Identifier identifier, @NotNull String asset) {
+        return new CursorStyle(identifier, asset);
+    }
 
-    MOVE,
+    public static @NotNull CursorStyle pointer() {
+        return POINTER;
+    }
 
-    RESIZE_VERTICAL,
+    public static @NotNull CursorStyle textCaret() {
+        return TEXT_CARET;
+    }
 
-    RESIZE_HORIZONTAL,
+    public static @NotNull CursorStyle move() {
+        return MOVE;
+    }
 
-    MAGNIFY,
+    public static @NotNull CursorStyle resizeVertical() {
+        return RESIZE_VERTICAL;
+    }
 
-    BUSY
+    public static @NotNull CursorStyle resizeHorizontal() {
+        return RESIZE_HORIZONTAL;
+    }
+
+    public static @NotNull CursorStyle magnify() {
+        return MAGNIFY;
+    }
+
+    public static @NotNull CursorStyle busy() {
+        return BUSY;
+    }
 
 }

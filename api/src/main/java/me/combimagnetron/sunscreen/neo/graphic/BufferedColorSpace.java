@@ -1,5 +1,6 @@
 package me.combimagnetron.sunscreen.neo.graphic;
 
+import me.combimagnetron.passport.util.math.Vec2f;
 import me.combimagnetron.sunscreen.neo.graphic.color.Color;
 import me.combimagnetron.sunscreen.neo.graphic.color.ColorLike;
 import me.combimagnetron.passport.util.math.Vec2i;
@@ -15,7 +16,7 @@ public final class BufferedColorSpace {
         this.size = size;
     }
 
-    protected BufferedColorSpace(@NotNull Vec2i size, int @NotNull [] data) {
+    private BufferedColorSpace(@NotNull Vec2i size, int @NotNull [] data) {
         this.buffer = data;
         this.size = size;
     }
@@ -39,6 +40,25 @@ public final class BufferedColorSpace {
         return new BufferedColorSpace(Vec2i.of(width, height), tempBuffer);
     }
 
+    public @NotNull BufferedColorSpace sub(@NotNull Vec2i position, @NotNull Vec2i size) {
+        return sub(position.x(), position.y(), size.x(), size.y());
+    }
+
+    public @NotNull BufferedColorSpace scale(float multiplier) {
+        Vec2i scaledSize = Vec2i.of((int) (size.x() * multiplier), (int) (size.y() * multiplier));
+        int[] tempBuffer = new int[scaledSize.x() * scaledSize.y()];
+        float xRatio = (float) size.x() / scaledSize.x();
+        float yRatio = (float) size.y() / scaledSize.y();
+        for (int y = 0; y < scaledSize.y(); y++) {
+            for (int x = 0; x < scaledSize.x(); x++) {
+                int sourceX = (int) Math.min(Math.floor(x * xRatio), size.x());
+                int sourceY = (int) Math.min(Math.floor(y * xRatio), size.y());
+                tempBuffer[pixelIndex(sourceX, sourceY, scaledSize.x())] = at(sourceX, sourceY);
+            }
+        }
+        return new BufferedColorSpace(scaledSize, tempBuffer);
+    }
+
     public void pixels(int[] pixels, int x, int y, int width, int height) {
         for (int h = 0; h < height; h++) {
             for (int w = 0; w < width; w++) {
@@ -46,6 +66,16 @@ public final class BufferedColorSpace {
                     this.colorDirectAnalog(pixelIndex(x + w, y + h, size.x()), pixels[pixelIndex(w, h, width)]);
                 }
             }
+        }
+    }
+
+    public void replace(@NotNull Color target, @NotNull Color replacement) {
+        int targetColor = target.rgba();
+        int replacementColor = replacement.rgba();
+        for (int i = 0; i < buffer.length; i++) {
+            int color = buffer[i];
+            if (color != targetColor) continue;
+            buffer[i] = replacementColor;
         }
     }
 
@@ -61,7 +91,12 @@ public final class BufferedColorSpace {
     }
 
     public void place(@NotNull BufferedColorSpace bufferedColorSpace, @NotNull Vec2i position) {
+        place(bufferedColorSpace, position.x(), position.y());
+    }
 
+    public void place(@NotNull BufferedColorSpace bufferedColorSpace, int x, int y) {
+        final Vec2i size = bufferedColorSpace.size();
+        pixels(bufferedColorSpace.buffer(), x, y, size.x(), size.y());
     }
 
     public void erase(int x, int y) {
