@@ -1,4 +1,4 @@
-package me.combimagnetron.sunscreen.event;
+package me.combimagnetron.sunscreen.neo.event;
 
 import me.combimagnetron.passport.event.Event;
 import me.combimagnetron.passport.util.math.Vec2i;

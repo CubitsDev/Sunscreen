@@ -1,18 +1,21 @@
 package me.combimagnetron.sunscreen.neo.input.keybind;
 
 import me.combimagnetron.passport.event.EventBus;
-import me.combimagnetron.sunscreen.event.UserPressKeybindEvent;
+import me.combimagnetron.sunscreen.neo.event.UserPressKeybindEvent;
 import me.combimagnetron.sunscreen.neo.input.Interactable;
 import me.combimagnetron.sunscreen.neo.input.ListenerReferences;
+import me.combimagnetron.sunscreen.neo.input.context.InputContext;
+import me.combimagnetron.sunscreen.neo.loader.MenuComponent;
+import me.combimagnetron.sunscreen.neo.loader.ComponentLoader;
+import me.combimagnetron.sunscreen.neo.loader.MenuComponentLoaderContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public final class Keybind implements Interactable<Keybind, Keybind.KeybindListenerReferences> {
+public final class Keybind implements Interactable<Keybind, Keybind.KeybindListenerReferences>, MenuComponent<Keybind> {
     private final KeybindListenerReferences references = new KeybindListenerReferences(this);
     private final Registered registered;
     private final Collection<Modifier> modifiers;
@@ -47,6 +50,11 @@ public final class Keybind implements Interactable<Keybind, Keybind.KeybindListe
         return references;
     }
 
+    @Override
+    public <C extends InputContext<?>> @NotNull C input(Class<C> clazz) {
+        return null;
+    }
+
     public Registered registered() {
         return registered;
     }
@@ -56,26 +64,14 @@ public final class Keybind implements Interactable<Keybind, Keybind.KeybindListe
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (Keybind) obj;
-        return Objects.equals(this.registered, that.registered) &&
-                Objects.equals(this.modifiers, that.modifiers);
+    public @NotNull ComponentLoader<Keybind, MenuComponentLoaderContext> loader() {
+        return null;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(registered, modifiers);
+    public @NotNull Class<Keybind> type() {
+        return Keybind.class;
     }
-
-    @Override
-    public String toString() {
-        return "Keybind[" +
-                "registered=" + registered + ", " +
-                "modifiers=" + modifiers + ']';
-    }
-
 
     /**
      * Enum class containing all detectable modifier keys in Minecraft.
@@ -123,7 +119,7 @@ public final class Keybind implements Interactable<Keybind, Keybind.KeybindListe
 
     }
 
-    public record KeybindListenerReferences(@NotNull Keybind back) implements ListenerReferences<Keybind> {
+    public record KeybindListenerReferences(@NotNull Keybind back) implements ListenerReferences<Keybind, KeybindListenerReferences> {
 
         public @NotNull KeybindListenerReferences pressed(@NotNull Consumer<UserPressKeybindEvent> event) {
             EventBus.subscribe(UserPressKeybindEvent.class, event);
