@@ -11,10 +11,11 @@ import me.combimagnetron.passport.internal.entity.Entity;
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.internal.network.Connection;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
-import me.combimagnetron.sunscreen.session.Session;
-import me.combimagnetron.sunscreen.neo.MenuRoot;
+import me.combimagnetron.sunscreen.neo.protocol.type.Location;
+import me.combimagnetron.sunscreen.neo.render.ScreenInfo;
+import me.combimagnetron.sunscreen.neo.render.Viewport;
+import me.combimagnetron.sunscreen.neo.session.Session;
 import me.combimagnetron.passport.util.data.Pair;
 import me.combimagnetron.passport.util.math.Vec2d;
 import me.combimagnetron.passport.util.math.Vec2i;
@@ -30,8 +31,8 @@ public class UserImpl implements SunscreenUser<Player> {
     private final Player player;
     private final Connection connection;
     private final ClientVersion version;
-    private ScreenSize screenSize = ScreenSize.of(Vec2i.of(200, 200), Pair.of(Vec2d.of(-0.11083211535, -0.11083211535), Vec2d.of(0.11083211535, 0.11083211535)));
     private final float fov = 70;
+    private final ScreenInfo screenInfo = new ScreenInfo(new Viewport(Vec2i.of(800, 450), Vec2i.of(800, 450), Vec2i.zero()));
 
     public static UserImpl of(Player player) {
         return new UserImpl(player);
@@ -82,6 +83,9 @@ public class UserImpl implements SunscreenUser<Player> {
     @Override
     public void show(Entity entity) {
         WrapperPlayServerSpawnEntity clientSpawnEntity = new WrapperPlayServerSpawnEntity(entity.id().intValue(), Optional.of(entity.uuid()), EntityTypes.getById(version, entity.type().id()), new com.github.retrooper.packetevents.util.Vector3d(entity.position().x(), entity.position().y(), entity.position().z()), (float) entity.rotation().x(), (float) entity.rotation().y(), (float) entity.rotation().z(), entity.data().i(), Optional.empty());
+        if (entity instanceof Entity.AbstractEntity abstractEntity) {
+            abstractEntity.prepare();
+        }
         List<EntityData<?>> entityData = entity.type().metadata().entityData();
         WrapperPlayServerEntityMetadata clientEntityMetadata = new WrapperPlayServerEntityMetadata(entity.id().intValue(), entityData);
         connection().send(clientSpawnEntity);
@@ -104,13 +108,8 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public @NotNull ScreenSize screenSize() {
-        return screenSize;
-    }
-
-    @Override
-    public void screenSize(@NotNull ScreenSize pos2D) {
-        this.screenSize = pos2D;
+    public @NotNull ScreenInfo screenInfo() {
+        return screenInfo;
     }
 
     @Override
@@ -119,13 +118,19 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public Session open(@NotNull MenuTemplate template) {
+    public @NotNull Session open(@NotNull MenuTemplate template) {
         /*OpenedMenu.FloatImpl menu = new OpenedMenu.Float(this, template);
         SunscreenLibrary.library().menuTicker().start(menu);
         menu.open(this);
         Session session = Session.session(menu, this);
         return SunscreenLibrary.library().sessionHandler().session(session);*/
         return null;
+    }
+
+    @Override
+    public @NotNull Location eyeLocation() {
+        org.bukkit.Location eyeLocation = player.getEyeLocation();
+        return new Location(eyeLocation.x(), eyeLocation.y(), eyeLocation.z());
     }
 
     @Override

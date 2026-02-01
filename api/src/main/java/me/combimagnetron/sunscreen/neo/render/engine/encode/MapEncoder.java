@@ -2,25 +2,16 @@ package me.combimagnetron.sunscreen.neo.render.engine.encode;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import me.combimagnetron.passport.util.math.Vec2f;
-import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.neo.graphic.BufferedColorSpace;
-import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.sunscreen.neo.render.engine.binary.BinaryMasks;
 import me.combimagnetron.sunscreen.neo.render.engine.binary.MapOutputStream;
 import me.combimagnetron.sunscreen.neo.render.engine.exception.FatalEncodeException;
-import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderChunk;
-import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderGrid;
+import me.combimagnetron.sunscreen.neo.render.engine.grid.ProcessedRenderChunk;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class MapEncoder {
     private final static int MAGIC_ID = 0x53554E53;
@@ -31,10 +22,10 @@ public class MapEncoder {
     private final ThreadLocal<ImageTile[]> imageTiles = ThreadLocal.withInitial(() -> new ImageTile[4096]);
     private final ThreadLocal<BitTile[]> bitTiles = ThreadLocal.withInitial(() -> new BitTile[4096]);
     private final BufferedColorSpace colorSpace;
-    private final RenderChunk renderChunk;
+    private final ProcessedRenderChunk renderChunk;
 
-    public MapEncoder(@NotNull RenderChunk renderChunk) {
-        this.colorSpace = renderChunk.space();
+    public MapEncoder(@NotNull ProcessedRenderChunk renderChunk) {
+        this.colorSpace = renderChunk.bufferedColorSpace();
         this.renderChunk = renderChunk;
 
         formTiles();
@@ -144,15 +135,6 @@ public class MapEncoder {
         return buffer;
     }
 
-    public void write(File file) throws IOException {
-        int index = 0;
-        try (FileWriter fileWriter = new FileWriter(file)) {
-            for (LocalPalette localPalette : localPalettes.get()) {
-                fileWriter.append(String.valueOf(index++)).append(" ").append(localPalette.colors().stream().map(Color::new).map(color -> color + " " + color.getAlpha()).collect(Collectors.toSet()).toString()).append("\n");
-            }
-        }
-    }
-
     private void write() {
         synchronized (lock) {
             try (MapOutputStream out = MapOutputStream.create(buffer)) {
@@ -174,6 +156,7 @@ public class MapEncoder {
                 out.writeBits(32, Float.floatToIntBits(renderChunk.scale()));
                 out.writeBits(32, Float.floatToIntBits(renderChunk.position().x()));
                 out.writeBits(32, Float.floatToIntBits(renderChunk.position().y()));
+                out.writeBits(32, Float.floatToIntBits(renderChunk.position().z()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -185,7 +168,6 @@ public class MapEncoder {
     record BitTile(IntArrayList indices, LocalPalette palette) {}
 
     public final class LocalPalette {
-        //private final int[] colors = new int[16];
         private final IntArrayList colors = IntArrayList.of();
         private final int id;
 

@@ -7,7 +7,7 @@ import me.combimagnetron.passport.user.UserHandler;
 import me.combimagnetron.passport.util.placeholder.PlaceholderRegistry;
 import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
 import me.combimagnetron.sunscreen.protocol.SpigotPlatformProtocolIntermediate;
-import me.combimagnetron.sunscreen.session.SessionHandler;
+import me.combimagnetron.sunscreen.neo.session.SessionHandler;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

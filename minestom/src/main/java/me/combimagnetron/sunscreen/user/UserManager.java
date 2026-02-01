@@ -2,7 +2,7 @@ package me.combimagnetron.sunscreen.user;
 
 import me.combimagnetron.passport.internal.network.ByteBuffer;
 import me.combimagnetron.passport.user.UserHandler;
-import me.combimagnetron.sunscreen.session.Session;
+import me.combimagnetron.sunscreen.neo.session.Session;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
@@ -28,7 +28,7 @@ public class UserManager implements UserHandler<Player, SunscreenUser<Player>> {
             if (session != null) {
                 session.close();
             }
-            userMap.remove(player.getUuid());
+            userMap.remove(player);
         });
     }
 

@@ -11,7 +11,7 @@ import me.combimagnetron.passport.internal.network.Connection;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
-import me.combimagnetron.sunscreen.session.Session;
+import me.combimagnetron.sunscreen.neo.session.Session;
 import me.combimagnetron.passport.util.data.Pair;
 import me.combimagnetron.passport.util.math.Vec2d;
 import me.combimagnetron.passport.util.math.Vec2i;
@@ -53,7 +53,7 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public Session open(MenuTemplate template) {
+    public @NotNull Session open(@NotNull MenuTemplate template) {
         return null;
     }
 

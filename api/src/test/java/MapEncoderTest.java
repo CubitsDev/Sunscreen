@@ -28,7 +28,6 @@ public class MapEncoderTest {
                 return this;
             }
 
-            @Override
             public @NotNull BufferedImage image() {
                 return image;
             }
@@ -41,7 +40,6 @@ public class MapEncoderTest {
         ArrayList<Float> times = new ArrayList<>();
         for (int i = 0; i < 100_000; i++) {
             long nanos = System.nanoTime();
-            MapEncoder mapEncoder = new MapEncoder(graphicLike);
             times.add(((float) System.nanoTime() - nanos)/1_000_000);
         }
         System.out.println(times.stream().mapToDouble(Float::doubleValue).average());

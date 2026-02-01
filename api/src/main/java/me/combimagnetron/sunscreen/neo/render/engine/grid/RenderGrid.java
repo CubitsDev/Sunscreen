@@ -1,43 +1,36 @@
 package me.combimagnetron.sunscreen.neo.render.engine.grid;
 
-import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.passport.util.math.Vec3f;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface RenderGrid {
+public class RenderGrid {
+    private final Map<Float, GridLayer> layers = new HashMap<>();
 
-    void add(@NotNull RenderChunk renderChunk);
+    public static @NotNull RenderGrid empty() {
+        return new RenderGrid();
+    }
 
-    void addAt(@NotNull RenderChunk renderChunk, @NotNull Vec2i position);
+    public @NotNull RenderGrid addAt(@NotNull RenderChunk chunk, @NotNull Vec3f position, float scale) {
+        GridLayer layer = layers.computeIfAbsent(scale, GridLayer::new);
+        layer.chunk(position, chunk);
+        return this;
+    }
 
-    @NotNull Vec2i size();
+    public @NotNull Collection<GridLayer> layers() {
+        return layers.values();
+    }
 
-    @NotNull RenderChunk[] chunks();
+    public @Nullable GridLayer byScale(float scale) {
+        return layers.get(scale);
+    }
 
-    class CenteredRenderGrid implements RenderGrid {
-
-        @Override
-        public void add(@NotNull RenderChunk renderChunk) {
-
-        }
-
-        @Override
-        public void addAt(@NotNull RenderChunk renderChunk, @NotNull Vec2i position) {
-
-        }
-
-        @Override
-        public @NotNull Vec2i size() {
-            return null;
-        }
-
-        @Override
-        public @NotNull RenderChunk[] chunks() {
-            return new RenderChunk[0];
-        }
-
+    public @NotNull Map<Float, GridLayer> layerMap() {
+        return layers;
     }
 
 }

@@ -3,7 +3,7 @@ package me.combimagnetron.sunscreen;
 import me.combimagnetron.passport.Passport;
 import me.combimagnetron.passport.user.UserHandler;
 import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
-import me.combimagnetron.sunscreen.session.SessionHandler;
+import me.combimagnetron.sunscreen.neo.session.SessionHandler;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;

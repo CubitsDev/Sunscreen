@@ -3,7 +3,7 @@ package me.combimagnetron.sunscreen.user;
 import me.combimagnetron.passport.internal.network.ByteBuffer;
 import me.combimagnetron.passport.user.UserHandler;
 import me.combimagnetron.sunscreen.SunscreenPlugin;
-import me.combimagnetron.sunscreen.session.Session;
+import me.combimagnetron.sunscreen.neo.session.Session;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,7 +50,7 @@ public class UserManager implements Listener, UserHandler<Player, SunscreenUser<
         SunscreenUser<Player> user = userMap.get(player.getUniqueId());
         Session session = user.session();
         if (session != null) {
-            session.close();
+
         }
         userMap.remove(player.getUniqueId());
     }

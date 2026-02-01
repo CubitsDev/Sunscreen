@@ -1,0 +1,74 @@
+package me.combimagnetron.sunscreen.neo.render.engine.pipeline;
+
+import it.unimi.dsi.fastutil.Pair;
+import me.combimagnetron.passport.event.Dispatcher;
+import me.combimagnetron.sunscreen.SunscreenLibrary;
+import me.combimagnetron.sunscreen.neo.element.ElementLike;
+import me.combimagnetron.sunscreen.neo.event.MenuTickEndEvent;
+import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
+import me.combimagnetron.sunscreen.neo.render.phase.RenderPhase;
+import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
+import me.combimagnetron.sunscreen.user.SunscreenUser;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+
+public final class RenderPipeline {
+    private static final int PHASE_AMOUNTS = 4;
+    private static final long TARGET_FPS = 60 * PHASE_AMOUNTS; //4 states that each need their own cycle, very nasty hack
+    private static final long PERIOD_MS = 1000 / TARGET_FPS;
+
+    private final AtomicLong tick = new AtomicLong();
+    private final UUID menuUuid;
+    private final ScheduledFuture<?> scheduledFuture;
+    private final HashSet<ElementLike<?>> queuedElements = new HashSet<>();
+    private final SunscreenUser<?> user;
+    private volatile RenderContext context;
+    private RenderPhase<?> state;
+
+    RenderPipeline(@NotNull ScheduledExecutorService scheduler, @NotNull SunscreenUser<?> user, @NotNull UUID menuUuid,
+                   @NotNull Collection<ElementLike<?>> initialElements) {
+        context = new RenderContext(user.screenInfo().viewport(), initialElements);
+        this.menuUuid = menuUuid;
+        this.state = new RenderPhase.Process(initialElements, user);
+        this.queuedElements.addAll(initialElements);
+        this.user = user;
+        this.scheduledFuture = start(scheduler);
+    }
+
+    public void stop() {
+        state = null;
+        scheduledFuture.cancel(false);
+    }
+
+    private @NotNull ScheduledFuture<?> start(@NotNull ScheduledExecutorService scheduler) {
+        return scheduler.scheduleAtFixedRate(this::tick, 0L, PERIOD_MS, TimeUnit.MILLISECONDS);
+    }
+
+    private void tick() {
+        try {
+            long currentTick = tick.incrementAndGet();
+            Pair<RenderPhase<?>, RenderContext> pair = (Pair<RenderPhase<?>, RenderContext>) state.advance(context);
+            state = pair.left();
+            context = pair.right();
+            Dispatcher.dispatcher().post(new MenuTickEndEvent(menuUuid, currentTick));
+            if (state.nextType() == RenderPhase.Process.class) {
+                state = new RenderPhase.Process(queuedElements, user);
+            }
+            queuedElements.clear();
+            if (context.stop()) stop();
+        } catch (Exception e) {
+            stop();
+            throw new RuntimeException("RenderPipeline tick failed", e);
+        }
+    }
+
+    public void submit(ElementLike<?>... elementLikes) {
+        queuedElements.addAll(List.of(elementLikes));
+    }
+
+}

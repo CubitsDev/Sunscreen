@@ -9,12 +9,22 @@ public interface PlatformProtocolIntermediate {
 
     EntityReference<?> spawnAndRideHorse(@NotNull SunscreenUser<?> user, @NotNull Location location);
 
-    EntityReference<?> spawnAndFillItemFrame(@NotNull SunscreenUser<?> user, @NotNull Location location, byte[] data, int mapId);
+    EntityReference<?> spawnAndFillItemFrame(@NotNull SunscreenUser<?> user, @NotNull Location location, byte @NotNull [] data, int mapId);
 
     EntityReference<?> spawnAndSpectateDisplay(@NotNull SunscreenUser<?> user, @NotNull Location location);
 
     void setHorseArmor(@NotNull SunscreenUser<?> user, int horseId, @NotNull String texturePath);
 
     void removeEntity(@NotNull SunscreenUser<?> user, int id);
+
+    void updateMap(@NotNull SunscreenUser<?> user, int mapId, byte @NotNull [] data);
+
+    void reset(@NotNull SunscreenUser<?> user);
+
+    void gameTime(@NotNull SunscreenUser<?> user);
+
+    default void removeEntity(@NotNull SunscreenUser<?> user, @NotNull EntityReference<?> reference) {
+        removeEntity(user, reference.id());
+    }
 
 }

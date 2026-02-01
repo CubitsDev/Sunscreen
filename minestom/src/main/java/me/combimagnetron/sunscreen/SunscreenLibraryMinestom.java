@@ -1,14 +1,12 @@
 package me.combimagnetron.sunscreen;
 
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import me.combimagnetron.passport.Passport;
 import me.combimagnetron.passport.user.User;
 import me.combimagnetron.passport.user.UserHandler;
 import me.combimagnetron.passport.util.placeholder.PlaceholderRegistry;
-import me.combimagnetron.sunscreen.config.Config;
-import me.combimagnetron.sunscreen.config.MenuConfigTransformer;
-import me.combimagnetron.sunscreen.menu.timing.MenuTicker;
-import me.combimagnetron.sunscreen.registry.MenuRegistry;
-import me.combimagnetron.sunscreen.session.SessionHandler;
+import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
+import me.combimagnetron.sunscreen.neo.session.SessionHandler;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.user.UserManager;
 import net.kyori.adventure.audience.Audience;
@@ -22,9 +20,8 @@ import java.io.InputStream;
 import java.nio.file.Path;
 
 public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player> {
+    private final
     private final SessionHandler sessionHandler = new SessionHandler();
-    private final MenuTicker menuTicker = new MenuTicker();
-    private final MenuRegistry menuRegistry = MenuRegistry.create();
     private final UserManager userManager = new UserManager();
 
     protected SunscreenLibraryMinestom() {
@@ -47,6 +44,11 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
 
             @Override
             public PlaceholderRegistry placeholders() {
+                return null;
+            }
+
+            @Override
+            public PacketEventsAPI<?> packetEventsApi() {
                 return null;
             }
 
@@ -78,18 +80,8 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
     }
 
     @Override
-    public MenuTicker menuTicker() {
-        return menuTicker;
-    }
-
-    @Override
     public @NotNull UserHandler<Player, SunscreenUser<Player>> users() {
         return userManager;
-    }
-
-    @Override
-    public Config config() {
-        return null;
     }
 
     @Override
@@ -98,12 +90,8 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
     }
 
     @Override
-    public MenuRegistry menuRegistry() {
-        return menuRegistry;
-    }
-
-    @Override
-    public MenuConfigTransformer menuConfigTransformer() {
+    public @NotNull PlatformProtocolIntermediate intermediate() {
         return null;
     }
+
 }

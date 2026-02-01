@@ -1,6 +1,6 @@
 package me.combimagnetron.sunscreen.hook;
 
-import me.combimagnetron.sunscreen.neo.ModernMenu;
+import me.combimagnetron.sunscreen.neo.ActiveMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ public interface SunscreenHook {
 
     void disable();
 
-    void onMenuEnter(SunscreenUser<?> user, ModernMenu menu);
+    void onMenuEnter(SunscreenUser<?> user, ActiveMenu menu);
 
-    void onMenuLeave(SunscreenUser<?> user, ModernMenu menu);
+    void onMenuLeave(SunscreenUser<?> user, ActiveMenu menu);
 
 }
