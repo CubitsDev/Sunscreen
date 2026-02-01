@@ -2,6 +2,8 @@
 lamp = "4.0.0-rc.14"
 adventure = "4.20.0"
 packetevents = "2.10.0"
+jackson = "2.20.1"
+creative = "1.11.8"
 
 [libraries]
 passport = { group = "me.combimagnetron", name = "Passport", version = "1.0-SNAPSHOT" }
@@ -16,6 +18,9 @@ adventure-gson = { group = "net.kyori", name = "adventure-text-serializer-gson",
 adventure-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 # Packetevents
 packetevents = { group = "com.github.retrooper", name = "packetevents-spigot", version.ref = "packetevents" }
+# Creative resourcepack
+creative-api = { group = "team.unnamed", name = "creative-api", version.ref = "creative" }
+creative-serializer-minecraft = { group = "team.unnamed", name = "creative-serializer-minecraft", version.ref = "creative" }
 
 # --- Config ---
 sponge-yaml = { group = "org.spongepowered", name = "configurate-yaml", version = "4.2.0" }
@@ -24,14 +29,16 @@ sponge-yaml = { group = "org.spongepowered", name = "configurate-yaml", version 
 guava = { group = "com.google.guava", name = "guava", version = "31.1-jre" }
 commons3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
 commons-io = { group = "commons-io", name = "commons-io", version = "2.18.0" }
+commons-compress = { group = "org.apache.commons", name = "commons-compress", version = "1.28.0" }
 caffeine = { group =  "com.github.ben-manes.caffeine", name = "caffeine", version ="3.2.0" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.16" }
-jackson = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.20.0" }
+jackson = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
+jackson-xml = { group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-xml", version.ref = "jackson" }
 
 # --- Build Logic Hacks ---
 build-system-license = { group = "com.github.hierynomus.license", name = "com.github.hierynomus.license.gradle.plugin", version = "0.16.1" }
 build-system-license-base = { group = "com.github.hierynomus.license-base", name = "com.github.hierynomus.license-base.gradle.plugin", version = "0.16.1" }
 
 [bundles]
-minecraft = ["lamp-common", "adventure-api", "adventure-gson", "adventure-plain", "packetevents"]
-utils = ["guava", "commons3", "commons-io", "caffeine", "fastutil", "jackson"]
+minecraft = ["lamp-common", "adventure-api", "adventure-gson", "adventure-plain", "packetevents", "creative-api", "creative-serializer-minecraft"]
+utils = ["guava", "commons3", "commons-io", "caffeine", "fastutil", "jackson", "commons-compress", "jackson-xml"]

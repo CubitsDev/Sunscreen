@@ -6,12 +6,11 @@ publishing {
     repositories {
         maven {
             name = "combimagnetron"
-            url = uri("http://repo.tikite.ch/releases/")
+            url = uri("https://repo.tikite.ch/releases/")
             credentials(PasswordCredentials::class)
             authentication {
                 create<BasicAuthentication>("basic")
             }
-            isAllowInsecureProtocol = true
         }
     }
     publications {

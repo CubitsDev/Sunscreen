@@ -29,10 +29,10 @@ configurations.all {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.10")
+        minecraftVersion("1.21.11")
         jvmArgs("-Dcom.mojang.eula.agree=true", "-Dfile.encoding=UTF-8")
         downloadPlugins {
-            github("retrooper", "packetevents", "v2.10.0", "packetevents-spigot-2.10.0.jar")
+            github("retrooper", "packetevents", "v2.11.1", "packetevents-spigot-2.11.1.jar")
             hangar("PlaceholderAPI", "2.11.6")
         }
     }
@@ -54,6 +54,7 @@ tasks {
             exclude(dependency("org.jetbrains.kotlin:kotlin-reflect:1.7.22"))
             exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.22"))
         }
+        relocate("io.github.retrooper.packetevents", "me.combimagnetron.shaded.packetevents.impl")
     }
 }
 
@@ -75,6 +76,7 @@ val adventureVersion = "4.20.0"
 dependencies {
     implementation(project(":api"))
     implementation("me.combimagnetron:Passport:1.0-SNAPSHOT")
+    implementation("com.github.retrooper:packetevents-spigot:2.11.1")
     library("commons-io:commons-io:2.18.0")
     library("com.google.guava:guava:31.1-jre")
     library("org.apache.commons:commons-lang3:3.17.0")
@@ -86,8 +88,6 @@ dependencies {
     compileOnly("net.kyori:adventure-api:${adventureVersion}")
     compileOnly("net.kyori:adventure-text-serializer-gson:${adventureVersion}")
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    compileOnly("com.github.retrooper:packetevents-spigot:2.9.1")
-    //compileOnly("io.lumine.mythichud:api:1.2.4-SNAPSHOT")
     compileOnly("io.github.toxicity188:BetterHud-standard-api:${betterHudVersion}")
     compileOnly("io.github.toxicity188:BetterHud-bukkit-api:${betterHudVersion}")
     compileOnly("io.github.toxicity188:BetterCommand:1.4.3")
@@ -106,7 +106,6 @@ bukkit {
     description = "Create UIs like never seen before, all from within the game!"
     website = "https://combimagnetron.me"
     dependencies {
-        depend = listOf("packetevents")
         softDepend = listOf("MythicHUD", "BetterHud", "TAB")
     }
 }

@@ -1,6 +1,6 @@
 background {
   builder: solid
-  color {
+  textColor {
     default: "#FF1122"
     hover: "#000000"
     click: "#FFFFFF"
@@ -14,7 +14,7 @@ background {
     A, B, B, B, B, A
     A, D, D, D, D, A
     A, A, A, A, A, A]
-  color {
+  textColor {
     default: {A: "#FF1122", B: "#FF1122", C: "#FF1122", D: "#FF1122"}
     hover: {A: "#FF1122", B: "#FF1122", C: "#FF1122", D: "#FF1122"}
     click: {A: "#FF1122", B: "#FF1122", C: "#FF1122", D: "#FF1122"}
@@ -33,7 +33,7 @@ text_input {
     A, B, B, B, A
     A, D, D, D, A
     A, A, A, A, A]
-  color {
+  textColor {
     default: "#FF1122"
     hover: "#000000"
   }
@@ -47,7 +47,7 @@ button {
     A, B, B, B, A
     A, D, D, D, A
     A, A, A, A, A]
-  color {
+  textColor {
     default: "#FF1122"
     hover: "#000000"
     click: "#FFFFFF"

@@ -3,7 +3,7 @@ package me.combimagnetron.sunscreen.hook.betterhud;
 import kr.toxicity.hud.api.BetterHudAPI;
 import kr.toxicity.hud.api.player.HudPlayer;
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
-import me.combimagnetron.sunscreen.neo.ModernMenu;
+import me.combimagnetron.sunscreen.neo.ActiveMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import org.bukkit.Bukkit;
 
@@ -25,7 +25,7 @@ public class BetterHudSunscreenHook implements SunscreenHook {
     }
 
     @Override
-    public void onMenuEnter(SunscreenUser<?> user, ModernMenu menu) {
+    public void onMenuEnter(SunscreenUser<?> user, ActiveMenu menu) {
         HudPlayer hudPlayer = BetterHudAPI.inst().getPlayerManager().getHudPlayer(user.uniqueIdentifier());
         if (hudPlayer == null) {
             return;
@@ -34,7 +34,7 @@ public class BetterHudSunscreenHook implements SunscreenHook {
     }
 
     @Override
-    public void onMenuLeave(SunscreenUser<?> user, ModernMenu menu) {
+    public void onMenuLeave(SunscreenUser<?> user, ActiveMenu menu) {
         HudPlayer hudPlayer = BetterHudAPI.inst().getPlayerManager().getHudPlayer(user.uniqueIdentifier());
         if (hudPlayer == null) {
             return;

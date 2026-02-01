@@ -1,7 +1,7 @@
 package me.combimagnetron.sunscreen.hook.tab;
 
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
-import me.combimagnetron.sunscreen.neo.ModernMenu;
+import me.combimagnetron.sunscreen.neo.ActiveMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.TabPlayer;
@@ -26,7 +26,7 @@ public class TABSunscreenHook implements SunscreenHook {
     }
 
     @Override
-    public void onMenuEnter(SunscreenUser<?> user, ModernMenu menu) {
+    public void onMenuEnter(SunscreenUser<?> user, ActiveMenu menu) {
         TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(user.uniqueIdentifier());
         if (tabPlayer == null) {
             return;
@@ -44,7 +44,7 @@ public class TABSunscreenHook implements SunscreenHook {
     }
 
     @Override
-    public void onMenuLeave(SunscreenUser<?> user, ModernMenu menu) {
+    public void onMenuLeave(SunscreenUser<?> user, ActiveMenu menu) {
         TabPlayer tabPlayer = TabAPI.getInstance().getPlayer(user.uniqueIdentifier());
         if (tabPlayer == null) {
             return;

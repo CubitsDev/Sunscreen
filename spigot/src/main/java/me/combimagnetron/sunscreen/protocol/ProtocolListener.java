@@ -3,16 +3,27 @@ package me.combimagnetron.sunscreen.protocol;
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
+import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerRotation;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMapData;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTimeUpdate;
 import me.combimagnetron.passport.event.Dispatcher;
+import me.combimagnetron.passport.internal.entity.Entity;
+import me.combimagnetron.passport.internal.entity.impl.passive.horse.Horse;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.event.UserMoveCursorEvent;
+import me.combimagnetron.sunscreen.SunscreenPlugin;
+import me.combimagnetron.sunscreen.neo.event.UserMoveStateChangeEvent;
+import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
+import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
+import me.combimagnetron.sunscreen.neo.session.Session;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.helper.RotationHelper;
 import net.kyori.adventure.audience.Audience;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -30,6 +41,7 @@ public class ProtocolListener implements PacketListener {
         switch (packetReceiveEvent.getPacketType()) {
             case PacketType.Play.Client.PLAYER_ROTATION -> handleRotation(new WrapperPlayClientPlayerRotation(packetReceiveEvent), user);
             case PacketType.Play.Client.INTERACT_ENTITY -> handleInteractEntity(packetReceiveEvent, user);
+            case PacketType.Play.Client.PLAYER_INPUT -> handleSneak(new WrapperPlayClientPlayerInput(packetReceiveEvent), user);
             default -> {}
         }
     }
@@ -44,12 +56,26 @@ public class ProtocolListener implements PacketListener {
         if (!inMenu(user)) return;
         switch (packetSendEvent.getPacketType()) {
             case PacketType.Play.Server.TIME_UPDATE -> handleTimeUpdate(new WrapperPlayServerTimeUpdate(packetSendEvent), user);
+            case PacketType.Play.Server.MAP_DATA -> handleMapData(packetSendEvent, user);
             default -> {}
         }
     }
 
+    private void handleMapData(PacketSendEvent packetSendEvent, SunscreenUser<?> user) {
+        if (inMenu(user)) return;
+        WrapperPlayServerMapData data = new WrapperPlayServerMapData(packetSendEvent);
+        if (data.getMapId() > 0) return;
+        packetSendEvent.setCancelled(true);
+    }
+
     private void handleTimeUpdate(WrapperPlayServerTimeUpdate wrapperPlayServerTimeUpdate, SunscreenUser<?> user) {
+        if (!inMenu(user)) return;
         wrapperPlayServerTimeUpdate.setWorldAge(-2000);
+    }
+
+    public void handleSneak(WrapperPlayClientPlayerInput input, SunscreenUser<?> user) {
+        if (!inMenu(user)) return;
+        if (input.isShift()) user.session().menu().close();
     }
 
     private void handleInteractEntity(PacketReceiveEvent packetReceiveEvent, SunscreenUser<?> user) {
@@ -59,12 +85,15 @@ public class ProtocolListener implements PacketListener {
     }
 
     private void handleRotation(WrapperPlayClientPlayerRotation wrapperPlayClientPlayerRotation, SunscreenUser<?> user) {
-        Dispatcher.dispatcher().post(new UserMoveCursorEvent(user, RotationHelper.convert(wrapperPlayClientPlayerRotation.getYaw(), wrapperPlayClientPlayerRotation.getPitch(), user.screenSize())));
+        final Session session = user.session();
+        if (session == null) return;
+        MouseInputContext context = session.menu().context(MouseInputContext.class);
+        if (context == null) return;
+        Dispatcher.dispatcher().post(new UserMoveStateChangeEvent(user, context.withPosition(RotationHelper.convert(wrapperPlayClientPlayerRotation.getYaw(), wrapperPlayClientPlayerRotation.getPitch(), user.screenInfo()))));
     }
 
-    private static boolean inMenu(@NotNull SunscreenUser<?> user) {
-        return true;
-        //return user.session() != null; TODO: Turn into real check
+    static boolean inMenu(@NotNull SunscreenUser<?> user) {
+        return SunscreenLibrary.library().sessionHandler().inMenu(user);
     }
 
 }

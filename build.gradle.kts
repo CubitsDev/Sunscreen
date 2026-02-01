@@ -25,6 +25,7 @@ allprojects {
         maven("https://repo.tikite.ch/releases")
         maven("https://jitpack.io")
         maven("https://repo.codemc.io/repository/maven-releases/")
+        maven("https://repo.nexomc.com/releases")
     }
 
     dependencies {
