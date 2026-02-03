@@ -28,7 +28,7 @@ public final class AtlasFont implements IdentifierHolder, Font {
         return this;
     }
 
-    public @NotNull AtlasFont fromTtfFile(@NotNull Path path, int fontSize) {
+    public @NotNull AtlasFont fromTtfFile(@NotNull Path path, float fontSize) {
         if (!path.toFile().exists()) throw new IllegalArgumentException("Font file does not exist!");
         Char2ObjectMap<Canvas> charToCanvasMap = FontRendererHelper.font(path, fontSize);
         characterMap.putAll(charToCanvasMap);

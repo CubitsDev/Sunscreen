@@ -53,7 +53,7 @@ public class TestMenuTemplate implements MenuTemplate {
                     "sunscreen",
                     "test_menu/element/test_label"
                 ),
-                Text.basic("yo it finally fucking works!").font(Registries.fonts().get(Identifier.of("sunscreen", "font/minecraft"))).color(TextColor.color(Color.of(219, 63, 253)))
+                Text.basic("yo it finally fucking works!").font(Registries.fonts().get(Identifier.of("sunscreen", "font/sunburned"))).color(TextColor.color(Color.of(219, 63, 253)))
             ).position(Position.nil()).size(Size.fixed(Vec2i.of(100, 100)))
         ).element(
             Elements.shape(

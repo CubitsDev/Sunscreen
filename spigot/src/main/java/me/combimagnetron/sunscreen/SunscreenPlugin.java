@@ -28,6 +28,7 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
     private SunscreenLibrary<SunscreenPlugin, Player> library;
     private UserManager userManager;
     private static final Identifier FONT_ID = Identifier.of("sunscreen", "font/minecraft");
+    private static final Identifier SMALL_FONT_ID = Identifier.of("sunscreen", "font/sunburned");
 
     @Override
     public void onLoad() {
@@ -56,7 +57,9 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
         //menus();
         platformSpecific();
         AtlasFont atlasFont = AtlasFont.font(FONT_ID).fromTtfFile(FileProvider.resource().find("minecraft_font.ttf").toPath(), 8);
+        AtlasFont sunburned = AtlasFont.font(SMALL_FONT_ID).fromTtfFile(FileProvider.resource().find("sunburned.ttf").toPath(), 15.8f);
         Registries.register(Registries.FONTS, atlasFont);
+        Registries.register(Registries.FONTS, sunburned);
         Bukkit.getPluginManager().registerEvents(this, this);
     }
 

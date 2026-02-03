@@ -13,7 +13,7 @@ import java.nio.file.Path;
 public class FontRendererHelper {
     private final static String characterRange = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
 
-    public static @NotNull Char2ObjectMap<Canvas> font(@NotNull Path file, int fontSize) {
+    public static @NotNull Char2ObjectMap<Canvas> font(@NotNull Path file, float fontSize) {
         final Char2ObjectMap<Canvas> charToCanvasMap = new Char2ObjectArrayMap<>();
         Font font;
         try {
