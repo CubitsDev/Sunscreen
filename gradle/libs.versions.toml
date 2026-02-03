@@ -12,8 +12,9 @@ paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" 
 # --- Minecraft ---
 # Lamp Command Framework
 lamp-common = { group = "io.github.revxrsal", name = "lamp.common", version.ref = "lamp" }
-lamp-paper = { group = "io.github.revxrsal", name = "lamp.minestom", version.ref = "lamp" }
-lamp-minestom = { group = "io.github.revxrsal", name = "lamp.paper", version.ref = "lamp" }
+lamp-paper = { group = "io.github.revxrsal", name = "lamp.bukkit", version.ref = "lamp" }
+lamp-brigadier = { group = "io.github.revxrsal", name = "lamp.brigadier", version.ref = "lamp" }
+lamp-minestom = { group = "io.github.revxrsal", name = "lamp.minestom", version.ref = "lamp" }
 # Kyori Adenture text shizzle
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventure-gson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
@@ -44,3 +45,4 @@ build-system-license-base = { group = "com.github.hierynomus.license-base", name
 [bundles]
 minecraft = ["lamp-common", "adventure-api", "adventure-gson", "adventure-plain", "creative-api", "creative-serializer-minecraft"]
 utils = ["guava", "commons3", "commons-io", "caffeine", "fastutil", "jackson", "commons-compress", "jackson-xml"]
+lamp-command = ["lamp-common", "lamp-paper", "lamp-minestom"]

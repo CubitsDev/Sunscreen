@@ -4,6 +4,7 @@ import com.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.combimagnetron.passport.Passport;
 import me.combimagnetron.passport.util.data.Identifier;
+import me.combimagnetron.sunscreen.command.SunscreenCommand;
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
 import me.combimagnetron.sunscreen.neo.ActiveMenu;
 import me.combimagnetron.sunscreen.neo.graphic.text.style.impl.font.AtlasFont;
@@ -19,6 +20,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import revxrsal.commands.Lamp;
+import revxrsal.commands.bukkit.BukkitLamp;
+import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 
 import java.io.*;
 import java.util.zip.ZipEntry;
@@ -38,16 +42,12 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
         //PacketEvents.getAPI().getEventManager().registerListener(new AnvilListener(), PacketListenerPriority.LOWEST);
     }
 
-    @EventHandler
-    public void onSneak(PlayerSwapHandItemsEvent sneakEvent) {
-        SunscreenUser<?> user = userManager().user(sneakEvent.getPlayer());
-        ActiveMenu menu = new ActiveMenu(new TestMenuTemplate(), user, Identifier.of("aa"));
-    }
-
     @Override
     public void onEnable() {
         PacketEvents.getAPI().init();
         this.library = new SunscreenLibrarySpigot(this);
+        Lamp<BukkitCommandActor> lamp = BukkitLamp.builder(this).build();
+        lamp.register(new SunscreenCommand());
         SunscreenLibrary.Holder.INSTANCE = library;
         Passport.Holder.INSTANCE = library.passport();
         this.getDataFolder().mkdirs();
@@ -60,7 +60,6 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
         AtlasFont sunburned = AtlasFont.font(SMALL_FONT_ID).fromTtfFile(FileProvider.resource().find("sunburned.ttf").toPath(), 15.8f);
         Registries.register(Registries.FONTS, atlasFont);
         Registries.register(Registries.FONTS, sunburned);
-        Bukkit.getPluginManager().registerEvents(this, this);
     }
 
     private void unzip() {

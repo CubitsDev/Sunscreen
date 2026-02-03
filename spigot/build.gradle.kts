@@ -81,7 +81,11 @@ fun libs(): LibrariesForLibs {
 
 dependencies {
     implementation(project(":api"))
+    implementation(project(":common"))
     implementation(libs().packetevents)
+    implementation(libs().lamp.paper)
+    implementation(libs().lamp.brigadier)
+    implementation(libs().lamp.common)
     compileOnly(libs().paper)
     library(libs().bundles.utils)
 }

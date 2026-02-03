@@ -1,11 +1,10 @@
 package me.combimagnetron.sunscreen.hook.lunar;
 
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPluginMessage;
 import com.google.gson.JsonObject;
 import me.combimagnetron.sunscreen.hook.ClientHook;
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
 import me.combimagnetron.sunscreen.hook.lunar.protocol.clientbound.ClientboundLunarClientModActionMessage;
-import me.combimagnetron.sunscreen.menu.OpenedMenu;
+import me.combimagnetron.sunscreen.neo.ActiveMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 
 import java.util.Map;
@@ -41,19 +40,19 @@ public class LunarClientSunscreenHook implements SunscreenHook, ClientHook {
     }
 
     @Override
-    public void onMenuEnter(SunscreenUser<?> user, OpenedMenu menu) {
+    public void onMenuEnter(SunscreenUser<?> user, ActiveMenu menu) {
         JsonObject object = new JsonObject();
         ClientboundLunarClientModActionMessage message = ClientboundLunarClientModActionMessage.of(MODS_DISABLE);
         message.write(object);
-        user.connection().send(new WrapperPlayServerPluginMessage(CHANNEL, object.toString().getBytes()));
+        //user.connection().send(new WrapperPlayServerPluginMessage(CHANNEL, object.toString().getBytes()));
     }
 
     @Override
-    public void onMenuLeave(SunscreenUser<?> user, OpenedMenu menu) {
+    public void onMenuLeave(SunscreenUser<?> user, ActiveMenu menu) {
         JsonObject object = new JsonObject();
         ClientboundLunarClientModActionMessage message = ClientboundLunarClientModActionMessage.of(MODS_ENABLE);
         message.write(object);
-        user.connection().send(new WrapperPlayServerPluginMessage(CHANNEL, object.toString().getBytes()));
+        //user.connection().send(new WrapperPlayServerPluginMessage(CHANNEL, object.toString().getBytes()));
     }
 
 }

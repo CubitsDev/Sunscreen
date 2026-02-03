@@ -1,3 +1,5 @@
+import org.gradle.accessors.dm.LibrariesForLibs
+
 plugins {
     id("java")
 }
@@ -5,10 +7,17 @@ plugins {
 group = "me.combimagnetron"
 version = "unspecified"
 
+fun libs(): LibrariesForLibs {
+    return rootProject.libs
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     implementation(project(":api"))
+    implementation(libs().lamp.common)
+    implementation(libs().lamp.paper)
 }
+

@@ -1,11 +1,10 @@
 package me.combimagnetron.sunscreen.hook.labymod;
 
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPluginMessage;
 import me.combimagnetron.passport.internal.network.ByteBuffer;
 import me.combimagnetron.sunscreen.hook.ClientHook;
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
 import me.combimagnetron.sunscreen.hook.labymod.protocol.clientbound.ClientboundLabyModAddonDisableMessage;
-import me.combimagnetron.sunscreen.menu.OpenedMenu;
+import me.combimagnetron.sunscreen.neo.ActiveMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class LabyModSunscreenHook implements SunscreenHook, ClientHook {
     }
 
     @Override
-    public void onMenuEnter(SunscreenUser<?> user, OpenedMenu menu) {
+    public void onMenuEnter(SunscreenUser<?> user, ActiveMenu menu) {
         List<String> modsToDisable = List.of(
                 "menu-blur",
                 "direction-hud",
@@ -40,11 +39,11 @@ public class LabyModSunscreenHook implements SunscreenHook, ClientHook {
         ClientboundLabyModAddonDisableMessage message = ClientboundLabyModAddonDisableMessage.of(modsToDisable, ClientboundLabyModAddonDisableMessage.Action.DISABLE);
         ByteBuffer buffer = ByteBuffer.empty();
         message.write(buffer);
-        user.connection().send(new WrapperPlayServerPluginMessage(CHANNEL, buffer.bytes()));
+        //user.connection().send(new WrapperPlayServerPluginMessage(CHANNEL, buffer.bytes()));
     }
 
     @Override
-    public void onMenuLeave(SunscreenUser<?> user, OpenedMenu menu) {
+    public void onMenuLeave(SunscreenUser<?> user, ActiveMenu menu) {
         // No implementation needed
     }
 }

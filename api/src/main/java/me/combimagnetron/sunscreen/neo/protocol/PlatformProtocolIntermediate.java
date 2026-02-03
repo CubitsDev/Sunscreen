@@ -1,5 +1,6 @@
 package me.combimagnetron.sunscreen.neo.protocol;
 
+import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
@@ -19,7 +20,7 @@ public interface PlatformProtocolIntermediate {
 
     void updateMap(@NotNull SunscreenUser<?> user, int mapId, byte @NotNull [] data);
 
-    void reset(@NotNull SunscreenUser<?> user);
+    void reset(@NotNull SunscreenUser<?> user, @NotNull Vector3d initialRotation);
 
     void gameTime(@NotNull SunscreenUser<?> user);
 

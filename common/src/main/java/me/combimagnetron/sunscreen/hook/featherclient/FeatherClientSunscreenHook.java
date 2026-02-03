@@ -2,7 +2,7 @@ package me.combimagnetron.sunscreen.hook.featherclient;
 
 import me.combimagnetron.sunscreen.hook.ClientHook;
 import me.combimagnetron.sunscreen.hook.SunscreenHook;
-import me.combimagnetron.sunscreen.menu.OpenedMenu;
+import me.combimagnetron.sunscreen.neo.ActiveMenu;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 
 public class FeatherClientSunscreenHook implements SunscreenHook, ClientHook {
@@ -22,12 +22,12 @@ public class FeatherClientSunscreenHook implements SunscreenHook, ClientHook {
     }
 
     @Override
-    public void onMenuEnter(SunscreenUser<?> user, OpenedMenu menu) {
+    public void onMenuEnter(SunscreenUser<?> user, ActiveMenu menu) {
 
     }
 
     @Override
-    public void onMenuLeave(SunscreenUser<?> user, OpenedMenu menu) {
+    public void onMenuLeave(SunscreenUser<?> user, ActiveMenu menu) {
 
     }
 }

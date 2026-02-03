@@ -5,8 +5,11 @@ import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEquippable;
+import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
+import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
+import com.github.retrooper.packetevents.protocol.npc.NPC;
 import com.github.retrooper.packetevents.protocol.player.*;
 import com.github.retrooper.packetevents.protocol.sound.Sounds;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
@@ -23,21 +26,24 @@ import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.Scheduler;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.channels.Channel;
 import java.util.*;
 
 public class SpigotPlatformProtocolIntermediate implements PlatformProtocolIntermediate {
     private static final WrapperPlayServerUpdateAttributes.PropertyModifier MODIFIER = new WrapperPlayServerUpdateAttributes.PropertyModifier(UUID.randomUUID(), 0, WrapperPlayServerUpdateAttributes.PropertyModifier.Operation.MULTIPLY_BASE);
-    private final Table<UUID, Integer, Entity> entities = HashBasedTable.create();
+    private final Table<UUID, Integer, Object> entities = HashBasedTable.create();
     private EquipmentSlot equipmentSlot = EquipmentSlot.BODY;
 
     public SpigotPlatformProtocolIntermediate() {
         PacketEvents.getAPI().getEventManager().registerListener(new ProtocolListener(), PacketListenerPriority.LOW);
     }
 
-    public @NotNull Map<Integer, Entity> entities(@NotNull UUID uuid) {
+    public @NotNull Map<Integer, Object> entities(@NotNull UUID uuid) {
         return entities.row(uuid);
     }
 
@@ -99,12 +105,16 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
         ItemDisplay display = ItemDisplay.itemDisplay(loc2Vec3(location));
         Player player = (Player) user.platformSpecificPlayer();
         display.rotation(Vector3d.vec3(player.getPitch(), player.getYaw(), 0));
-        WrapperPlayServerCamera camera = new WrapperPlayServerCamera(display.id().intValue());
-        user.show(display);
+        WrapperPlayServerCamera camera = new WrapperPlayServerCamera(-10_000);
+        UUID uuid = UUID.randomUUID();
+        UserProfile profile = new UserProfile(uuid, ".");
+        WrapperPlayServerSpawnEntity spawnEntity = new WrapperPlayServerSpawnEntity(-10_000, uuid, EntityTypes.PLAYER, vec32PeLoc(user.position(), user.rotation()), player.getYaw(), 0, com.github.retrooper.packetevents.util.Vector3d.zero());
+        WrapperPlayServerPlayerInfoUpdate infoUpdate = new WrapperPlayServerPlayerInfoUpdate(WrapperPlayServerPlayerInfoUpdate.Action.ADD_PLAYER, new WrapperPlayServerPlayerInfoUpdate.PlayerInfo(profile, false, 0, GameMode.CREATIVE, null, null, 0, true));
+        user.connection().send(infoUpdate);
+        user.connection().send(spawnEntity);
         user.connection().send(camera);
         entities.put(user.uniqueIdentifier(), display.id().intValue(), display);
         user.connection().send(new WrapperPlayServerChangeGameState(WrapperPlayServerChangeGameState.Reason.CHANGE_GAME_MODE, 3));
-        //user.connection().send(new WrapperPlayServerPlayerInfoUpdate(WrapperPlayServerPlayerInfoUpdate.Action.UPDATE_GAME_MODE, new WrapperPlayServerPlayerInfoUpdate.PlayerInfo(new UserProfile(user.uniqueIdentifier(), user.name()), true, 0, GameMode.SPECTATOR, MenuComponent.empty(), null)));
         return new EntityReference<>(display.id().intValue(), display);
     }
 
@@ -128,14 +138,16 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
     }
 
     @Override
-    public void reset(@NotNull SunscreenUser<?> user) {
+    public void reset(@NotNull SunscreenUser<?> user, @NotNull Vector3d initialRotation) {
         Player player = (Player) user.platformSpecificPlayer();
         WrapperPlayServerCamera camera = new WrapperPlayServerCamera(user.entityId());
         WrapperPlayServerChangeGameState gameState = new WrapperPlayServerChangeGameState(WrapperPlayServerChangeGameState.Reason.CHANGE_GAME_MODE, user.gameMode());
         WrapperPlayServerTimeUpdate timeUpdate = new WrapperPlayServerTimeUpdate(player.getWorld().getGameTime(), player.getPlayerTime());
         int[] ids = entities.columnKeySet().stream().mapToInt(Integer::intValue).toArray();
         user.connection().send(new WrapperPlayServerDestroyEntities(ids));
+        user.connection().send(new WrapperPlayServerDestroyEntities(-10_000));
         entities.row(user.uniqueIdentifier()).clear();
+        user.connection().send(new WrapperPlayServerPlayerPositionAndLook(user.position().x(), user.position().y(), user.position().z(), (float) initialRotation.x(), (float) initialRotation.y(), (byte)0, 0, false));
         user.connection().send(timeUpdate);
         user.connection().send(gameState);
         user.connection().send(camera);
@@ -147,8 +159,17 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
         user.connection().send(time);
     }
 
+    private static @NotNull Object channel(@NotNull SunscreenUser<?> user) {
+        Player player = (Player) user.platformSpecificPlayer();
+        return PacketEvents.getAPI().getPlayerManager().getChannel(player);
+    }
+
     private static @NotNull Vector3d loc2Vec3(@NotNull Location location) {
         return Vector3d.vec3(location.x(), location.y(), location.z());
+    }
+
+    private static @NotNull com.github.retrooper.packetevents.protocol.world.Location vec32PeLoc(@NotNull Vector3d position, @NotNull Vector3d rotation) {
+        return new com.github.retrooper.packetevents.protocol.world.Location(new com.github.retrooper.packetevents.util.Vector3d(position.x(), position.y(), position.z()), (float) rotation.x(), (float) rotation.y());
     }
 
     private static @NotNull WrapperPlayServerEntityEquipment horseEquipment(@NotNull String texturePath, int id, EquipmentSlot equipmentSlot) {
