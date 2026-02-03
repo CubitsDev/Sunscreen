@@ -205,7 +205,7 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
             RenderCache renderCache = renderContext.renderCache();
             PlatformProtocolIntermediate intermediate = SunscreenLibrary.library().intermediate();
             final Location location = user.eyeLocation();
-            chunks.stream().parallel().forEach(chunk -> {
+            for (EncodedRenderChunk chunk : chunks) {
                 Integer mapId = renderCache.byPosAndScale(chunk.scale(), chunk.position());
                 if (mapId == null) {
                     mapId = renderCache.next(chunk);
@@ -213,7 +213,7 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
                 } else {
                     intermediate.updateMap(user, mapId, chunk.data());
                 }
-            });
+            }
             return Pair.of(new Empty(), renderContext);
         }
 

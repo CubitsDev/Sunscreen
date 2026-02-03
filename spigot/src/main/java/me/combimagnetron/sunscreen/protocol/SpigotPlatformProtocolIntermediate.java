@@ -133,11 +133,9 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
         WrapperPlayServerCamera camera = new WrapperPlayServerCamera(user.entityId());
         WrapperPlayServerChangeGameState gameState = new WrapperPlayServerChangeGameState(WrapperPlayServerChangeGameState.Reason.CHANGE_GAME_MODE, user.gameMode());
         WrapperPlayServerTimeUpdate timeUpdate = new WrapperPlayServerTimeUpdate(player.getWorld().getGameTime(), player.getPlayerTime());
-        Scheduler.delay(() -> {
-            int[] ids = entities.columnKeySet().stream().mapToInt(Integer::intValue).toArray();
-            user.connection().send(new WrapperPlayServerDestroyEntities(ids));
-            entities.row(user.uniqueIdentifier()).clear();
-        }, 100L);
+        int[] ids = entities.columnKeySet().stream().mapToInt(Integer::intValue).toArray();
+        user.connection().send(new WrapperPlayServerDestroyEntities(ids));
+        entities.row(user.uniqueIdentifier()).clear();
         user.connection().send(timeUpdate);
         user.connection().send(gameState);
         user.connection().send(camera);
