@@ -1,12 +1,14 @@
 [versions]
 lamp = "4.0.0-rc.14"
 adventure = "4.20.0"
-packetevents = "2.10.0"
+packetevents = "2.11.1"
 jackson = "2.20.1"
 creative = "1.11.8"
+paper = "1.21.11-R0.1-SNAPSHOT"
 
 [libraries]
 passport = { group = "me.combimagnetron", name = "Passport", version = "1.0-SNAPSHOT" }
+paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
 # --- Minecraft ---
 # Lamp Command Framework
 lamp-common = { group = "io.github.revxrsal", name = "lamp.common", version.ref = "lamp" }
@@ -40,5 +42,5 @@ build-system-license = { group = "com.github.hierynomus.license", name = "com.gi
 build-system-license-base = { group = "com.github.hierynomus.license-base", name = "com.github.hierynomus.license-base.gradle.plugin", version = "0.16.1" }
 
 [bundles]
-minecraft = ["lamp-common", "adventure-api", "adventure-gson", "adventure-plain", "packetevents", "creative-api", "creative-serializer-minecraft"]
+minecraft = ["lamp-common", "adventure-api", "adventure-gson", "adventure-plain", "creative-api", "creative-serializer-minecraft"]
 utils = ["guava", "commons3", "commons-io", "caffeine", "fastutil", "jackson", "commons-compress", "jackson-xml"]

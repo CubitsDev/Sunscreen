@@ -13,24 +13,17 @@ import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.github.retrooper.packetevents.wrapper.play.server.*;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import me.combimagnetron.passport.internal.entity.Entity;
 import me.combimagnetron.passport.internal.entity.impl.display.ItemDisplay;
 import me.combimagnetron.passport.internal.entity.impl.passive.horse.Horse;
 import me.combimagnetron.passport.internal.entity.impl.tile.ItemFrame;
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
-import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.SunscreenPlugin;
 import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
 import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.Scheduler;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -87,13 +80,18 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
     public EntityReference<?> spawnAndFillItemFrame(@NotNull SunscreenUser<?> user, @NotNull Location location, byte[] data, int mapId) {
         WrapperPlayServerMapData mapData = new WrapperPlayServerMapData(mapId, (byte) 0, false, false, null, 128, 128, 0, 0, data);
         ItemStack itemStack = ItemStack.builder().type(ItemTypes.FILLED_MAP).component(ComponentTypes.MAP_ID, mapId).build();
-        ItemFrame itemFrame = ItemFrame.frame(loc2Vec3(location), itemStack);
-        itemFrame.invisible(true);
-        itemFrame.direction(ItemFrame.Direction.DOWN);
+        ItemFrame upper = ItemFrame.frame(loc2Vec3(location), itemStack);
+        ItemFrame lower = ItemFrame.frame(loc2Vec3(location), itemStack);
+        upper.invisible(true);
+        upper.direction(ItemFrame.Direction.UP);
+        lower.invisible(true);
+        lower.direction(ItemFrame.Direction.DOWN);
         user.connection().send(mapData);
-        user.show(itemFrame);
-        entities.put(user.uniqueIdentifier(), itemFrame.id().intValue(), itemFrame);
-        return new EntityReference<>(itemFrame.id().intValue(), itemFrame);
+        user.show(upper);
+        user.show(lower);
+        entities.put(user.uniqueIdentifier(), upper.id().intValue(), upper);
+        entities.put(user.uniqueIdentifier(), lower.id().intValue(), lower);
+        return new EntityReference<>(upper.id().intValue(), upper);
     }
 
     @Override
@@ -135,10 +133,8 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
         WrapperPlayServerCamera camera = new WrapperPlayServerCamera(user.entityId());
         WrapperPlayServerChangeGameState gameState = new WrapperPlayServerChangeGameState(WrapperPlayServerChangeGameState.Reason.CHANGE_GAME_MODE, user.gameMode());
         WrapperPlayServerTimeUpdate timeUpdate = new WrapperPlayServerTimeUpdate(player.getWorld().getGameTime(), player.getPlayerTime());
-        //entities.rowMap().get(user.uniqueIdentifier()).keySet().parallelStream().forEach(i -> user.connection().send(new WrapperPlayServerDestroyEntities(i)));
         Scheduler.delay(() -> {
             int[] ids = entities.columnKeySet().stream().mapToInt(Integer::intValue).toArray();
-            player.sendMessage(Arrays.toString(ids) + " " + ids.length);
             user.connection().send(new WrapperPlayServerDestroyEntities(ids));
             entities.row(user.uniqueIdentifier()).clear();
         }, 100L);

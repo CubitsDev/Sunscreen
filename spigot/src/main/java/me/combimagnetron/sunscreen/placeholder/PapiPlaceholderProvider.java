@@ -1,6 +1,5 @@
 package me.combimagnetron.sunscreen.placeholder;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.matcher.Token;
 import me.combimagnetron.passport.util.placeholder.Placeholder;
@@ -21,6 +20,6 @@ public class PapiPlaceholderProvider implements PlaceholderProvider<Player> {
 
     @Override
     public <V> V parse(Placeholder<Player> placeholder) {
-        return (V) PlaceholderAPI.setPlaceholders(placeholder.player(), placeholder.placeholder());
+        return (V) null;//PlaceholderAPI.setPlaceholders(placeholder.player(), placeholder.placeholder());
     }
 }

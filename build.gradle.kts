@@ -29,7 +29,7 @@ allprojects {
     }
 
     dependencies {
-        implementation(libs().bundles.utils)
+        compileOnly(libs().bundles.utils)
         implementation(libs().bundles.minecraft)
         implementation(libs().passport)
     }

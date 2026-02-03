@@ -20,7 +20,6 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.junit.platform:junit-platform-suite:1.13.4")
-    implementation("it.unimi.dsi:fastutil:8.5.16")
 }
 
 tasks.test {

@@ -1,3 +1,5 @@
+import org.gradle.accessors.dm.LibrariesForLibs
+
 plugins {
     id("java")
     id("com.gradleup.shadow") version "9.2.2"
@@ -73,28 +75,15 @@ tasks.withType<JavaCompile> {
 val betterHudVersion = "1.12.2"
 val adventureVersion = "4.20.0"
 
+fun libs(): LibrariesForLibs {
+    return rootProject.libs
+}
+
 dependencies {
     implementation(project(":api"))
-    implementation("me.combimagnetron:Passport:1.0-SNAPSHOT")
-    implementation("com.github.retrooper:packetevents-spigot:2.11.1")
-    library("commons-io:commons-io:2.18.0")
-    library("com.google.guava:guava:31.1-jre")
-    library("org.apache.commons:commons-lang3:3.17.0")
-    library("org.jetbrains.kotlin:kotlin-reflect:1.7.22")
-    library("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.22")
-    library("commons-io:commons-io:2.18.0")
-    library("com.github.ben-manes.caffeine:caffeine:3.2.0")
-    compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("net.kyori:adventure-api:${adventureVersion}")
-    compileOnly("net.kyori:adventure-text-serializer-gson:${adventureVersion}")
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    compileOnly("io.github.toxicity188:BetterHud-standard-api:${betterHudVersion}")
-    compileOnly("io.github.toxicity188:BetterHud-bukkit-api:${betterHudVersion}")
-    compileOnly("io.github.toxicity188:BetterCommand:1.4.3")
-    compileOnly("com.github.NEZNAMY:TAB-API:5.2.0")
-    compileOnly("com.nexomc:nexo:1.5.0")
-    compileOnly("team.unnamed:creative-api:1.7.3")
-    compileOnly("team.unnamed:creative-serializer-minecraft:1.7.3")
+    implementation(libs().packetevents)
+    compileOnly(libs().paper)
+    library(libs().bundles.utils)
 }
 
 bukkit {
