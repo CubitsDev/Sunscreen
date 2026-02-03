@@ -50,7 +50,7 @@ public class UserManager implements Listener, UserHandler<Player, SunscreenUser<
         SunscreenUser<Player> user = userMap.get(player.getUniqueId());
         Session session = user.session();
         if (session != null) {
-
+            session.menu().close();
         }
         userMap.remove(player.getUniqueId());
     }

@@ -1,4 +1,4 @@
-package me.combimagnetron.sunscreen.neo.render.phase;
+package me.combimagnetron.sunscreen.neo.render.engine.phase;
 
 import com.google.common.graph.Traverser;
 import it.unimi.dsi.fastutil.Pair;
@@ -10,11 +10,8 @@ import me.combimagnetron.sunscreen.neo.element.ModernElement;
 import me.combimagnetron.sunscreen.neo.graphic.BufferedColorSpace;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
-import me.combimagnetron.sunscreen.neo.graphic.color.Color;
-import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.Size;
 import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
-import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.neo.element.ElementContainer;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
@@ -23,7 +20,7 @@ import me.combimagnetron.sunscreen.neo.render.engine.cache.RenderCache;
 import me.combimagnetron.sunscreen.neo.render.engine.encode.MapEncoder;
 import me.combimagnetron.sunscreen.neo.render.engine.grid.EncodedRenderChunk;
 import me.combimagnetron.sunscreen.neo.render.engine.grid.ProcessedRenderChunk;
-import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
+import me.combimagnetron.sunscreen.neo.render.engine.context.RenderContext;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.helper.HoverHelper;
 import me.combimagnetron.sunscreen.util.helper.PropertyHelper;
@@ -233,10 +230,6 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
         public @NotNull Pair<Process, RenderContext> advance(@NonNull RenderContext renderContext) {
             return Pair.of(null, renderContext.clear());
         }
-
-    }
-
-    record TilePos(int index, int x, int y) {
 
     }
 

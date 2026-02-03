@@ -59,11 +59,6 @@ import java.util.zip.ZipInputStream;
 public class SunscreenPlugin extends JavaPlugin implements Listener {
     private SunscreenLibrary<SunscreenPlugin, Player> library;
     private UserManager userManager;
-    private AtomicInteger lastSlot = new AtomicInteger();
-    private AtomicBoolean changed = new AtomicBoolean(false);
-    private AtomicReference<Float> scale = new AtomicReference<>(1.56f);
-    private ScrollDirection direction;
-    public static boolean inMenu = false;
     private static final Identifier FONT_ID = Identifier.of("sunscreen", "font/minecraft");
 
     @Override
@@ -76,79 +71,8 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onSneak(PlayerSwapHandItemsEvent sneakEvent) {
-//        final Player player = sneakEvent.getPlayer();
-//        player.getWorld().setFullTime(-2000);
-//        inMenu = true;
-//        Text text = Text.basic("Hello!").font(Registries.fonts().get(FONT_ID)).color(TextColor.color(Color.of(219, 63, 253)));
-//        Canvas canvas = Canvas.empty(Vec2i.of(896, 896)).place(Canvas.url("https://i.imgur.com/eIacYAm.png"), Vec2i.zero()).text(text, Vec2i.zero());
-//        PlatformProtocolIntermediate intermediate = SunscreenLibrary.library().intermediate();
-//        SunscreenUser<?> user = userManager().user(player);
-//        org.bukkit.Location eyeLocation = player.getEyeLocation();
-//        Location location = new Location(eyeLocation.x(), eyeLocation.y(), eyeLocation.z());
-//        intermediate.spawnAndSpectateDisplay(user, location);
-//        ItemDisplay itemDisplay = ItemDisplay.itemDisplay(Vector3d.vec3(player.getX(), player.getY(), player.getZ()));
-//        itemDisplay.transformation(Display.Transformation.of(Vector3d.vec3(0, -4100, 0), Vector3d.vec3(1), Quaternion.of(0, 0, 0, 1), Quaternion.of(0, 0, 0, 1)));
-//        itemDisplay.displayType(ItemDisplay.DisplayType.GUI);
-//        itemDisplay.item(ItemStack.builder().type(ItemTypes.DIRT).build());
-//        itemDisplay.nameVisible(false);
-//        user.show(itemDisplay);
-//        intermediate.spawnAndRideHorse(user, location);
-//        final Vec2i size = Vec2i.of(128, 128);
-//        final boolean[] first = new boolean[]{true};
-//
-//        Bukkit.getScheduler().runTaskTimer(this, () -> {
-//            boolean changed = this.changed.get();
-//            lastSlot.set(player.getInventory().getHeldItemSlot());
-//            IntStream.range(0, 49).parallel().forEach(idx -> {
-//                int i = idx % 7;
-//                int j = idx / 7;
-//                int oopsj = (6 - j);
-//                Vec2i subPos = Vec2i.of(i * 128, oopsj * 128);
-//                Canvas temp = canvas.sub(subPos, size);
-//                MapEncoder mapEncoder = new MapEncoder(new ProcessedRenderChunk(
-//                        temp.bufferedColorSpace(),
-//                        Vec3f.of((float) (-1 * (i - 2.625)), (float) (j - (4.74)), 0f),
-//                        scale.get()
-//                ));
-//                byte[] data = mapEncoder.bytes().toByteArray();
-//                int mapId = 99 + i + 10 * j;
-//                if (first[0]) {
-//                    intermediate.spawnAndFillItemFrame(user, new Location(location.x(), location.y(), location.z()), data, mapId);
-//                } else if (changed) {
-//                    player.sendMessage(scale.get() + "");
-//                    user.connection().send(new WrapperPlayServerMapData(mapId, (byte) 0, false, false, null, 128, 128, 0, 0, data));
-//                }
-//            });
-//            first[0] = false;
-//        }, 0L, 1L);
-
         SunscreenUser<?> user = userManager().user(sneakEvent.getPlayer());
         ActiveMenu menu = new ActiveMenu(new TestMenuTemplate(), user, Identifier.of("aa"));
-    }
-
-    enum ScrollDirection {
-        UP, DOWN
-    }
-
-    @EventHandler
-    public void onScroll(PlayerItemHeldEvent event) {
-        boolean changed;
-        int last = event.getPreviousSlot();
-        int current = event.getNewSlot();
-        if ((last == 0 && current != 8 && direction == ScrollDirection.DOWN) || (current < last || last == 0 && current == 8)) {
-            changed = true;
-            direction = ScrollDirection.DOWN;
-            scale.updateAndGet(v -> v - 0.07f);
-        } else if ((current > last || last == 8 && current == 0) || (last == 8 && current != 0 && direction == ScrollDirection.UP)) {
-            changed = true;
-            direction = ScrollDirection.UP;
-            scale.updateAndGet(v -> v + 0.07f);
-        } else {
-            changed = false;
-        }
-        if (scale.get() <= 0) scale.set(0f);
-        if (last == current) changed = false;
-        this.changed.set(changed);
     }
 
     @Override

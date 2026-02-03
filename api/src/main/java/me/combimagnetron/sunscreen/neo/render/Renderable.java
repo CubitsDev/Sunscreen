@@ -2,7 +2,7 @@ package me.combimagnetron.sunscreen.neo.render;
 
 import me.combimagnetron.sunscreen.neo.graphic.GraphicLike;
 import me.combimagnetron.sunscreen.neo.property.Property;
-import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
+import me.combimagnetron.sunscreen.neo.render.engine.context.RenderContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -6,7 +6,7 @@ import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.property.handler.PropertyHandler;
 import me.combimagnetron.passport.util.math.Vec4i;
 import me.combimagnetron.sunscreen.neo.render.Viewport;
-import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
+import me.combimagnetron.sunscreen.neo.render.engine.context.RenderContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

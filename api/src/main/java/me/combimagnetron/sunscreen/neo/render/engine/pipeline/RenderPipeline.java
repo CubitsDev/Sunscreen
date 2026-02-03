@@ -2,19 +2,15 @@ package me.combimagnetron.sunscreen.neo.render.engine.pipeline;
 
 import it.unimi.dsi.fastutil.Pair;
 import me.combimagnetron.passport.event.Dispatcher;
-import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.event.MenuTickEndEvent;
-import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
-import me.combimagnetron.sunscreen.neo.render.phase.RenderPhase;
-import me.combimagnetron.sunscreen.neo.render.phase.context.RenderContext;
+import me.combimagnetron.sunscreen.neo.render.engine.phase.RenderPhase;
+import me.combimagnetron.sunscreen.neo.render.engine.context.RenderContext;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 public final class RenderPipeline {
@@ -42,7 +38,7 @@ public final class RenderPipeline {
 
     public void stop() {
         state = null;
-        scheduledFuture.cancel(false);
+        scheduledFuture.cancel(true);
     }
 
     private @NotNull ScheduledFuture<?> start(@NotNull ScheduledExecutorService scheduler) {

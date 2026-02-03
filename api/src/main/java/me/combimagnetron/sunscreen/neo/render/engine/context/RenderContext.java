@@ -1,13 +1,11 @@
-package me.combimagnetron.sunscreen.neo.render.phase.context;
+package me.combimagnetron.sunscreen.neo.render.engine.context;
 
 import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
-import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.render.Viewport;
 import me.combimagnetron.sunscreen.neo.render.engine.cache.RenderCache;
 import me.combimagnetron.sunscreen.neo.render.engine.grid.ProcessedRenderChunk;
-import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderGrid;
 import me.combimagnetron.sunscreen.neo.theme.decorator.ThemeDecorator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,11 +45,6 @@ public final class RenderContext {
     }
 
     public @NotNull RenderContext withViewport(@Nullable Viewport viewport) {
-        return new RenderContext(viewport, tree, renderCache, bytes,
-                canvasses, decorators);
-    }
-
-    public @NotNull RenderContext withGrid(@NotNull RenderGrid renderGrid) {
         return new RenderContext(viewport, tree, renderCache, bytes,
                 canvasses, decorators);
     }
