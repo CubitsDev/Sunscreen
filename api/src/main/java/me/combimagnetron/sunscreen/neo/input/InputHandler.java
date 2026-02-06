@@ -1,7 +1,5 @@
 package me.combimagnetron.sunscreen.neo.input;
 
-import com.google.common.collect.ClassToInstanceMap;
-import com.google.common.collect.MutableClassToInstanceMap;
 import me.combimagnetron.passport.event.Dispatcher;
 import me.combimagnetron.passport.event.Event;
 import me.combimagnetron.passport.util.math.Vec2i;
@@ -31,8 +29,8 @@ public class InputHandler {
         C currentInput = (C) inputContextMap.get(type);
         C mutatedInput = function.apply(currentInput);
         inputContextMap.put(type, mutatedInput);
-        Event event = currentInput.constructEvent(user);
-        Dispatcher.dispatcher().post(currentInput.eventType(), event);
+        Event event = mutatedInput.constructEvent(user);
+        Dispatcher.dispatcher().post(mutatedInput.eventType(), event);
         return mutatedInput;
     }
 
