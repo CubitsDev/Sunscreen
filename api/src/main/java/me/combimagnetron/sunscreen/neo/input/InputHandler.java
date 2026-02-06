@@ -30,7 +30,7 @@ public class InputHandler {
         C mutatedInput = function.apply(currentInput);
         inputContextMap.put(type, mutatedInput);
         Event event = mutatedInput.constructEvent(user);
-        Dispatcher.dispatcher().post(mutatedInput.eventType(), event);
+        Dispatcher.dispatcher().post(currentInput.eventType(), event);
         return mutatedInput;
     }
 

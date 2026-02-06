@@ -57,6 +57,7 @@ public class ProtocolListener implements PacketListener {
     }
 
     private void handleMapData(PacketSendEvent packetSendEvent, SunscreenUser<?> user) {
+        if (inMenu(user)) return;
         WrapperPlayServerMapData data = new WrapperPlayServerMapData(packetSendEvent);
         if (data.getMapId() > 0) return;
         packetSendEvent.setCancelled(true);
