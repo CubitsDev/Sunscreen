@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 
 public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player> {
-    private final
+    private final MinestomPlatformProtocolIntermediate protocolIntermediate = new MinestomPlatformProtocolIntermediate();
     private final SessionHandler sessionHandler = new SessionHandler();
     private final UserManager userManager = new UserManager();
 
@@ -48,12 +48,12 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
             }
 
             @Override
-            public PacketEventsAPI<?> packetEventsApi() {
+            public com.github.retrooper.packetevents.PacketEventsAPI<?> packetEventsApi() {
                 return null;
             }
 
             @Override
-            public SunscreenAddon plugin() {
+            public Sun plugin() {
                 return null;
             }
         };
@@ -91,7 +91,7 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
 
     @Override
     public @NotNull PlatformProtocolIntermediate intermediate() {
-        return null;
+        return protocolIntermediate;
     }
 
 }

@@ -1,32 +1,21 @@
 package me.combimagnetron.sunscreen.user;
 
-import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
-import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnEntity;
 import me.combimagnetron.passport.internal.entity.Entity;
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.internal.network.Connection;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.menu.ScreenSize;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
+import me.combimagnetron.sunscreen.neo.protocol.type.Location;
+import me.combimagnetron.sunscreen.neo.render.ScreenInfo;
 import me.combimagnetron.sunscreen.neo.session.Session;
-import me.combimagnetron.passport.util.data.Pair;
-import me.combimagnetron.passport.util.math.Vec2d;
-import me.combimagnetron.passport.util.math.Vec2i;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class UserImpl implements SunscreenUser<Player> {
-    private final static ClientVersion CLIENT_VERSION = ClientVersion.V_1_21_4;
     private final Player player;
     private final Connection connection;
-    private ScreenSize screenSize = ScreenSize.of(Vec2i.of(200, 200), Pair.of(Vec2d.of(-0.11083211535, -0.11083211535), Vec2d.of(0.11083211535, 0.11083211535)));
 
     public static UserImpl of(Player player) {
         return new UserImpl(player);
@@ -38,13 +27,8 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public @NotNull ScreenSize screenSize() {
-        return screenSize;
-    }
-
-    @Override
-    public void screenSize(@NotNull ScreenSize screenSize) {
-        this.screenSize = screenSize;
+    public @NotNull ScreenInfo screenInfo() {
+        return null;
     }
 
     @Override
@@ -54,6 +38,11 @@ public class UserImpl implements SunscreenUser<Player> {
 
     @Override
     public @NotNull Session open(@NotNull MenuTemplate template) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Location eyeLocation() {
         return null;
     }
 
@@ -84,11 +73,7 @@ public class UserImpl implements SunscreenUser<Player> {
 
     @Override
     public void show(Entity entity) {
-        WrapperPlayServerSpawnEntity clientSpawnEntity = new WrapperPlayServerSpawnEntity(entity.id().intValue(), Optional.of(entity.uuid()), EntityTypes.getById(ClientVersion.V_1_21_4, entity.type().id()), new com.github.retrooper.packetevents.util.Vector3d(entity.position().x(), entity.position().y(), entity.position().z()), (float) entity.rotation().x(), (float) entity.rotation().y(), (float) entity.rotation().z(), entity.data().i(), Optional.empty());
-        List<EntityData<?>> entityData = entity.type().metadata().entityData();
-        WrapperPlayServerEntityMetadata clientEntityMetadata = new WrapperPlayServerEntityMetadata(entity.id().intValue(), entityData);
-        connection().send(clientSpawnEntity);
-        connection().send(clientEntityMetadata);
+
     }
 
     @Override
@@ -117,7 +102,8 @@ public class UserImpl implements SunscreenUser<Player> {
     }
 
     @Override
-    public ClientVersion clientVersion() {
+    public com.github.retrooper.packetevents.protocol.player.ClientVersion clientVersion() {
         return null;
     }
+
 }

@@ -3,22 +3,24 @@ package me.combimagnetron.sunscreen.protocol;
 import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerRotation;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMapData;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTimeUpdate;
 import me.combimagnetron.passport.event.Dispatcher;
-import me.combimagnetron.passport.internal.entity.Entity;
-import me.combimagnetron.passport.internal.entity.impl.passive.horse.Horse;
+import me.combimagnetron.passport.util.data.Identifier;
+import me.combimagnetron.passport.util.math.Vec2f;
+import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.SunscreenPlugin;
+import me.combimagnetron.sunscreen.neo.ActiveMenu;
+import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.event.UserMoveStateChangeEvent;
+import me.combimagnetron.sunscreen.neo.input.InputHandler;
 import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
-import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
+import me.combimagnetron.sunscreen.neo.property.Position;
+import me.combimagnetron.sunscreen.neo.render.Viewport;
 import me.combimagnetron.sunscreen.neo.session.Session;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.helper.RotationHelper;
@@ -87,9 +89,11 @@ public class ProtocolListener implements PacketListener {
     private void handleRotation(WrapperPlayClientPlayerRotation wrapperPlayClientPlayerRotation, SunscreenUser<?> user) {
         final Session session = user.session();
         if (session == null) return;
-        MouseInputContext context = session.menu().context(MouseInputContext.class);
-        if (context == null) return;
-        Dispatcher.dispatcher().post(new UserMoveStateChangeEvent(user, context.withPosition(RotationHelper.convert(wrapperPlayClientPlayerRotation.getYaw(), wrapperPlayClientPlayerRotation.getPitch(), user.screenInfo()))));
+        final InputHandler inputHandler = session.menu().inputHandler();
+        float yaw = wrapperPlayClientPlayerRotation.getYaw();
+        float pitch = wrapperPlayClientPlayerRotation.getPitch();
+        MouseInputContext mutatedContext = inputHandler.peek(MouseInputContext.class, old -> old.withPosition(RotationHelper.convert(yaw, pitch, user.screenInfo())), user);
+        Dispatcher.dispatcher().post(new UserMoveStateChangeEvent(user, mutatedContext));
     }
 
     static boolean inMenu(@NotNull SunscreenUser<?> user) {

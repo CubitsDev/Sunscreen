@@ -23,11 +23,6 @@ public class BreadcrumbElement extends GenericInteractableModernElement<Breadcru
     }
 
     @Override
-    public @NonNull <C extends InputContext<?>> C input(Class<C> clazz) {
-        return null;
-    }
-
-    @Override
     public @NonNull Canvas render(@NonNull Size property, @Nullable RenderContext context) {
         return null;
     }

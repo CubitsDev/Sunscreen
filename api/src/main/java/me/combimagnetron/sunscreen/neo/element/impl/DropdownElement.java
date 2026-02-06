@@ -24,11 +24,6 @@ public class DropdownElement extends GenericInteractableModernElement<DropdownEl
     }
 
     @Override
-    public <C extends InputContext<?>> @NotNull C input(Class<C> clazz) {
-        return null;
-    }
-
-    @Override
     public @NonNull Canvas render(@NonNull Size property, @Nullable RenderContext context) {
         return null;
     }

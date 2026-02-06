@@ -1,18 +1,13 @@
-package me.combimagnetron.sunscreen;
+package me.combimagnetron.sunscreen.neo;
 
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.math.Vec2i;
-import me.combimagnetron.sunscreen.neo.MenuRoot;
-import me.combimagnetron.sunscreen.neo.MenuTemplate;
 import me.combimagnetron.sunscreen.neo.element.Elements;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.graphic.color.Color;
 import me.combimagnetron.sunscreen.neo.graphic.shape.Shape;
-import me.combimagnetron.sunscreen.neo.graphic.text.Text;
-import me.combimagnetron.sunscreen.neo.graphic.text.style.impl.color.TextColor;
 import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.Size;
-import me.combimagnetron.sunscreen.neo.registry.Registries;
 import me.combimagnetron.sunscreen.neo.theme.ModernTheme;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,13 +38,12 @@ public class TestMenuTemplate implements MenuTemplate {
                 Canvas.empty(Vec2i.of(100, 100)).fill(Position.nil(), Size.fixed(Vec2i.of(100, 100)), Color.of(54, 197, 244))
             ).position(Position.fixed(Vec2i.of(0, 0)))
         ).element(
-            Elements.label(
+            Elements.button(
                 Identifier.of(
                     "sunscreen",
-                    "test_menu/element/test_label"
-                ),
-                Text.basic("yo it finally fucking works!").font(Registries.fonts().get(Identifier.of("sunscreen", "font/sunburned"))).color(TextColor.color(Color.of(219, 63, 253)))
-            ).position(Position.nil()).size(Size.fixed(Vec2i.of(100, 100)))
+                    "test_menu/element/button"
+                )
+            ).position(Position.fixed(Vec2i.of(450, 200))).size(Size.fixed(Vec2i.of(77, 24)))
         ).element(
             Elements.shape(
                 Identifier.of(
@@ -57,7 +51,7 @@ public class TestMenuTemplate implements MenuTemplate {
                 "test_menu/element/test_shape"
                 ),
                 Shape.line(Vec2i.of(200, 322), Vec2i.of(600, 20), 3),
-                Color.of(219, 63, 253)
+                Color.of(0, 0, 0)
             ).position(Position.fixed(Vec2i.of(200, 200)))
         ).element(
             Elements.image(

@@ -38,6 +38,11 @@ public class RenderCache {
         return renderChunk.contentHash() != idToHashcodeMap.get(mapId);
     }
 
+    public void update(@NotNull RenderChunk renderChunk, int mapId) {
+        remove(mapId);
+        add(renderChunk, mapId);
+    }
+
     public Integer byPosAndScale(float scale, @NotNull Vec3f vec3f) {
         return scaleToIdByPositionTable.get(scale, vec3f);
     }
@@ -62,6 +67,7 @@ public class RenderCache {
     private void remove(int id) {
         RenderChunk chunk = idToChunkMap.remove(id);
         if (chunk != null) invertedIdToChunkMap.removeInt(chunk);
+        idToHashcodeMap.remove(id);
     }
 
     public @Nullable RenderChunk get(float scale, @NotNull Vec3f position) {

@@ -3,22 +3,18 @@ package me.combimagnetron.sunscreen;
 import com.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.combimagnetron.passport.Passport;
+import me.combimagnetron.passport.event.EventBus;
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.sunscreen.command.SunscreenCommand;
-import me.combimagnetron.sunscreen.hook.SunscreenHook;
-import me.combimagnetron.sunscreen.neo.ActiveMenu;
+import me.combimagnetron.sunscreen.neo.event.UserMoveStateChangeEvent;
 import me.combimagnetron.sunscreen.neo.graphic.text.style.impl.font.AtlasFont;
 import me.combimagnetron.sunscreen.neo.registry.Registries;
 import me.combimagnetron.sunscreen.placeholder.PapiPlaceholderProvider;
-import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.user.UserManager;
 import me.combimagnetron.sunscreen.util.FileProvider;
 import org.apache.commons.io.IOUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import revxrsal.commands.Lamp;
 import revxrsal.commands.bukkit.BukkitLamp;
@@ -29,10 +25,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class SunscreenPlugin extends JavaPlugin implements Listener {
-    private SunscreenLibrary<SunscreenPlugin, Player> library;
-    private UserManager userManager;
     private static final Identifier FONT_ID = Identifier.of("sunscreen", "font/minecraft");
     private static final Identifier SMALL_FONT_ID = Identifier.of("sunscreen", "font/sunburned");
+    private Lamp<BukkitCommandActor> lamp;
+    private SunscreenLibrary<SunscreenPlugin, Player> library;
+    private UserManager userManager;
+
 
     @Override
     public void onLoad() {
@@ -46,8 +44,7 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         PacketEvents.getAPI().init();
         this.library = new SunscreenLibrarySpigot(this);
-        Lamp<BukkitCommandActor> lamp = BukkitLamp.builder(this).build();
-        lamp.register(new SunscreenCommand());
+        lamp = BukkitLamp.builder(this).build();
         SunscreenLibrary.Holder.INSTANCE = library;
         Passport.Holder.INSTANCE = library.passport();
         this.getDataFolder().mkdirs();
@@ -113,6 +110,7 @@ public class SunscreenPlugin extends JavaPlugin implements Listener {
     }
 
     private void commands() {
+        lamp.register(new SunscreenCommand());
     }
 
     @Override

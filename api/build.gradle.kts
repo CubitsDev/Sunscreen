@@ -3,9 +3,6 @@ plugins {
     `maven-publish`
 }
 
-group = "me.combimagnetron"
-version = "1.0-SNAPSHOT"
-
 repositories {
     maven("https://repo.tikite.ch/releases")
     mavenCentral()
@@ -20,6 +17,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.junit.platform:junit-platform-suite:1.13.4")
+    testImplementation(libs.bundles.utils)
 }
 
 tasks.test {

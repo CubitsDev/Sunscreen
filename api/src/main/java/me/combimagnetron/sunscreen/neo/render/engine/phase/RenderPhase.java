@@ -18,6 +18,7 @@ import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.render.Viewport;
 import me.combimagnetron.sunscreen.neo.render.engine.cache.RenderCache;
 import me.combimagnetron.sunscreen.neo.render.engine.encode.MapEncoder;
+import me.combimagnetron.sunscreen.neo.render.engine.encode.MapEncoderTest;
 import me.combimagnetron.sunscreen.neo.render.engine.grid.EncodedRenderChunk;
 import me.combimagnetron.sunscreen.neo.render.engine.grid.ProcessedRenderChunk;
 import me.combimagnetron.sunscreen.neo.render.engine.context.RenderContext;
@@ -129,6 +130,7 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
     }
 
     class Encode implements RenderPhase<Send> {
+        private long time = System.currentTimeMillis();
         private static final int CHUNK_SIZE = 128;
         private final SunscreenUser<?> user;
 
@@ -143,8 +145,11 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
 
         @Override
         public @NotNull Pair<Send, RenderContext> advance(@NonNull RenderContext renderContext) {
+            //System.out.println("a " + (System.currentTimeMillis() - time));
+            //time = System.currentTimeMillis();
             List<ProcessedRenderChunk> changedChunks = new ArrayList<>();
-
+            //System.out.println("b " + (System.currentTimeMillis() - time));
+            //time = System.currentTimeMillis();
             for (Map.Entry<Float, Canvas> entry : renderContext.start().entrySet()) {
                 float scale = entry.getKey();
                 Canvas canvas = entry.getValue();
@@ -168,20 +173,38 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
 
                         if (!exists || renderContext.chunkChangedAt(newChunk, id)) {
                             changedChunks.add(newChunk);
+
                         }
 
                     }
                 }
             }
 
-            Collection<EncodedRenderChunk> encodedChunks = encodeChunks(changedChunks);
+            //System.out.println("c " + (System.currentTimeMillis() - time));
+            //time = System.currentTimeMillis();
+
+            Collection<EncodedRenderChunk> encodedChunks = encodeChunks(changedChunks, renderContext.renderCache());
+
+            //System.out.println("d " + (System.currentTimeMillis() - time));
+            //time = System.currentTimeMillis();
 
             return Pair.of(new Send(encodedChunks, user),
                     renderContext);
         }
 
-        private @NotNull Collection<EncodedRenderChunk> encodeChunks(List<ProcessedRenderChunk> changed) {
-            return changed.stream().parallel().map(chunk -> new EncodedRenderChunk(new MapEncoder(chunk).bytes().toByteArray(), chunk.position(), chunk.scale(), chunk.bufferedColorSpace())).toList();
+        private @NotNull Collection<EncodedRenderChunk> encodeChunks(List<ProcessedRenderChunk> changed, RenderCache cache) {
+            return changed.stream().map(chunk -> {
+                try {
+                    byte[] bytes = new MapEncoderTest(chunk).bytes().toByteArray();
+                    EncodedRenderChunk encodedRenderChunk = new EncodedRenderChunk(bytes, chunk.position(), chunk.scale(), chunk.bufferedColorSpace());
+                    Integer id = cache.byPosAndScale(chunk.scale(), chunk.position());
+                    boolean exists = id != null;
+                    if (exists) cache.update(encodedRenderChunk, id);
+                    return encodedRenderChunk;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).toList();
         }
 
     }

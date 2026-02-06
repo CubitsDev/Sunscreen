@@ -1,7 +1,9 @@
 package me.combimagnetron.sunscreen.neo.input.context;
 
+import me.combimagnetron.passport.event.Event;
 import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.neo.event.UserMoveStateChangeEvent;
+import me.combimagnetron.sunscreen.user.SunscreenUser;
 import org.jetbrains.annotations.NotNull;
 
 public record MouseInputContext(boolean active, boolean rightPressed, boolean leftPressed, @NotNull Vec2i position) implements InputContext<UserMoveStateChangeEvent> {
@@ -13,6 +15,11 @@ public record MouseInputContext(boolean active, boolean rightPressed, boolean le
     @Override
     public @NotNull Class<UserMoveStateChangeEvent> eventType() {
         return UserMoveStateChangeEvent.class;
+    }
+
+    @Override
+    public @NotNull UserMoveStateChangeEvent constructEvent(@NotNull SunscreenUser<?> user) {
+        return new UserMoveStateChangeEvent(user, this);
     }
 
     public @NotNull MouseInputContext withActive(boolean newActive) {

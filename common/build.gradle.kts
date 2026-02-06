@@ -4,9 +4,6 @@ plugins {
     id("java")
 }
 
-group = "me.combimagnetron"
-version = "unspecified"
-
 fun libs(): LibrariesForLibs {
     return rootProject.libs
 }

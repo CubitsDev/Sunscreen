@@ -4,6 +4,9 @@ import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
+import me.combimagnetron.sunscreen.neo.element.ElementLike;
+import me.combimagnetron.sunscreen.neo.element.GenericInteractableModernElement;
+import me.combimagnetron.sunscreen.neo.input.InputHandler;
 import me.combimagnetron.sunscreen.neo.input.context.InputContext;
 import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
 import me.combimagnetron.sunscreen.neo.input.context.ScrollInputContext;
@@ -19,6 +22,7 @@ import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.IdentifierHolder;
 import me.combimagnetron.sunscreen.util.Scheduler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ActiveMenu implements IdentifierHolder {
+    private final InputHandler inputHandler = InputHandler.defaults();
     private final Map<Class<MenuComponent<?>>, MenuComponent<?>> loadedComponents = new HashMap<>();
-    private final Map<Class<? extends InputContext<?>>, InputContext<?>> inputContextMap = new HashMap<>();
     private final MenuRoot menuRoot = new MenuRoot();
     private final Vector3d initialRotation;
     private final SunscreenUser<?> user;
@@ -39,11 +43,14 @@ public class ActiveMenu implements IdentifierHolder {
         this.user = user;
         this.identifier = identifier;
         template.build(menuRoot);
-        inputContextMap.put(MouseInputContext.class, new MouseInputContext(false, false, false, Vec2i.zero()));
-        inputContextMap.put(ScrollInputContext.class, new ScrollInputContext(false, 0f));
         loadComponents();
         PlatformProtocolIntermediate intermediate = SunscreenLibrary.library().intermediate();
         intermediate.gameTime(user);
+        for (ElementLike<?> elementLike : menuRoot.elementLikes()) {
+            if (elementLike instanceof GenericInteractableModernElement<?,?,?> interactableModernElement) {
+                interactableModernElement.inputHandler(inputHandler);
+            }
+        }
         renderPipeline = RenderThreadPoolHandler.start(user, menuRoot);
 
         Location location = user.eyeLocation();
@@ -53,7 +60,7 @@ public class ActiveMenu implements IdentifierHolder {
     }
 
     private void loadComponents() {
-        MenuComponentLoaderContext context = new MenuComponentLoaderContext(null, null, null, null);
+        MenuComponentLoaderContext context = new MenuComponentLoaderContext(null, null, null);
         menuRoot.components().parallelStream().forEach(component -> {
             MenuComponent<?> loaded = component.loader().load(context);
             loadedComponents.put((Class<MenuComponent<?>>) component.getClass(), loaded);
@@ -72,19 +79,24 @@ public class ActiveMenu implements IdentifierHolder {
         return identifier;
     }
 
-    public @NotNull <E extends InputContext<?>> E context(@NotNull Class<E> contextClass) {
-        return (E) inputContextMap.get(contextClass);
+    public @NotNull InputHandler inputHandler() {
+        return inputHandler;
     }
 
-    public <E extends InputContext<?>> void context(@NotNull E context) {
-        inputContextMap.put((Class<InputContext<?>>) context.getClass(), context);
+    public @NotNull ActiveMenu add(@NotNull ElementLike<?> @NotNull... elementLikes) {
+        renderPipeline.submit(elementLikes);
+        return this;
+    }
+
+    public @Nullable ElementLike<?> element(@NotNull Identifier identifier) {
+        return renderPipeline.element(identifier);
     }
 
     public void close() {
         SunscreenLibrary.library().sessionHandler().remove(user);
         renderPipeline.stop();
         PlatformProtocolIntermediate intermediate = SunscreenLibrary.library().intermediate();
-        intermediate.reset(user);
+        intermediate.reset(user, initialRotation);
     }
 
 }

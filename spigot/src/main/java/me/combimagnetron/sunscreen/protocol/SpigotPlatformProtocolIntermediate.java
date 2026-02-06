@@ -1,5 +1,6 @@
 package me.combimagnetron.sunscreen.protocol;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
@@ -28,6 +29,7 @@ import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.Scheduler;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.bukkit.profile.PlayerTextures;
 import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,13 +73,15 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
                         List.of(MODIFIER)
                 )
         );
-        WrapperPlayServerEntityTeleport entityTeleport = new WrapperPlayServerEntityTeleport(horse.id().intValue(), new com.github.retrooper.packetevents.util.Vector3d(horse.position().x(), horse.position().y(), horse.position().z()), 0f, 0f, false);
+        WrapperPlayServerEntityTeleport entityTeleport = new WrapperPlayServerEntityTeleport(horse.id().intValue(), new com.github.retrooper.packetevents.util.Vector3d(horse.position().x(), horse.position().y(), horse.position().z()), 0f, 180f, false);
         WrapperPlayServerUpdateAttributes updateAttributes = new WrapperPlayServerUpdateAttributes(horse.id().intValue(), attributes);
+        user.connection().send(new WrapperPlayServerPlayerRotation(0f, -180f));
         user.show(horse);
         user.connection().send(updateAttributes);
         user.connection().send(entityEquipment);
         user.connection().send(entityTeleport);
         user.connection().send(passengers);
+        user.connection().send(new WrapperPlayServerPlayerRotation(0f, -37.3f));
         entities.put(user.uniqueIdentifier(), horse.id().intValue(), horse);
         return new EntityReference<>(horse.id().intValue(), horse);
     }
@@ -107,7 +111,11 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
         display.rotation(Vector3d.vec3(player.getPitch(), player.getYaw(), 0));
         WrapperPlayServerCamera camera = new WrapperPlayServerCamera(-10_000);
         UUID uuid = UUID.randomUUID();
-        UserProfile profile = new UserProfile(uuid, ".");
+        List<TextureProperty> properties = new ArrayList<>();
+        for (ProfileProperty property : player.getPlayerProfile().getProperties()) {
+            properties.add(new TextureProperty(property.getName(), property.getValue(), property.getSignature()));
+        }
+        UserProfile profile = new UserProfile(uuid, player.getName(), properties);
         WrapperPlayServerSpawnEntity spawnEntity = new WrapperPlayServerSpawnEntity(-10_000, uuid, EntityTypes.PLAYER, vec32PeLoc(user.position(), user.rotation()), player.getYaw(), 0, com.github.retrooper.packetevents.util.Vector3d.zero());
         WrapperPlayServerPlayerInfoUpdate infoUpdate = new WrapperPlayServerPlayerInfoUpdate(WrapperPlayServerPlayerInfoUpdate.Action.ADD_PLAYER, new WrapperPlayServerPlayerInfoUpdate.PlayerInfo(profile, false, 0, GameMode.CREATIVE, null, null, 0, true));
         user.connection().send(infoUpdate);

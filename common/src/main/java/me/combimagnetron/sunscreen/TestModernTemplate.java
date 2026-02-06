@@ -1,11 +1,11 @@
+package me.combimagnetron.sunscreen;
+
 import me.combimagnetron.passport.logic.state.MutableState;
 import me.combimagnetron.passport.logic.state.State;
-import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
 import me.combimagnetron.sunscreen.neo.MenuRoot;
 import me.combimagnetron.sunscreen.neo.element.Elements;
 import me.combimagnetron.sunscreen.neo.element.impl.ButtonElement;
-import me.combimagnetron.sunscreen.neo.element.impl.LabelElement;
 import me.combimagnetron.sunscreen.neo.element.impl.text.TextBoxElement;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.graphic.NineSlice;
@@ -13,7 +13,6 @@ import me.combimagnetron.sunscreen.neo.graphic.modifier.GraphicModifiers;
 import me.combimagnetron.sunscreen.neo.graphic.modifier.ModifierContext;
 import me.combimagnetron.sunscreen.neo.graphic.shape.Shape;
 import me.combimagnetron.sunscreen.neo.graphic.text.Text;
-import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
 import me.combimagnetron.sunscreen.neo.input.keybind.Keybind;
 import me.combimagnetron.sunscreen.neo.layout.Layout;
 import me.combimagnetron.sunscreen.neo.page.Page;
@@ -26,9 +25,7 @@ import me.combimagnetron.sunscreen.neo.selector.filter.Filter;
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.neo.theme.ModernTheme;
-import me.combimagnetron.sunscreen.neo.theme.color.ColorScheme;
 import me.combimagnetron.sunscreen.neo.theme.decorator.ThemeDecorator;
-import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;

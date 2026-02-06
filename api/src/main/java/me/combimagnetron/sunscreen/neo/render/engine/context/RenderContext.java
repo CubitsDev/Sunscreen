@@ -1,5 +1,6 @@
 package me.combimagnetron.sunscreen.neo.render.engine.context;
 
+import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public final class RenderContext {
+    private final Map<Identifier, Object> objectStorage;
     private final RenderCache renderCache;
     private final Collection<byte[]> bytes;
     private final Map<Float, Canvas> canvasses;
@@ -25,6 +27,7 @@ public final class RenderContext {
                          @Nullable Iterable<ElementLike<?>> tree) {
         this.viewport = viewport;
         this.tree = tree;
+        this.objectStorage = new HashMap<>();
         this.decorators = new HashMap<>();
         this.renderCache = new RenderCache();
         this.bytes = new ArrayList<>();
@@ -33,11 +36,13 @@ public final class RenderContext {
 
     private RenderContext(@Nullable Viewport viewport,
                           @Nullable Iterable<ElementLike<?>> tree,
+                          @NotNull Map<Identifier, Object> objectStorage,
                           @NotNull RenderCache renderCache,
                           @NotNull Collection<byte[]> bytes,
                           @NotNull Map<Float, Canvas> canvasses, Map<Class<? extends ElementLike<?>>, ThemeDecorator<?>> decorators) {
         this.viewport = viewport;
         this.tree = tree;
+        this.objectStorage = objectStorage;
         this.renderCache = renderCache;
         this.bytes = bytes;
         this.canvasses = canvasses;
@@ -45,18 +50,18 @@ public final class RenderContext {
     }
 
     public @NotNull RenderContext withViewport(@Nullable Viewport viewport) {
-        return new RenderContext(viewport, tree, renderCache, bytes,
+        return new RenderContext(viewport, tree, objectStorage, renderCache, bytes,
                 canvasses, decorators);
     }
 
     public @NotNull RenderContext withBytes(@Nullable Collection<byte[]> bytes) {
-        return new RenderContext(viewport, tree, renderCache,
+        return new RenderContext(viewport, tree, objectStorage, renderCache,
                 bytes != null ? bytes : new ArrayList<>(), canvasses, decorators);
     }
 
     public @NotNull RenderContext withTree(@Nullable Iterable<ElementLike<?>> tree) {
-        return new RenderContext(viewport, tree, renderCache, bytes,
-                canvasses, decorators);
+        return new RenderContext(viewport, tree, objectStorage, renderCache, bytes,
+            canvasses, decorators);
     }
 
     public @NotNull RenderContext withStart(@Nullable Map<Float, Canvas> start) {
@@ -110,6 +115,10 @@ public final class RenderContext {
 
     public @NotNull Map<Class<? extends ElementLike<?>>, ThemeDecorator<?>> decorators() {
         return decorators;
+    }
+
+    public @NotNull Map<Identifier, Object> objectStorage() {
+        return objectStorage;
     }
 
     public @NotNull RenderCache renderCache() {
