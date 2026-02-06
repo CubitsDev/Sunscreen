@@ -4,6 +4,7 @@ import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientAnimation;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerRotation;
@@ -23,6 +24,7 @@ import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.render.Viewport;
 import me.combimagnetron.sunscreen.neo.session.Session;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
+import me.combimagnetron.sunscreen.util.Scheduler;
 import me.combimagnetron.sunscreen.util.helper.RotationHelper;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
@@ -44,6 +46,7 @@ public class ProtocolListener implements PacketListener {
             case PacketType.Play.Client.PLAYER_ROTATION -> handleRotation(new WrapperPlayClientPlayerRotation(packetReceiveEvent), user);
             case PacketType.Play.Client.INTERACT_ENTITY -> handleInteractEntity(packetReceiveEvent, user);
             case PacketType.Play.Client.PLAYER_INPUT -> handleSneak(new WrapperPlayClientPlayerInput(packetReceiveEvent), user);
+            case PacketType.Play.Client.ANIMATION -> handleAnimation(new WrapperPlayClientAnimation(packetReceiveEvent), user);
             default -> {}
         }
     }
@@ -70,6 +73,19 @@ public class ProtocolListener implements PacketListener {
         packetSendEvent.setCancelled(true);
     }
 
+    private void handleAnimation(WrapperPlayClientAnimation wrapperPlayClientAnimation, SunscreenUser<?> user) {
+        if (!inMenu(user)) return;
+        final Session session = user.session();
+        if (session == null) return;
+        final InputHandler inputHandler = session.menu().inputHandler();
+        MouseInputContext mutatedContext = inputHandler.peek(MouseInputContext.class, old -> old.withLeftPressed(true), user);
+        Dispatcher.dispatcher().post(new UserMoveStateChangeEvent(user, mutatedContext));
+        Scheduler.delayTick(() -> {
+            MouseInputContext secondMutatedContext = inputHandler.peek(MouseInputContext.class, old -> old.withLeftPressed(false), user);
+            Dispatcher.dispatcher().post(new UserMoveStateChangeEvent(user, secondMutatedContext));
+        });
+    }
+
     private void handleTimeUpdate(WrapperPlayServerTimeUpdate wrapperPlayServerTimeUpdate, SunscreenUser<?> user) {
         if (!inMenu(user)) return;
         wrapperPlayServerTimeUpdate.setWorldAge(-2000);
@@ -87,6 +103,7 @@ public class ProtocolListener implements PacketListener {
     }
 
     private void handleRotation(WrapperPlayClientPlayerRotation wrapperPlayClientPlayerRotation, SunscreenUser<?> user) {
+        if (!inMenu(user)) return;
         final Session session = user.session();
         if (session == null) return;
         final InputHandler inputHandler = session.menu().inputHandler();

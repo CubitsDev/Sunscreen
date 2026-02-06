@@ -50,7 +50,9 @@ public final class NineSlice {
             Vec2i size = pieceSizeByIndex(i);
             parts[i] = canvas.sub(position, size);
             if (i == 2 || i == 5) {
-                position = position.mul(0, 1).add(0, size.y());
+                position = Vec2i.of(0, position.y() + size.y());
+            } else {
+                position = position.add(size.x(), 0);
             }
         }
     }

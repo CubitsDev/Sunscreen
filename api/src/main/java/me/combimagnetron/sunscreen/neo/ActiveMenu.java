@@ -51,7 +51,7 @@ public class ActiveMenu implements IdentifierHolder {
                 interactableModernElement.inputHandler(inputHandler);
             }
         }
-        renderPipeline = RenderThreadPoolHandler.start(user, menuRoot);
+        renderPipeline = RenderThreadPoolHandler.start(user, menuRoot, loadedComponents.values());
 
         Location location = user.eyeLocation();
         intermediate.spawnAndSpectateDisplay(user, location);
@@ -60,7 +60,7 @@ public class ActiveMenu implements IdentifierHolder {
     }
 
     private void loadComponents() {
-        MenuComponentLoaderContext context = new MenuComponentLoaderContext(null, null, null);
+        MenuComponentLoaderContext context = new MenuComponentLoaderContext(null, null, null, menuRoot);
         menuRoot.components().parallelStream().forEach(component -> {
             MenuComponent<?> loaded = component.loader().load(context);
             loadedComponents.put((Class<MenuComponent<?>>) component.getClass(), loaded);

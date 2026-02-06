@@ -2,14 +2,22 @@ package me.combimagnetron.sunscreen.neo;
 
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.neo.element.Elements;
+import me.combimagnetron.sunscreen.neo.element.GenericInteractableModernElement;
+import me.combimagnetron.sunscreen.neo.element.impl.ButtonElement;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
+import me.combimagnetron.sunscreen.neo.graphic.NineSlice;
 import me.combimagnetron.sunscreen.neo.graphic.color.Color;
 import me.combimagnetron.sunscreen.neo.graphic.shape.Shape;
 import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.Size;
 import me.combimagnetron.sunscreen.neo.theme.ModernTheme;
+import me.combimagnetron.sunscreen.neo.theme.decorator.ThemeDecorator;
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.file.Path;
+import java.util.Map;
 
 public class TestMenuTemplate implements MenuTemplate {
     private static final Identifier IDENTIFIER = Identifier.of("sunscreen", "test_menu");
@@ -21,11 +29,21 @@ public class TestMenuTemplate implements MenuTemplate {
 
     @Override
     public void build(@NotNull MenuRoot root) {
+        Path dataPath = SunscreenLibrary.library().path();
         root.theme(
             ModernTheme.theme(
                 Identifier.of(
                     "sunscreen",
                     "test_menu/theme/test")
+            ).decorator(
+                ThemeDecorator.stateNineSlice(
+                    ButtonElement.class,
+                    Map.of(
+                        GenericInteractableModernElement.ElementPhase.DEFAULT, NineSlice.nineSlice(Canvas.file(dataPath.resolve("default.png"))),
+                        GenericInteractableModernElement.ElementPhase.HOVER, NineSlice.nineSlice(Canvas.file(dataPath.resolve("hovered.png"))),
+                        GenericInteractableModernElement.ElementPhase.CLICK, NineSlice.nineSlice(Canvas.file(dataPath.resolve("clicked.png")))
+                    )
+                )
             )
         );
         //root.element(Elements.image(Identifier.of("woopsie_fuck"), Canvas.url("https://i.imgur.com/eIacYAm.png")).position(Position.nil()).scale(Scale.fixed(1.56f))
@@ -43,7 +61,7 @@ public class TestMenuTemplate implements MenuTemplate {
                     "sunscreen",
                     "test_menu/element/button"
                 )
-            ).position(Position.fixed(Vec2i.of(450, 200))).size(Size.fixed(Vec2i.of(77, 24)))
+            ).position(Position.fixed(Vec2i.of(450, 200))).size(Size.fixed(Vec2i.of(200, 60)))
         ).element(
             Elements.shape(
                 Identifier.of(

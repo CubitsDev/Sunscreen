@@ -11,22 +11,19 @@ import me.combimagnetron.sunscreen.neo.input.context.InputContext;
 import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
 import me.combimagnetron.sunscreen.neo.property.Size;
 import me.combimagnetron.sunscreen.neo.render.engine.context.RenderContext;
+import me.combimagnetron.sunscreen.neo.theme.ModernTheme;
+import me.combimagnetron.sunscreen.neo.theme.decorator.ThemeDecorator;
 import me.combimagnetron.sunscreen.util.helper.HoverHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ButtonElement extends GenericInteractableModernElement<ButtonElement, Canvas, ButtonElement.ButtonElementListenerReferences> {
     private final ButtonElementListenerReferences references = new ButtonElementListenerReferences(this);
-    private final Canvas hovered;
-    private final Canvas idle;
-    private boolean hover = false;
+    private ElementPhase phase = ElementPhase.DEFAULT;
+    private int click = 0;
 
     public ButtonElement(@Nullable Identifier identifier) {
         super(identifier);
-        Canvas sheet = Canvas.url("https://i.imgur.com/NGqcMHh.png");
-        final Vec2i size = Vec2i.of(77, 24);
-        this.idle = sheet.sub(Vec2i.zero(), size);
-        this.hovered = sheet.sub(Vec2i.of(0, 24), size);
     }
 
     @Override
@@ -38,7 +35,16 @@ public class ButtonElement extends GenericInteractableModernElement<ButtonElemen
     private void handleCursor(@NotNull UserMoveStateChangeEvent event) {
         final MouseInputContext context = event.context();
         Vec2i cursor = context.position();
-        hover = HoverHelper.in(this, cursor);
+        boolean hover = HoverHelper.in(this, cursor);
+        if (hover && context.leftPressed()) click = 6;
+        if (click > 0) {
+            click -= 1;
+            phase = ElementPhase.CLICK;
+        } else if (hover) {
+            phase = ElementPhase.HOVER;
+        } else {
+            phase = ElementPhase.DEFAULT;
+        }
     }
 
     @Override
@@ -48,10 +54,12 @@ public class ButtonElement extends GenericInteractableModernElement<ButtonElemen
 
     @Override
     public @NotNull Canvas render(@NotNull Size property, @Nullable RenderContext context) {
-        //todo replace with real error handling for the editor and placeholder textures.
-//        if (context == null) return Canvas.url("");
-//        return context.decorators().get(this.getClass()).render(property, context);
-        return hover ? hovered : idle;
+        Size size = size();
+        if (context == null) return Canvas.error(size);
+        ModernTheme theme = context.theme();
+        ThemeDecorator<?> themeDecorator = theme.find(this.getClass());
+        if (!(themeDecorator instanceof ThemeDecorator.StateNineSLiceThemeDecorator<?> decorator)) return Canvas.error(size);
+        return decorator.render(size, context, phase);
     }
 
     public record ButtonElementListenerReferences(ButtonElement buttonElement) implements ListenerReferences<ButtonElement, ButtonElementListenerReferences> {

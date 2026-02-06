@@ -2,6 +2,7 @@ package me.combimagnetron.sunscreen.neo.theme.decorator;
 
 import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
+import me.combimagnetron.sunscreen.neo.element.GenericInteractableModernElement;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.graphic.NineSlice;
 import me.combimagnetron.sunscreen.neo.property.Size;
@@ -28,6 +29,10 @@ public sealed interface ThemeDecorator<E extends ElementLike<E>> extends Rendera
         return new NineSliceThemeDecorator<>(target, nineSlice);
     }
 
+    static <E extends ElementLike<E>> @NotNull StateNineSLiceThemeDecorator<E> stateNineSlice(@NotNull Class<E> target, @NotNull Map<GenericInteractableModernElement.ElementPhase, NineSlice> phases) {
+        return new StateNineSLiceThemeDecorator<>(target, phases);
+    }
+
     record NineSliceThemeDecorator<E extends ElementLike<E>>(@NotNull Class<E> target, @NotNull NineSlice nineSlice) implements ThemeDecorator<E> {
 
         @Override
@@ -38,13 +43,19 @@ public sealed interface ThemeDecorator<E extends ElementLike<E>> extends Rendera
 
     }
 
-    record StateNineSLiceThemeDecorator<E extends ElementLike<E>>(@NotNull Class<E> target, @NotNull List<NineSlice> nineSlices) implements ThemeDecorator<E> {
+    record StateNineSLiceThemeDecorator<E extends ElementLike<E>>(@NotNull Class<E> target, @NotNull Map<GenericInteractableModernElement.ElementPhase, NineSlice> nineSlices) implements ThemeDecorator<E> {
+
+        public @NotNull Canvas render(@NotNull Size property, @Nullable RenderContext context, @NotNull GenericInteractableModernElement.ElementPhase phase) {
+            if (context == null) throw new IllegalArgumentException("Context may not be null while constructing decorators.");
+            NineSlice nineSlice = nineSlices.get(phase);
+            if (nineSlice == null) return Canvas.empty(Vec2i.zero());
+            Vec2i sizeVec = PropertyHelper.vectorOrThrow(property, Vec2i.class);
+            return nineSlice.size(sizeVec);
+        }
 
         @Override
-        public @NonNull Canvas render(@NonNull Size property, @Nullable RenderContext context) {
-            if (context == null) throw new IllegalArgumentException("Context may not be null while constructing decorators.");
-            //int state = context.objectStorage().get();
-            return null;
+        public @NotNull Canvas render(@NotNull Size property, @Nullable RenderContext context) {
+            return render(property, context, GenericInteractableModernElement.ElementPhase.DEFAULT);
         }
 
     }

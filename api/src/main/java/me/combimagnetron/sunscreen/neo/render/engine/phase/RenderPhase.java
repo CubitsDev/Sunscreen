@@ -145,11 +145,7 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
 
         @Override
         public @NotNull Pair<Send, RenderContext> advance(@NonNull RenderContext renderContext) {
-            //System.out.println("a " + (System.currentTimeMillis() - time));
-            //time = System.currentTimeMillis();
             List<ProcessedRenderChunk> changedChunks = new ArrayList<>();
-            //System.out.println("b " + (System.currentTimeMillis() - time));
-            //time = System.currentTimeMillis();
             for (Map.Entry<Float, Canvas> entry : renderContext.start().entrySet()) {
                 float scale = entry.getKey();
                 Canvas canvas = entry.getValue();
@@ -180,13 +176,7 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
                 }
             }
 
-            //System.out.println("c " + (System.currentTimeMillis() - time));
-            //time = System.currentTimeMillis();
-
             Collection<EncodedRenderChunk> encodedChunks = encodeChunks(changedChunks, renderContext.renderCache());
-
-            //System.out.println("d " + (System.currentTimeMillis() - time));
-            //time = System.currentTimeMillis();
 
             return Pair.of(new Send(encodedChunks, user),
                     renderContext);

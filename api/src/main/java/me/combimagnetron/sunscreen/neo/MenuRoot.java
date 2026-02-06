@@ -16,7 +16,6 @@ public final class MenuRoot implements RootLike<MenuRoot> {
     private final static ModernTheme DEFAULT_THEME = ModernTheme.theme(Identifier.of("basic-theme")).colorScheme(ColorSchemes.BASIC_DARK);
     private final List<ElementLike<?>> elementLikes = new LinkedList<>();
     private final List<MenuComponent<?>> menuComponents = new LinkedList<>();
-    private ModernTheme theme = DEFAULT_THEME;
 
     MenuRoot() {
 

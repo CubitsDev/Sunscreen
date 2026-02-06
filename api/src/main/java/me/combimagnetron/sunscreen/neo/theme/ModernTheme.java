@@ -20,7 +20,7 @@ public sealed interface ModernTheme extends MenuComponent<ModernTheme>, Identifi
 
     <E extends ModernElement<E, Canvas>, D extends ThemeDecorator<E>> @NotNull ModernTheme decorator(@NotNull ThemeDecorator<E> themeDecorator);
 
-    <E extends ModernElement<E, Canvas>, D extends ThemeDecorator<E>> @NotNull ThemeDecorator<E> find(@NotNull Class<@NotNull E> clazz);
+    <E extends ModernElement<E, Canvas>, D extends ThemeDecorator<E>> @NotNull ThemeDecorator<E> find(@NotNull Class<@NotNull ? extends E> clazz);
 
     @NotNull ModernTheme colorScheme(@NotNull ColorScheme colorScheme);
 
@@ -29,7 +29,7 @@ public sealed interface ModernTheme extends MenuComponent<ModernTheme>, Identifi
     }
 
     final class SimpleModernTheme implements ModernTheme {
-        private final ComponentLoader<ModernTheme, MenuComponentLoaderContext> componentLoader = context -> null;
+        private final ComponentLoader<ModernTheme, MenuComponentLoaderContext> componentLoader = context -> (ModernTheme) context.menuRoot().components().stream().filter(menuComponent -> menuComponent.type().equals(ModernTheme.class)).findAny().orElseThrow();
         private final Map<Class<?>, ThemeDecorator<?>> decoratorMap = new HashMap<>();
         private final Identifier identifier;
         private ColorScheme colorScheme;
@@ -50,7 +50,7 @@ public sealed interface ModernTheme extends MenuComponent<ModernTheme>, Identifi
         }
 
         @Override
-        public @NotNull <E extends ModernElement<E, Canvas>, D extends ThemeDecorator<E>> ThemeDecorator<E> find(@NotNull Class<@NotNull E> clazz) {
+        public @NotNull <E extends ModernElement<E, Canvas>, D extends ThemeDecorator<E>> ThemeDecorator<E> find(@NotNull Class<@NotNull ? extends E> clazz) {
             return (ThemeDecorator<E>) decoratorMap.get(clazz);
         }
 

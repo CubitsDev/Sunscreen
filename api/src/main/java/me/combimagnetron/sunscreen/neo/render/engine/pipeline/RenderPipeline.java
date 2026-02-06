@@ -5,6 +5,7 @@ import me.combimagnetron.passport.event.Dispatcher;
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.event.MenuTickEndEvent;
+import me.combimagnetron.sunscreen.neo.loader.MenuComponent;
 import me.combimagnetron.sunscreen.neo.render.engine.phase.RenderPhase;
 import me.combimagnetron.sunscreen.neo.render.engine.context.RenderContext;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
@@ -28,12 +29,10 @@ public final class RenderPipeline {
     private final SunscreenUser<?> user;
     private volatile RenderContext context;
     private RenderPhase<?> state;
-    private long fullCycleTime = System.currentTimeMillis();
-    private long stageCycleTime = System.currentTimeMillis();
 
     RenderPipeline(@NotNull ScheduledExecutorService scheduler, @NotNull SunscreenUser<?> user, @NotNull UUID menuUuid,
-                   @NotNull Collection<ElementLike<?>> initialElements) {
-        context = new RenderContext(user.screenInfo().viewport(), initialElements);
+                   @NotNull Collection<ElementLike<?>> initialElements, @NotNull Collection<MenuComponent<?>> loadedComponents) {
+        context = new RenderContext(user.screenInfo().viewport(), initialElements, loadedComponents);
         this.menuUuid = menuUuid;
         this.state = new RenderPhase.Process(initialElements, user);
         for (ElementLike<?> initialElement : initialElements) {
@@ -55,19 +54,13 @@ public final class RenderPipeline {
     private void tick() {
         try {
             long currentTick = tick.incrementAndGet();
-            //Class<?> type = state.getClass();
             Pair<RenderPhase<?>, RenderContext> pair = (Pair<RenderPhase<?>, RenderContext>) state.advance(context);
             state = pair.left();
-            //System.out.println(type + " " + (System.currentTimeMillis() - stageCycleTime));
             context = pair.right();
             Dispatcher.dispatcher().post(new MenuTickEndEvent(menuUuid, currentTick));
-            //stageCycleTime = System.currentTimeMillis();
             if (state.nextType() == RenderPhase.Process.class) {
-                //System.out.println(System.currentTimeMillis() - fullCycleTime + " " + currentTick);
                 state = new RenderPhase.Process(queuedElements.values(), user);
-                //fullCycleTime = System.currentTimeMillis();
             }
-            //queuedElements.clear();
             if (context.stop()) stop();
         } catch (Exception e) {
             stop();
