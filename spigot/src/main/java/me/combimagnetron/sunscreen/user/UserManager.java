@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class UserManager implements Listener, UserHandler<Player, SunscreenUser<Player>> {
-    private final Map<UUID, SunscreenUser<Player>> userMap = new WeakHashMap<>();
+    private final Map<UUID, SunscreenUser<Player>> userMap = new HashMap<>();
 
     public UserManager(SunscreenPlugin library) {
         Bukkit.getServer().getPluginManager().registerEvents(this, library);
@@ -48,6 +48,11 @@ public class UserManager implements Listener, UserHandler<Player, SunscreenUser<
     public void onLeave(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         SunscreenUser<Player> user = userMap.get(player.getUniqueId());
+        if (user == null) {
+            userMap.remove(player.getUniqueId());
+            return;
+        }
+
         Session session = user.session();
         if (session != null) {
             session.menu().close();
@@ -66,7 +71,11 @@ public class UserManager implements Listener, UserHandler<Player, SunscreenUser<
 
     @Override
     public Optional<SunscreenUser<Player>> user(String s) {
-        return Optional.ofNullable(userMap.get(Bukkit.getPlayer(s).getUniqueId()));
+        final Player player = Bukkit.getPlayer(s);
+        if (player == null) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(userMap.get(player.getUniqueId()));
     }
 
     @Override

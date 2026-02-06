@@ -10,24 +10,14 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPl
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerRotation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerMapData;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTimeUpdate;
-import me.combimagnetron.passport.event.Dispatcher;
-import me.combimagnetron.passport.util.data.Identifier;
-import me.combimagnetron.passport.util.math.Vec2f;
-import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
-import me.combimagnetron.sunscreen.neo.ActiveMenu;
-import me.combimagnetron.sunscreen.neo.element.ElementLike;
-import me.combimagnetron.sunscreen.neo.event.UserMoveStateChangeEvent;
 import me.combimagnetron.sunscreen.neo.input.InputHandler;
 import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
-import me.combimagnetron.sunscreen.neo.property.Position;
-import me.combimagnetron.sunscreen.neo.render.Viewport;
 import me.combimagnetron.sunscreen.neo.session.Session;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.Scheduler;
 import me.combimagnetron.sunscreen.util.helper.RotationHelper;
 import net.kyori.adventure.audience.Audience;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -78,11 +68,9 @@ public class ProtocolListener implements PacketListener {
         final Session session = user.session();
         if (session == null) return;
         final InputHandler inputHandler = session.menu().inputHandler();
-        MouseInputContext mutatedContext = inputHandler.peek(MouseInputContext.class, old -> old.withLeftPressed(true), user);
-        Dispatcher.dispatcher().post(new UserMoveStateChangeEvent(user, mutatedContext));
+        inputHandler.peek(MouseInputContext.class, old -> old.withLeftPressed(true), user);
         Scheduler.delayTick(() -> {
-            MouseInputContext secondMutatedContext = inputHandler.peek(MouseInputContext.class, old -> old.withLeftPressed(false), user);
-            Dispatcher.dispatcher().post(new UserMoveStateChangeEvent(user, secondMutatedContext));
+            inputHandler.peek(MouseInputContext.class, old -> old.withLeftPressed(false), user);
         });
     }
 
@@ -109,8 +97,7 @@ public class ProtocolListener implements PacketListener {
         final InputHandler inputHandler = session.menu().inputHandler();
         float yaw = wrapperPlayClientPlayerRotation.getYaw();
         float pitch = wrapperPlayClientPlayerRotation.getPitch();
-        MouseInputContext mutatedContext = inputHandler.peek(MouseInputContext.class, old -> old.withPosition(RotationHelper.convert(yaw, pitch, user.screenInfo())), user);
-        Dispatcher.dispatcher().post(new UserMoveStateChangeEvent(user, mutatedContext));
+        inputHandler.peek(MouseInputContext.class, old -> old.withPosition(RotationHelper.convert(yaw, pitch, user.screenInfo())), user);
     }
 
     static boolean inMenu(@NotNull SunscreenUser<?> user) {

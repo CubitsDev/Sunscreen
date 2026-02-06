@@ -11,13 +11,12 @@ import me.combimagnetron.passport.internal.entity.Entity;
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.internal.network.Connection;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
+import me.combimagnetron.sunscreen.neo.ActiveMenu;
 import me.combimagnetron.sunscreen.neo.MenuTemplate;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.neo.render.ScreenInfo;
 import me.combimagnetron.sunscreen.neo.render.Viewport;
 import me.combimagnetron.sunscreen.neo.session.Session;
-import me.combimagnetron.passport.util.data.Pair;
-import me.combimagnetron.passport.util.math.Vec2d;
 import me.combimagnetron.passport.util.math.Vec2i;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -119,12 +118,17 @@ public class UserImpl implements SunscreenUser<Player> {
 
     @Override
     public @NotNull Session open(@NotNull MenuTemplate template) {
-        /*OpenedMenu.FloatImpl menu = new OpenedMenu.Float(this, template);
-        SunscreenLibrary.library().menuTicker().start(menu);
-        menu.open(this);
-        Session session = Session.session(menu, this);
-        return SunscreenLibrary.library().sessionHandler().session(session);*/
-        return null;
+        final Session current = this.session();
+        if (current != null) {
+            current.menu().close();
+        }
+
+        new ActiveMenu(template, this, template.identifier());
+        final Session created = this.session();
+        if (created == null) {
+            throw new IllegalStateException("Failed to create menu session for " + this.uniqueIdentifier());
+        }
+        return created;
     }
 
     @Override

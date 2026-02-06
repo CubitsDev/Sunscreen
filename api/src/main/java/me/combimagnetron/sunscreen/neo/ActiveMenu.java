@@ -2,31 +2,23 @@ package me.combimagnetron.sunscreen.neo;
 
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.util.data.Identifier;
-import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.element.GenericInteractableModernElement;
 import me.combimagnetron.sunscreen.neo.input.InputHandler;
-import me.combimagnetron.sunscreen.neo.input.context.InputContext;
-import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
-import me.combimagnetron.sunscreen.neo.input.context.ScrollInputContext;
 import me.combimagnetron.sunscreen.neo.loader.MenuComponent;
 import me.combimagnetron.sunscreen.neo.loader.MenuComponentLoaderContext;
 import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
-import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.neo.render.engine.pipeline.RenderPipeline;
 import me.combimagnetron.sunscreen.neo.render.engine.pipeline.RenderThreadPoolHandler;
 import me.combimagnetron.sunscreen.neo.session.Session;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.IdentifierHolder;
-import me.combimagnetron.sunscreen.util.Scheduler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ActiveMenu implements IdentifierHolder {
@@ -61,10 +53,10 @@ public class ActiveMenu implements IdentifierHolder {
 
     private void loadComponents() {
         MenuComponentLoaderContext context = new MenuComponentLoaderContext(null, null, null, menuRoot);
-        menuRoot.components().parallelStream().forEach(component -> {
+        for (final MenuComponent<?> component : menuRoot.components()) {
             MenuComponent<?> loaded = component.loader().load(context);
             loadedComponents.put((Class<MenuComponent<?>>) component.getClass(), loaded);
-        });
+        }
     }
 
     public @NotNull MenuRoot root() {
