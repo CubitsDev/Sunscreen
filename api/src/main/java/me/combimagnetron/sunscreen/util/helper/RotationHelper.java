@@ -7,7 +7,7 @@ import me.combimagnetron.sunscreen.neo.render.Viewport;
 import org.jetbrains.annotations.NotNull;
 
 public class RotationHelper {
-    private final static float LESS_ACURATE_PI = 3.14159265359f;
+    private final static float LESS_ACCURATE_PI = 3.14159265359f;
     private final static float CURSOR_SIZE = 0.5f;
 
     public static @NotNull Vec2i convert(float yawDegrees, float pitchDegrees, @NotNull ScreenInfo screenSize) {
@@ -18,7 +18,7 @@ public class RotationHelper {
         float yaw = (float) Math.toRadians(yawDegrees);
 
         float cursorSize = 1.0f / CURSOR_SIZE;
-        Vec2f pos = Vec2f.of(yaw / LESS_ACURATE_PI * 1.5f - 0.048f, (pitch / LESS_ACURATE_PI * 7.0f) + 0.3825f).mul(cursorSize);
+        Vec2f pos = Vec2f.of(yaw / LESS_ACCURATE_PI * 1.5f - 0.048f, (pitch / LESS_ACCURATE_PI * 7.0f) + 0.3825f).mul(cursorSize);
 
         float aspect = (float) viewportVec.x() / viewportVec.y();
         float scale = 0.05f;

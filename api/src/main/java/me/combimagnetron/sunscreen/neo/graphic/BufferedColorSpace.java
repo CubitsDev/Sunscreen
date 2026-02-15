@@ -85,7 +85,7 @@ public final class BufferedColorSpace {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (start.x() + width > size.x() || start.y() + height > size.y()) return;
-                color(x, y, colorLike);
+                color(x + start.x(), y + start.y(), colorLike);
             }
         }
     }

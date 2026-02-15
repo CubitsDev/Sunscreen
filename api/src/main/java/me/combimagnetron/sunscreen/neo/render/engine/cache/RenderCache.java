@@ -1,8 +1,6 @@
 package me.combimagnetron.sunscreen.neo.render.engine.cache;
 
-import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Table;
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
@@ -12,6 +10,7 @@ import me.combimagnetron.sunscreen.neo.render.engine.grid.RenderChunk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RenderCache {
@@ -34,6 +33,14 @@ public class RenderCache {
         return id;
     }
 
+    public void remove(float scale) {
+        Collection<Integer> ids = scaleToIdByPositionTable.row(scale).values();
+        for (int id : ids) {
+            remove(id);
+        }
+        scaleToIdByPositionTable.row(scale).clear();
+    }
+
     public boolean changed(@NotNull RenderChunk renderChunk, int mapId) {
         return renderChunk.contentHash() != idToHashcodeMap.get(mapId);
     }
@@ -45,6 +52,15 @@ public class RenderCache {
 
     public Integer byPosAndScale(float scale, @NotNull Vec3f vec3f) {
         return scaleToIdByPositionTable.get(scale, vec3f);
+    }
+
+    public @NotNull Collection<Float> scales() {
+        return scaleToIdByPositionTable.rowKeySet();
+    }
+
+    public @NotNull Collection<Integer> idsByScale(@NotNull Float scale) {
+        System.out.println("id scale hello hello why ho");
+        return scaleToIdByPositionTable.row(scale).values();
     }
 
     public boolean isEmpty() {

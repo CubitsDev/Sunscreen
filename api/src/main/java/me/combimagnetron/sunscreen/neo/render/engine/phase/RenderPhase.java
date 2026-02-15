@@ -121,8 +121,28 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
                     GraphicLike<?> graphics = element.render(Size.fixed(canvasSize), renderContext);
                     Vec2i positionVec = PropertyHelper.vectorOrThrow(elementLike.position(), Vec2i.class);
                     canvasses.computeIfPresent(scale,
-                            (_, canvas) -> canvas.place(graphics.bufferedColorSpace(), positionVec));
+                        (_, canvas) -> canvas.place(graphics.bufferedColorSpace(), positionVec));
                 }
+            }
+
+            final RenderCache cache = renderContext.renderCache();
+
+            Set<Float> allCurrentScales = new HashSet<>();
+            for (ElementLike<?> element : renderContext.tree()) {
+                allCurrentScales.add(element.scale().value());
+            }
+
+            List<Float> scalesToRemove = new ArrayList<>();
+            for (float scale : cache.scales()) {
+                if (!allCurrentScales.contains(scale)) {
+                    scalesToRemove.add(scale);
+                }
+            }
+
+            for (float scale : scalesToRemove) {
+                System.out.println(scale);
+                renderContext.markedForRemoval().addAll(cache.idsByScale(scale));
+                cache.remove(scale);
             }
             return Pair.of(new Encode(user), renderContext.withStart(canvasses));
         }
@@ -177,7 +197,6 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
             }
 
             Collection<EncodedRenderChunk> encodedChunks = encodeChunks(changedChunks, renderContext.renderCache());
-
             return Pair.of(new Send(encodedChunks, user),
                     renderContext);
         }
@@ -218,6 +237,9 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
             RenderCache renderCache = renderContext.renderCache();
             PlatformProtocolIntermediate intermediate = SunscreenLibrary.library().intermediate();
             final Location location = user.eyeLocation();
+            for (Integer id : renderContext.markedForRemoval()) {
+                intermediate.removeEntity(user, id);
+            }
             for (EncodedRenderChunk chunk : chunks) {
                 Integer mapId = renderCache.byPosAndScale(chunk.scale(), chunk.position());
                 if (mapId == null) {
@@ -227,6 +249,7 @@ public interface RenderPhase<N extends RenderPhase<? extends RenderPhase<?>>> {
                     intermediate.updateMap(user, mapId, chunk.data());
                 }
             }
+            renderContext.markedForRemoval().clear();
             return Pair.of(new Empty(), renderContext);
         }
 

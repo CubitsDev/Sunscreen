@@ -41,6 +41,10 @@ public abstract class GenericInteractableModernElement<E extends ModernElement<E
         lateInit();
     }
 
+    protected @Nullable InputHandler inputHandler() {
+        return inputHandler;
+    }
+
     @Override
     public @NotNull <C extends InputContext<?>> C input(Class<C> clazz) {
         return inputHandler.context(clazz);

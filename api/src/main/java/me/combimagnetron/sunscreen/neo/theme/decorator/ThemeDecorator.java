@@ -11,17 +11,14 @@ import me.combimagnetron.sunscreen.neo.render.engine.context.RenderContext;
 import me.combimagnetron.sunscreen.util.helper.PropertyHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Interface representing theme entries to link to an element, to retexture a button in a theme for example.
  * @param <E> element target type.
  */
-public sealed interface ThemeDecorator<E extends ElementLike<E>> extends Renderable<Size, Canvas> permits Divider, ThemeDecorator.NineSliceThemeDecorator, ThemeDecorator.StateNineSLiceThemeDecorator {
+public sealed interface ThemeDecorator<E extends ElementLike<E>> extends Renderable<Size, Canvas> permits Divider, ThemeDecorator.NineSliceThemeDecorator, ThemeDecorator.StateNineSliceThemeDecorator {
 
     @NotNull Class<E> target();
 
@@ -29,8 +26,8 @@ public sealed interface ThemeDecorator<E extends ElementLike<E>> extends Rendera
         return new NineSliceThemeDecorator<>(target, nineSlice);
     }
 
-    static <E extends ElementLike<E>> @NotNull StateNineSLiceThemeDecorator<E> stateNineSlice(@NotNull Class<E> target, @NotNull Map<GenericInteractableModernElement.ElementPhase, NineSlice> phases) {
-        return new StateNineSLiceThemeDecorator<>(target, phases);
+    static <E extends ElementLike<E>> @NotNull StateNineSliceThemeDecorator<E> stateNineSlice(@NotNull Class<E> target, @NotNull Map<GenericInteractableModernElement.ElementPhase, NineSlice> phases) {
+        return new StateNineSliceThemeDecorator<>(target, phases);
     }
 
     record NineSliceThemeDecorator<E extends ElementLike<E>>(@NotNull Class<E> target, @NotNull NineSlice nineSlice) implements ThemeDecorator<E> {
@@ -43,7 +40,7 @@ public sealed interface ThemeDecorator<E extends ElementLike<E>> extends Rendera
 
     }
 
-    record StateNineSLiceThemeDecorator<E extends ElementLike<E>>(@NotNull Class<E> target, @NotNull Map<GenericInteractableModernElement.ElementPhase, NineSlice> nineSlices) implements ThemeDecorator<E> {
+    record StateNineSliceThemeDecorator<E extends ElementLike<E>>(@NotNull Class<E> target, @NotNull Map<GenericInteractableModernElement.ElementPhase, NineSlice> nineSlices) implements ThemeDecorator<E> {
 
         public @NotNull Canvas render(@NotNull Size property, @Nullable RenderContext context, @NotNull GenericInteractableModernElement.ElementPhase phase) {
             if (context == null) throw new IllegalArgumentException("Context may not be null while constructing decorators.");

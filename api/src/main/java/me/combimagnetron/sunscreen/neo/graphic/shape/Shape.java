@@ -44,4 +44,12 @@ public interface Shape {
         return new RoundedRectangle(size, cornerRadius);
     }
 
+    static @NotNull FilledLine filledLine(@NotNull Vec2i start, @NotNull Vec2i end) {
+        return filledLine(start, end, false);
+    }
+
+    static @NotNull FilledLine filledLine(@NotNull Vec2i start, @NotNull Vec2i end, boolean above) {
+        return new FilledLine(start, end, above);
+    }
+
 }

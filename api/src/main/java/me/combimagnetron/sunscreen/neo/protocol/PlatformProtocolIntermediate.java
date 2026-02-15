@@ -14,7 +14,7 @@ public interface PlatformProtocolIntermediate {
 
     EntityReference<?> spawnAndSpectateDisplay(@NotNull SunscreenUser<?> user, @NotNull Location location);
 
-    void setHorseArmor(@NotNull SunscreenUser<?> user, int horseId, @NotNull String texturePath);
+    void setHorseArmor(@NotNull SunscreenUser<?> user, @NotNull String texturePath);
 
     void removeEntity(@NotNull SunscreenUser<?> user, int id);
 

@@ -147,11 +147,6 @@ public class UserImpl implements SunscreenUser<Player> {
         player.updateInventory();
     }
 
-    @Override
-    public ClientVersion clientVersion() {
-        return version;
-    }
-
     public static class PacketEventsConnectionImpl<T> implements Connection {
         private final T player;
 

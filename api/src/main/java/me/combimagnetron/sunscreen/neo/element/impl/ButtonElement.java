@@ -2,12 +2,12 @@ package me.combimagnetron.sunscreen.neo.element.impl;
 
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.sunscreen.neo.cursor.CursorStyle;
 import me.combimagnetron.sunscreen.neo.element.GenericInteractableModernElement;
 import me.combimagnetron.sunscreen.neo.event.UserMoveStateChangeEvent;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.input.InputHandler;
 import me.combimagnetron.sunscreen.neo.input.ListenerReferences;
-import me.combimagnetron.sunscreen.neo.input.context.InputContext;
 import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
 import me.combimagnetron.sunscreen.neo.property.Size;
 import me.combimagnetron.sunscreen.neo.render.engine.context.RenderContext;
@@ -33,17 +33,23 @@ public class ButtonElement extends GenericInteractableModernElement<ButtonElemen
     }
 
     private void handleCursor(@NotNull UserMoveStateChangeEvent event) {
+        if (event.user() != inputHandler().user()) return;
         final MouseInputContext context = event.context();
         Vec2i cursor = context.position();
         boolean hover = HoverHelper.in(this, cursor);
         if (hover && context.leftPressed()) click = 6;
+        InputHandler handler = inputHandler();
+        if (!hover && phase != ElementPhase.DEFAULT) {
+            phase = ElementPhase.DEFAULT;
+            handler.cursor(CursorStyle.pointer());
+            return;
+        }
         if (click > 0) {
             click -= 1;
             phase = ElementPhase.CLICK;
         } else if (hover) {
             phase = ElementPhase.HOVER;
-        } else {
-            phase = ElementPhase.DEFAULT;
+            handler.cursor(CursorStyle.click());
         }
     }
 
@@ -58,7 +64,7 @@ public class ButtonElement extends GenericInteractableModernElement<ButtonElemen
         if (context == null) return Canvas.error(size);
         ModernTheme theme = context.theme();
         ThemeDecorator<?> themeDecorator = theme.find(this.getClass());
-        if (!(themeDecorator instanceof ThemeDecorator.StateNineSLiceThemeDecorator<?> decorator)) return Canvas.error(size);
+        if (!(themeDecorator instanceof ThemeDecorator.StateNineSliceThemeDecorator<?> decorator)) return Canvas.error(size);
         return decorator.render(size, context, phase);
     }
 

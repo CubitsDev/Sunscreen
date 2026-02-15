@@ -3,6 +3,8 @@ package me.combimagnetron.sunscreen.neo.input;
 import me.combimagnetron.passport.event.Dispatcher;
 import me.combimagnetron.passport.event.Event;
 import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.sunscreen.neo.ActiveMenu;
+import me.combimagnetron.sunscreen.neo.cursor.CursorStyle;
 import me.combimagnetron.sunscreen.neo.input.context.InputContext;
 import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
 import me.combimagnetron.sunscreen.neo.input.context.ScrollInputContext;
@@ -15,14 +17,16 @@ import java.util.function.Function;
 
 public class InputHandler {
     private final Map<Class<? extends InputContext<?>>, InputContext<?>> inputContextMap = new HashMap<>();
+    private final ActiveMenu activeMenu;
 
-    protected InputHandler() {
+    protected InputHandler(ActiveMenu activeMenu) {
+        this.activeMenu = activeMenu;
         inputContextMap.put(MouseInputContext.class, new MouseInputContext(false, false, false, Vec2i.zero()));
         inputContextMap.put(ScrollInputContext.class, new ScrollInputContext(false, 0f));
     }
 
-    public static @NotNull InputHandler defaults() {
-        return new InputHandler();
+    public static @NotNull InputHandler defaults(@NotNull ActiveMenu activeMenu) {
+        return new InputHandler(activeMenu);
     }
 
     public <C extends InputContext<E>, E extends Event> @NotNull C peek(@NotNull Class<C> type, @NotNull Function<C, C> function, @NotNull SunscreenUser<?> user) {
@@ -36,6 +40,14 @@ public class InputHandler {
 
     public <C extends InputContext<?>> @NotNull C context(@NotNull Class<C> type) {
         return (C) inputContextMap.get(type);
+    }
+
+    public void cursor(@NotNull CursorStyle cursorStyle) {
+        activeMenu.cursor(cursorStyle);
+    }
+
+    public @NotNull SunscreenUser<?> user() {
+        return activeMenu.user();
     }
 
 }

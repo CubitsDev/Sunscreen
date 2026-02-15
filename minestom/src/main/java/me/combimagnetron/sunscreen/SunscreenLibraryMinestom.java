@@ -1,6 +1,5 @@
 package me.combimagnetron.sunscreen;
 
-import com.github.retrooper.packetevents.PacketEventsAPI;
 import me.combimagnetron.passport.Passport;
 import me.combimagnetron.passport.user.User;
 import me.combimagnetron.passport.user.UserHandler;
@@ -48,12 +47,12 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
             }
 
             @Override
-            public com.github.retrooper.packetevents.PacketEventsAPI<?> packetEventsApi() {
+            public Object packetEventsApi() {
                 return null;
             }
 
             @Override
-            public Sun plugin() {
+            public Object plugin() {
                 return null;
             }
         };
@@ -71,7 +70,8 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
 
     @Override
     public @Nullable InputStream resource(String path) {
-        return SunscreenLibraryMinestom.class.getResourceAsStream(path);
+        String resourcePath = path.startsWith("/") ? path : "/" + path;
+        return SunscreenLibraryMinestom.class.getResourceAsStream(resourcePath);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class SunscreenLibraryMinestom implements SunscreenLibrary<Object, Player
 
     @Override
     public @NotNull Logger logger() {
-        return MinecraftServer.LOGGER;
+        return null;//MinecraftServer.LOGGER;
     }
 
     @Override

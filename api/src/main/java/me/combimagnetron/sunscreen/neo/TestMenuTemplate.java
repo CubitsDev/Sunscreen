@@ -3,6 +3,7 @@ package me.combimagnetron.sunscreen.neo;
 import me.combimagnetron.passport.util.data.Identifier;
 import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
+import me.combimagnetron.sunscreen.neo.editor.element.PaddingMarginElement;
 import me.combimagnetron.sunscreen.neo.element.Elements;
 import me.combimagnetron.sunscreen.neo.element.GenericInteractableModernElement;
 import me.combimagnetron.sunscreen.neo.element.impl.ButtonElement;
@@ -14,6 +15,7 @@ import me.combimagnetron.sunscreen.neo.property.Position;
 import me.combimagnetron.sunscreen.neo.property.Size;
 import me.combimagnetron.sunscreen.neo.theme.ModernTheme;
 import me.combimagnetron.sunscreen.neo.theme.decorator.ThemeDecorator;
+import me.combimagnetron.sunscreen.util.FileProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -39,9 +41,9 @@ public class TestMenuTemplate implements MenuTemplate {
                 ThemeDecorator.stateNineSlice(
                     ButtonElement.class,
                     Map.of(
-                        GenericInteractableModernElement.ElementPhase.DEFAULT, NineSlice.nineSlice(Canvas.file(dataPath.resolve("default.png"))),
-                        GenericInteractableModernElement.ElementPhase.HOVER, NineSlice.nineSlice(Canvas.file(dataPath.resolve("hovered.png"))),
-                        GenericInteractableModernElement.ElementPhase.CLICK, NineSlice.nineSlice(Canvas.file(dataPath.resolve("clicked.png")))
+                        GenericInteractableModernElement.ElementPhase.DEFAULT, NineSlice.nineSlice(Canvas.file(FileProvider.resource().find("default.png").toPath())),
+                        GenericInteractableModernElement.ElementPhase.HOVER, NineSlice.nineSlice(Canvas.file(FileProvider.resource().find("hovered.png").toPath())),
+                        GenericInteractableModernElement.ElementPhase.CLICK, NineSlice.nineSlice(Canvas.file(FileProvider.resource().find("clicked.png").toPath()))
                     )
                 )
             )
@@ -61,7 +63,7 @@ public class TestMenuTemplate implements MenuTemplate {
                     "sunscreen",
                     "test_menu/element/button"
                 )
-            ).position(Position.fixed(Vec2i.of(450, 200))).size(Size.fixed(Vec2i.of(200, 60)))
+            ).position(Position.fixed(Vec2i.of(450, 200))).size(Size.fixed(Vec2i.of(100, 20)))
         ).element(
             Elements.shape(
                 Identifier.of(
@@ -79,6 +81,8 @@ public class TestMenuTemplate implements MenuTemplate {
                 ),
                 Canvas.url("https://i.imgur.com/YNMmJRM.png")
             ).position(Position.fixed(Vec2i.of(200, 300)))//.position(Position.relative(RelativeMeasure.vec2i().x().percentage(50).back().y().percentage(50).back()))
+        ).element(
+            new PaddingMarginElement(Identifier.of("hello")).position(Position.fixed(Vec2i.of(150, 160)))
         );
     }
 

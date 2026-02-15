@@ -80,12 +80,4 @@ public sealed interface Text extends Renderable<Size, Canvas> permits TextImpl {
     @NotNull
     Text append(@NotNull Text text);
 
-    static void test() {
-        Text text = Text.basic("Hello!")
-                .font(Registries.fonts().get(Identifier.of("minecraft_vanilla")))
-                .color(Gradient.linear(Color.hex("#414141"), Color.of(0, 22, 0)))
-                .append(Text.keybind(Keybind.of(Keybind.NamedKey.W, Keybind.NamedModifier.CTRL))
-                        .append(Text.state(State.mutable("goodbye"))));
-    }
-
 }

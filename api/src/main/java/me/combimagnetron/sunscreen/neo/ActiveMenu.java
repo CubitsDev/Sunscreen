@@ -2,27 +2,36 @@ package me.combimagnetron.sunscreen.neo;
 
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
 import me.combimagnetron.passport.util.data.Identifier;
+import me.combimagnetron.passport.util.math.Vec2i;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
+import me.combimagnetron.sunscreen.neo.cursor.CursorStyle;
 import me.combimagnetron.sunscreen.neo.element.ElementLike;
 import me.combimagnetron.sunscreen.neo.element.GenericInteractableModernElement;
 import me.combimagnetron.sunscreen.neo.input.InputHandler;
+import me.combimagnetron.sunscreen.neo.input.context.InputContext;
+import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
+import me.combimagnetron.sunscreen.neo.input.context.ScrollInputContext;
 import me.combimagnetron.sunscreen.neo.loader.MenuComponent;
 import me.combimagnetron.sunscreen.neo.loader.MenuComponentLoaderContext;
 import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
+import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.neo.render.engine.pipeline.RenderPipeline;
 import me.combimagnetron.sunscreen.neo.render.engine.pipeline.RenderThreadPoolHandler;
 import me.combimagnetron.sunscreen.neo.session.Session;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.IdentifierHolder;
+import me.combimagnetron.sunscreen.util.Scheduler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ActiveMenu implements IdentifierHolder {
-    private final InputHandler inputHandler = InputHandler.defaults();
+    private final InputHandler inputHandler = InputHandler.defaults(this);
     private final Map<Class<MenuComponent<?>>, MenuComponent<?>> loadedComponents = new HashMap<>();
     private final MenuRoot menuRoot = new MenuRoot();
     private final Vector3d initialRotation;
@@ -44,10 +53,9 @@ public class ActiveMenu implements IdentifierHolder {
             }
         }
         renderPipeline = RenderThreadPoolHandler.start(user, menuRoot, loadedComponents.values());
-
         Location location = user.eyeLocation();
         intermediate.spawnAndSpectateDisplay(user, location);
-        intermediate.spawnAndRideHorse(user, location);
+        intermediate.spawnAndRideHorse(user, user.eyeLocation());
         SunscreenLibrary.library().sessionHandler().session(new Session(this, user));
     }
 
@@ -82,6 +90,16 @@ public class ActiveMenu implements IdentifierHolder {
 
     public @Nullable ElementLike<?> element(@NotNull Identifier identifier) {
         return renderPipeline.element(identifier);
+    }
+
+    public @NotNull ActiveMenu cursor(@NotNull CursorStyle style) {
+        PlatformProtocolIntermediate protocolIntermediate = SunscreenLibrary.library().intermediate();
+        protocolIntermediate.setHorseArmor(user, style.asset());
+        return this;
+    }
+
+    public @NotNull SunscreenUser<?> user() {
+        return user;
     }
 
     public void close() {

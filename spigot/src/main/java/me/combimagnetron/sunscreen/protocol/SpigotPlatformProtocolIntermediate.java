@@ -2,22 +2,25 @@ package me.combimagnetron.sunscreen.protocol;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEquippable;
-import com.github.retrooper.packetevents.protocol.entity.type.EntityType;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
-import com.github.retrooper.packetevents.protocol.npc.NPC;
 import com.github.retrooper.packetevents.protocol.player.*;
+import com.github.retrooper.packetevents.protocol.potion.PotionTypes;
 import com.github.retrooper.packetevents.protocol.sound.Sounds;
+import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
+import com.github.retrooper.packetevents.util.Vector3i;
 import com.github.retrooper.packetevents.wrapper.play.server.*;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import me.combimagnetron.passport.internal.entity.Entity;
+import me.combimagnetron.passport.internal.entity.impl.Interaction;
 import me.combimagnetron.passport.internal.entity.impl.display.ItemDisplay;
 import me.combimagnetron.passport.internal.entity.impl.passive.horse.Horse;
 import me.combimagnetron.passport.internal.entity.impl.tile.ItemFrame;
@@ -26,19 +29,14 @@ import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
 import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
-import me.combimagnetron.sunscreen.util.Scheduler;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
-import org.bukkit.profile.PlayerTextures;
-import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.channels.Channel;
 import java.util.*;
 
 public class SpigotPlatformProtocolIntermediate implements PlatformProtocolIntermediate {
     private static final WrapperPlayServerUpdateAttributes.PropertyModifier MODIFIER = new WrapperPlayServerUpdateAttributes.PropertyModifier(UUID.randomUUID(), 0, WrapperPlayServerUpdateAttributes.PropertyModifier.Operation.MULTIPLY_BASE);
-    private final Table<UUID, Integer, Object> entities = HashBasedTable.create();
+    protected final Table<UUID, Integer, Object> entities = HashBasedTable.create();
     private EquipmentSlot equipmentSlot = EquipmentSlot.BODY;
 
     public SpigotPlatformProtocolIntermediate() {
@@ -51,10 +49,11 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
 
     @Override
     public EntityReference<?> spawnAndRideHorse(@NotNull SunscreenUser<?> user, @NotNull Location location) {
+        Player player = (Player) user.platformSpecificPlayer();
         Horse horse = Horse.horse(loc2Vec3(location));
         horse.invisible(true);
         horse.crouching(true);
-        if (user.clientVersion().getProtocolVersion() >= ClientVersion.V_1_21_5.getProtocolVersion()) {
+        if (PacketEvents.getAPI().getPlayerManager().getClientVersion(player).getProtocolVersion() >= ClientVersion.V_1_21_5.getProtocolVersion()) {
             equipmentSlot = EquipmentSlot.SADDLE;
         } else {
             horse.saddled(true);
@@ -73,7 +72,7 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
                         List.of(MODIFIER)
                 )
         );
-        WrapperPlayServerEntityTeleport entityTeleport = new WrapperPlayServerEntityTeleport(horse.id().intValue(), new com.github.retrooper.packetevents.util.Vector3d(horse.position().x(), horse.position().y(), horse.position().z()), 0f, 180f, false);
+        WrapperPlayServerEntityTeleport entityTeleport = new WrapperPlayServerEntityTeleport(horse.id().intValue(), new com.github.retrooper.packetevents.util.Vector3d(horse.position().x(), horse.position().y() - 1.7, horse.position().z()), 0f, 180f, false);
         WrapperPlayServerUpdateAttributes updateAttributes = new WrapperPlayServerUpdateAttributes(horse.id().intValue(), attributes);
         user.connection().send(new WrapperPlayServerPlayerRotation(0f, -180f));
         user.show(horse);
@@ -106,9 +105,7 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
 
     @Override
     public EntityReference<?> spawnAndSpectateDisplay(@NotNull SunscreenUser<?> user, @NotNull Location location) {
-        ItemDisplay display = ItemDisplay.itemDisplay(loc2Vec3(location));
         Player player = (Player) user.platformSpecificPlayer();
-        display.rotation(Vector3d.vec3(player.getPitch(), player.getYaw(), 0));
         WrapperPlayServerCamera camera = new WrapperPlayServerCamera(-10_000);
         UUID uuid = UUID.randomUUID();
         List<TextureProperty> properties = new ArrayList<>();
@@ -118,17 +115,22 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
         UserProfile profile = new UserProfile(uuid, player.getName(), properties);
         WrapperPlayServerSpawnEntity spawnEntity = new WrapperPlayServerSpawnEntity(-10_000, uuid, EntityTypes.PLAYER, vec32PeLoc(user.position(), user.rotation()), player.getYaw(), 0, com.github.retrooper.packetevents.util.Vector3d.zero());
         WrapperPlayServerPlayerInfoUpdate infoUpdate = new WrapperPlayServerPlayerInfoUpdate(WrapperPlayServerPlayerInfoUpdate.Action.ADD_PLAYER, new WrapperPlayServerPlayerInfoUpdate.PlayerInfo(profile, false, 0, GameMode.CREATIVE, null, null, 0, true));
+        WrapperPlayServerBlockChange blockChange = new WrapperPlayServerBlockChange(new Vector3i((int) player.getX(), (int) player.getY() + 1, (int) player.getZ()), WrappedBlockState.getDefaultState(StateTypes.BARRIER));
+        user.connection().send(new WrapperPlayServerEntityEffect(player.getEntityId(), PotionTypes.INVISIBILITY, 255, -1, ((byte) 0)));
+        // todo: fix invis potion
         user.connection().send(infoUpdate);
         user.connection().send(spawnEntity);
         user.connection().send(camera);
-        entities.put(user.uniqueIdentifier(), display.id().intValue(), display);
-        user.connection().send(new WrapperPlayServerChangeGameState(WrapperPlayServerChangeGameState.Reason.CHANGE_GAME_MODE, 3));
-        return new EntityReference<>(display.id().intValue(), display);
+        user.connection().send(blockChange);
+        user.connection().send(new WrapperPlayServerChangeGameState(WrapperPlayServerChangeGameState.Reason.CHANGE_GAME_MODE, 0));
+        return null;
     }
 
     @Override
-    public void setHorseArmor(@NotNull SunscreenUser<?> user, int horseId, @NotNull String texturePath) {
-        WrapperPlayServerEntityEquipment entityEquipment = horseEquipment(texturePath, horseId, equipmentSlot);
+    public void setHorseArmor(@NotNull SunscreenUser<?> user, @NotNull String texturePath) {
+        Horse horse = (Horse) entities.row(user.uniqueIdentifier()).values().stream().filter(object -> object instanceof Horse).findAny().orElseThrow();
+        int horseId = horse.id().intValue();
+        WrapperPlayServerEntityEquipment entityEquipment = horseEquipment("cursor_" + texturePath, horseId, equipmentSlot);
         user.connection().send(entityEquipment);
     }
 
@@ -162,17 +164,14 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
         user.connection().send(timeUpdate);
         user.connection().send(gameState);
         user.connection().send(camera);
+        user.connection().send(new WrapperPlayServerBlockChange(new Vector3i((int) player.getX(), (int) player.getY() + 1, (int) player.getZ()), WrappedBlockState.getDefaultState(StateTypes.AIR)));
+        user.connection().send(new WrapperPlayServerRemoveEntityEffect(player.getEntityId(), PotionTypes.INVISIBILITY));
     }
 
     @Override
     public void gameTime(@NotNull SunscreenUser<?> user) {
         WrapperPlayServerTimeUpdate time = new WrapperPlayServerTimeUpdate(-2000, (long) user.worldTime(), false);
         user.connection().send(time);
-    }
-
-    private static @NotNull Object channel(@NotNull SunscreenUser<?> user) {
-        Player player = (Player) user.platformSpecificPlayer();
-        return PacketEvents.getAPI().getPlayerManager().getChannel(player);
     }
 
     private static @NotNull Vector3d loc2Vec3(@NotNull Location location) {

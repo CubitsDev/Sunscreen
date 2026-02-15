@@ -98,12 +98,16 @@ public record Canvas(BufferedColorSpace bufferedColorSpace) implements GraphicLi
 
 
     public @NotNull Canvas shape(@NotNull Shape shape, @NotNull Color color) {
+        return shape(shape, color, Vec2i.zero());
+    }
+
+    public @NotNull Canvas shape(@NotNull Shape shape, @NotNull Color color, @NotNull Vec2i position) {
         Vec2i squareSize = shape.squareSize();
         BitSet bits = shape.shape();
 
         for (int i = bits.nextSetBit(0); i >= 0; i = bits.nextSetBit(i + 1)) {
-            int x = i % squareSize.x();
-            int y = i / squareSize.x();
+            int x = i % squareSize.x() + position.x();
+            int y = i / squareSize.x() + position.y();
             bufferedColorSpace.color(Vec2i.of(x, y), color);
         }
 
@@ -117,7 +121,11 @@ public record Canvas(BufferedColorSpace bufferedColorSpace) implements GraphicLi
     public @NotNull Canvas fill(@NotNull Position position, @NotNull Size size, @NotNull ColorLike colorLike) {
         Vec2i sizeVec = PropertyHelper.vectorOrThrow(size, Vec2i.class);
         Vec2i start = PropertyHelper.vectorOrThrow(position, Vec2i.class);
-        Vec2i end = start.add(sizeVec);
+        return fill(start, sizeVec, colorLike);
+    }
+
+    public @NotNull Canvas fill(@NotNull Vec2i start, @NotNull Vec2i size, @NotNull ColorLike colorLike) {
+        Vec2i end = start.add(size);
         bufferedColorSpace.fill(start, end, colorLike);
         return this;
     }
