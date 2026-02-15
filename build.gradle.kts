@@ -29,7 +29,12 @@ allprojects {
     }
 
     dependencies {
-        compileOnly(libs().bundles.utils)
+        compileOnly(libs().bundles.adventure)
+        if (project.name.equals("minestom")) {
+            implementation(libs().bundles.utils)
+        } else {
+            compileOnly(libs().bundles.utils)
+        }
         implementation(libs().bundles.minecraft)
         implementation(libs().passport)
     }

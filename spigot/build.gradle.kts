@@ -34,7 +34,7 @@ tasks {
         minecraftVersion("1.21.11")
         jvmArgs("-Dcom.mojang.eula.agree=true", "-Dfile.encoding=UTF-8")
         downloadPlugins {
-            github("retrooper", "packetevents", "v2.11.1", "packetevents-spigot-2.11.1.jar")
+            //github("retrooper", "packetevents", "v2.11.1", "packetevents-spigot-2.11.1.jar")
             hangar("PlaceholderAPI", "2.11.6")
         }
     }

@@ -3,6 +3,8 @@ package me.combimagnetron.sunscreen.user;
 import me.combimagnetron.passport.internal.network.ByteBuffer;
 import me.combimagnetron.passport.user.UserHandler;
 import me.combimagnetron.sunscreen.neo.session.Session;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
@@ -17,6 +19,7 @@ public class UserManager implements UserHandler<Player, SunscreenUser<Player>> {
     private final EventNode<PlayerEvent> eventNode = EventNode.type("player-spawn-sunscreen", EventFilter.PLAYER);
 
     public UserManager() {
+        MinecraftServer.getGlobalEventHandler().addChild(eventNode);
         eventNode.addListener(PlayerSpawnEvent.class, event -> {
             final Player player = event.getPlayer();
             userMap.put(player.getUuid(), UserImpl.of(player));
@@ -26,7 +29,7 @@ public class UserManager implements UserHandler<Player, SunscreenUser<Player>> {
             SunscreenUser<Player> user = userMap.get(player.getUuid());
             Session session = user.session();
             if (session != null) {
-                session.close();
+                session.menu().close();
             }
             userMap.remove(player);
         });
@@ -34,27 +37,29 @@ public class UserManager implements UserHandler<Player, SunscreenUser<Player>> {
 
     @Override
     public SunscreenUser<Player> user(Player player) {
-        return null;
+        return userMap.get(player.getUuid());
     }
 
     @Override
     public Optional<SunscreenUser<Player>> user(UUID uuid) {
-        return Optional.empty();
+        SunscreenUser<Player> playerSunscreenUser = userMap.get(uuid);
+        if (playerSunscreenUser == null) return Optional.empty();
+        return Optional.of(playerSunscreenUser);
     }
 
     @Override
     public Optional<SunscreenUser<Player>> user(String s) {
-        return Optional.empty();
+        return Optional.ofNullable(userMap.get(MinecraftServer.getConnectionManager().findOnlinePlayer(s).getUuid()));
     }
 
     @Override
     public Collection<SunscreenUser<Player>> users() {
-        return List.of();
+        return userMap.values();
     }
 
     @Override
     public Collection<SunscreenUser<Player>> global() {
-        return List.of();
+        return users();
     }
 
     @Override

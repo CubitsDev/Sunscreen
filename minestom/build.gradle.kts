@@ -1,6 +1,25 @@
 dependencies {
     implementation(project(":api"))
-    implementation("me.combimagnetron:Passport:1.0-SNAPSHOT")
-    implementation("net.minestom:minestom:2025.12.20-1.21.11")
+    implementation("ch.qos.logback:logback-classic:1.5.29")
+    implementation("net.minestom:minestom:2026.02.09-1.21.11")
     compileOnly("commons-io:commons-io:2.18.0")
+    implementation("com.google.code.gson:gson:2.13.2")
+}
+
+configurations.all {
+    resolutionStrategy {
+        cacheChangingModulesFor(0, "seconds")
+    }
+}
+
+plugins {
+    application
+}
+
+application {
+    mainClass.set("me.combimagnetron.sunscreen.MinestomTest")
+}
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
