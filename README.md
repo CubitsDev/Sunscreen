@@ -22,6 +22,10 @@ I am currently working on a v2 of Sunscreen because there were too many fundamen
 - Automatic resourcepack imports
 - Unlimited cursor styles (text carets for example)
 
+### Showcase from V2
+Rendered at 6fps to fit in a gif, a lot smoother in-game.
+![Showcase of the library](./assets/image/showcase-gif-v2.gif)
+
 ### Showcase from V1
 ![Showcase of the library](./assets/image/showcase-gif.gif)
 
