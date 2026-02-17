@@ -7,6 +7,7 @@ import me.combimagnetron.sunscreen.neo.editor.element.PaddingMarginElement;
 import me.combimagnetron.sunscreen.neo.element.Elements;
 import me.combimagnetron.sunscreen.neo.element.GenericInteractableModernElement;
 import me.combimagnetron.sunscreen.neo.element.impl.ButtonElement;
+import me.combimagnetron.sunscreen.neo.element.impl.text.TextFieldElement;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
 import me.combimagnetron.sunscreen.neo.graphic.NineSlice;
 import me.combimagnetron.sunscreen.neo.graphic.color.Color;
@@ -46,6 +47,11 @@ public class TestMenuTemplate implements MenuTemplate {
                         GenericInteractableModernElement.ElementPhase.CLICK, NineSlice.nineSlice(Canvas.file(FileProvider.resource().find("clicked.png").toPath()))
                     )
                 )
+            ).decorator(
+                ThemeDecorator.nineSlice(
+                    TextFieldElement.class,
+                    NineSlice.nineSlice(Canvas.empty(Vec2i.of(9, 9)).fill(Vec2i.zero(), Vec2i.of(9, 9), Color.of(13, 13, 13)))
+                )
             )
         );
         //root.element(Elements.image(Identifier.of("woopsie_fuck"), Canvas.url("https://i.imgur.com/eIacYAm.png")).position(Position.nil()).scale(Scale.fixed(1.56f))
@@ -83,6 +89,10 @@ public class TestMenuTemplate implements MenuTemplate {
             ).position(Position.fixed(Vec2i.of(200, 300)))//.position(Position.relative(RelativeMeasure.vec2i().x().percentage(50).back().y().percentage(50).back()))
         ).element(
             new PaddingMarginElement(Identifier.of("hello")).position(Position.fixed(Vec2i.of(150, 160)))
+        ).element(
+            Elements.textField(
+                Identifier.of("test")
+            ).position(Position.fixed(Vec2i.of(20, 300))).size(Size.fixed(Vec2i.of(700, 10)))
         );
     }
 

@@ -63,9 +63,6 @@ public class TestModernTemplate implements MenuTemplate {
                         Elements.image(Identifier.of("test_image"), Canvas.empty(Vec2i.of(100, 200))),
                         Elements.button(Identifier.of("test_button")).listen().mouse(event -> event.context().leftPressed()).back(),
                         Elements.textBox(Identifier.split("test:textbox"))
-                                .textInput().state().modify(
-                                state -> state.observe((old, current) -> SunscreenLibrary.library().logger().debug("Input changed from {} to {}!", old, current))
-                                )
                                 .size(Size.fit())
                                 .padding(Padding.relative(RelativeMeasure.vec4i()
                                         .up().percentage(20).pixel(6).back()
@@ -77,9 +74,6 @@ public class TestModernTemplate implements MenuTemplate {
 
         //Conventional way
         TextBoxElement textBoxElement = Elements.textBox(Identifier.of("test_modern", "element/textbox_2"));
-        textBoxElement.listen().finished(event -> {
-            SunscreenLibrary.library().logger().debug("Input finished and is {}!", event.input().state().value());
-        }).back().textInput().state().modify(state -> state.state("a"));
 
         //Making a new canvas and applying a GraphicModifier
         Canvas canvas = Canvas.empty(Vec2i.of(100, 300));

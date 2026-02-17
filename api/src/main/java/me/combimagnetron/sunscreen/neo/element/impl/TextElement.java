@@ -1,37 +1,31 @@
 package me.combimagnetron.sunscreen.neo.element.impl;
 
 import me.combimagnetron.passport.event.EventBus;
-import me.combimagnetron.passport.logic.state.InlinedMutableState;
 import me.combimagnetron.passport.util.data.Identifier;
-import me.combimagnetron.sunscreen.neo.event.UserFinishTextInputEvent;
-import me.combimagnetron.sunscreen.neo.event.UserUpdateTextInputEvent;
-import me.combimagnetron.sunscreen.neo.element.GenericModernElement;
-import me.combimagnetron.sunscreen.neo.element.ModernElement;
+import me.combimagnetron.sunscreen.neo.element.GenericInteractableModernElement;
+import me.combimagnetron.sunscreen.neo.event.UserTextStateChangeEvent;
 import me.combimagnetron.sunscreen.neo.graphic.Canvas;
-import me.combimagnetron.sunscreen.neo.input.Interactable;
 import me.combimagnetron.sunscreen.neo.input.ListenerReferences;
 import me.combimagnetron.sunscreen.neo.input.context.InputContext;
-import me.combimagnetron.sunscreen.neo.input.text.TextInput;
+import me.combimagnetron.sunscreen.neo.input.context.TextInputContext;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public abstract class TextElement<E extends ModernElement<E, Canvas>> extends GenericModernElement<E, Canvas> implements Interactable<TextElement<E>, TextElement.TextElementListenerReferences<E>> {
-    private final TextElementListenerReferences<E> references = new TextElementListenerReferences<>(this);
-    private final TextInput<E> textInput = new TextInput<>();
+public abstract class TextElement<E extends TextElement<E>> extends GenericInteractableModernElement<E, Canvas, TextElement.TextElementListenerReferences<E>> {
+    private final TextElementListenerReferences<E> references = new TextElementListenerReferences<>(self());
 
-    protected TextElement(@Nullable Identifier identifier) {
+    protected TextElement(@NotNull Identifier identifier) {
         super(identifier);
-        InlinedMutableState<String, E> inlinedMutableState = textInput().state();
-        inlinedMutableState.returns((E) this);
     }
 
-    public @NotNull TextInput<E> textInput() {
-        if (this.textInput.finished()) {
-            this.textInput.reset();
-        }
-        return this.textInput;
+    @SuppressWarnings("unchecked")
+    private E self() {
+        return (E) this;
+    }
+
+    protected @NotNull TextInputContext context() {
+        return input(TextInputContext.class);
     }
 
     @Override
@@ -39,22 +33,13 @@ public abstract class TextElement<E extends ModernElement<E, Canvas>> extends Ge
         return references;
     }
 
-    public record TextElementListenerReferences<F extends ModernElement<F, Canvas>>(TextElement<F> back) implements ListenerReferences<TextElement<F>, TextElementListenerReferences<F>> {
+    public record TextElementListenerReferences<E extends TextElement<E>>(E back) implements ListenerReferences<E, TextElementListenerReferences<E>> {
 
-        public @NotNull TextElementListenerReferences<F> finished(@NotNull Consumer<UserFinishTextInputEvent> event) {
-            EventBus.subscribe(UserFinishTextInputEvent.class, event);
-            return this;
-        }
-
-        public @NotNull TextElementListenerReferences<F> updated(@NotNull Consumer<UserUpdateTextInputEvent> event) {
-            EventBus.subscribe(UserUpdateTextInputEvent.class, event);
+        public @NotNull TextElementListenerReferences<E> updated(@NotNull Consumer<UserTextStateChangeEvent> event) {
+            EventBus.subscribe(UserTextStateChangeEvent.class, event);
             return this;
         }
 
     }
 
-    @Override
-    public <C extends InputContext<?>> @NotNull C input(Class<C> clazz) {
-        return null;
-    }
 }

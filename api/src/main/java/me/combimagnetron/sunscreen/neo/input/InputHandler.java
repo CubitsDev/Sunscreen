@@ -2,12 +2,15 @@ package me.combimagnetron.sunscreen.neo.input;
 
 import me.combimagnetron.passport.event.Dispatcher;
 import me.combimagnetron.passport.event.Event;
+import me.combimagnetron.passport.logic.state.State;
 import me.combimagnetron.passport.util.math.Vec2i;
+import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.neo.ActiveMenu;
 import me.combimagnetron.sunscreen.neo.cursor.CursorStyle;
 import me.combimagnetron.sunscreen.neo.input.context.InputContext;
 import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
 import me.combimagnetron.sunscreen.neo.input.context.ScrollInputContext;
+import me.combimagnetron.sunscreen.neo.input.context.TextInputContext;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +26,7 @@ public class InputHandler {
         this.activeMenu = activeMenu;
         inputContextMap.put(MouseInputContext.class, new MouseInputContext(false, false, false, Vec2i.zero()));
         inputContextMap.put(ScrollInputContext.class, new ScrollInputContext(false, 0f));
+        inputContextMap.put(TextInputContext.class, new TextInputContext(false, State.immutable(""), State.immutable("")));
     }
 
     public static @NotNull InputHandler defaults(@NotNull ActiveMenu activeMenu) {
@@ -44,6 +48,11 @@ public class InputHandler {
 
     public void cursor(@NotNull CursorStyle cursorStyle) {
         activeMenu.cursor(cursorStyle);
+    }
+
+    public void anvil() {
+        SunscreenLibrary.library().intermediate().openEmptyAnvil(activeMenu.user());
+        peek(TextInputContext.class, old -> old.withActive(true), user());
     }
 
     public @NotNull SunscreenUser<?> user() {

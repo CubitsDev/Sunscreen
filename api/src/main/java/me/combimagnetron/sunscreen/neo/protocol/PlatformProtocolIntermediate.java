@@ -24,6 +24,9 @@ public interface PlatformProtocolIntermediate {
 
     void gameTime(@NotNull SunscreenUser<?> user);
 
+
+    void openEmptyAnvil(SunscreenUser<?> user);
+
     default void removeEntity(@NotNull SunscreenUser<?> user, @NotNull EntityReference<?> reference) {
         removeEntity(user, reference.id());
     }

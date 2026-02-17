@@ -8,6 +8,7 @@ import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -18,6 +19,7 @@ import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.entity.metadata.other.ItemFrameMeta;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.inventory.type.AnvilInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Equippable;
@@ -164,6 +166,14 @@ public class MinestomPlatformProtocolIntermediate implements PlatformProtocolInt
         final Player player = (Player) user.platformSpecificPlayer();
         final Instance instance = player.getInstance();
         player.getPlayerConnection().sendPacket(new TimeUpdatePacket(-2000, instance.getTime(), true));
+    }
+
+    @Override
+    public void openEmptyAnvil(SunscreenUser<?> user) {
+        final Player player = (Player) user.platformSpecificPlayer();
+        AnvilInventory anvilInventory = new AnvilInventory("");
+        anvilInventory.addItemStack(ItemStack.of(Material.PAPER).with(DataComponents.CUSTOM_NAME, Component.empty()).with(DataComponents.ITEM_MODEL, "minecraft:air"));
+        player.openInventory(anvilInventory);
     }
 
     private Player player(SunscreenUser<?> user) {

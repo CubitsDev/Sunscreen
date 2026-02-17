@@ -13,6 +13,8 @@ import me.combimagnetron.passport.internal.entity.impl.Interaction;
 import me.combimagnetron.sunscreen.SunscreenLibrary;
 import me.combimagnetron.sunscreen.neo.input.InputHandler;
 import me.combimagnetron.sunscreen.neo.input.context.MouseInputContext;
+import me.combimagnetron.sunscreen.neo.input.context.TextInputContext;
+import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
 import me.combimagnetron.sunscreen.neo.session.Session;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
 import me.combimagnetron.sunscreen.util.Scheduler;
@@ -42,6 +44,7 @@ public class ProtocolListener implements PacketListener {
             case PacketType.Play.Client.PLAYER_INPUT -> handleSneak(new WrapperPlayClientPlayerInput(packetReceiveEvent), user);
             case PacketType.Play.Client.ANIMATION -> handleAnimation(new WrapperPlayClientAnimation(packetReceiveEvent), user);
             case PacketType.Play.Client.PLAYER_DIGGING -> handleDigging(new WrapperPlayClientPlayerDigging(packetReceiveEvent), user);
+            case PacketType.Play.Client.NAME_ITEM -> handleNameItem(new WrapperPlayClientNameItem(packetReceiveEvent), user);
             default -> {}
         }
     }
@@ -74,6 +77,22 @@ public class ProtocolListener implements PacketListener {
         if (data.getMapId() > 0) return;
         packetSendEvent.setCancelled(true);
     }
+
+    private void handleNameItem(WrapperPlayClientNameItem wrapperPlayClientNameItem, SunscreenUser<?> user) {
+        final Session session = user.session();
+        if (session == null) return;
+        final InputHandler inputHandler = session.menu().inputHandler();
+        final String input = wrapperPlayClientNameItem.getItemName();
+        if (input.length() == 50) {
+            System.out.println("get that man a true");
+            inputHandler.peek(TextInputContext.class, old -> old.append(input), user);
+            PlatformProtocolIntermediate protocolIntermediate = SunscreenLibrary.library().intermediate();
+            protocolIntermediate.openEmptyAnvil(user);
+            return;
+        }
+        inputHandler.peek(TextInputContext.class, old -> old.withStream(input), user);
+    }
+
 
     private void handleAnimation(WrapperPlayClientAnimation wrapperPlayClientAnimation, SunscreenUser<?> user) {
         final Session session = user.session();

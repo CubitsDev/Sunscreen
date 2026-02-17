@@ -2,11 +2,11 @@ package me.combimagnetron.sunscreen.protocol;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.component.ComponentTypes;
 import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemEquippable;
+import com.github.retrooper.packetevents.protocol.component.builtin.item.ItemModel;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.protocol.item.ItemStack;
 import com.github.retrooper.packetevents.protocol.item.type.ItemTypes;
@@ -20,8 +20,6 @@ import com.github.retrooper.packetevents.util.Vector3i;
 import com.github.retrooper.packetevents.wrapper.play.server.*;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import me.combimagnetron.passport.internal.entity.impl.Interaction;
-import me.combimagnetron.passport.internal.entity.impl.display.ItemDisplay;
 import me.combimagnetron.passport.internal.entity.impl.passive.horse.Horse;
 import me.combimagnetron.passport.internal.entity.impl.tile.ItemFrame;
 import me.combimagnetron.passport.internal.entity.metadata.type.Vector3d;
@@ -29,6 +27,7 @@ import me.combimagnetron.sunscreen.neo.protocol.PlatformProtocolIntermediate;
 import me.combimagnetron.sunscreen.neo.protocol.type.EntityReference;
 import me.combimagnetron.sunscreen.neo.protocol.type.Location;
 import me.combimagnetron.sunscreen.user.SunscreenUser;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -118,6 +117,7 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
         WrapperPlayServerBlockChange blockChange = new WrapperPlayServerBlockChange(new Vector3i((int) player.getX(), (int) player.getY() + 1, (int) player.getZ()), WrappedBlockState.getDefaultState(StateTypes.BARRIER));
         user.connection().send(new WrapperPlayServerEntityEffect(player.getEntityId(), PotionTypes.INVISIBILITY, 255, -1, ((byte) 0)));
         // todo: fix invis potion
+        player.setInvisible(true);
         user.connection().send(infoUpdate);
         user.connection().send(spawnEntity);
         user.connection().send(camera);
@@ -160,6 +160,7 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
         }
         user.connection().send(new WrapperPlayServerDestroyEntities(-10_000));
         trackedEntities.clear();
+        player.setInvisible(false);
         user.connection().send(new WrapperPlayServerPlayerPositionAndLook(user.position().x(), user.position().y(), user.position().z(), (float) initialRotation.x(), (float) initialRotation.y(), (byte)0, 0, false));
         user.connection().send(timeUpdate);
         user.connection().send(gameState);
@@ -172,6 +173,23 @@ public class SpigotPlatformProtocolIntermediate implements PlatformProtocolInter
     public void gameTime(@NotNull SunscreenUser<?> user) {
         WrapperPlayServerTimeUpdate time = new WrapperPlayServerTimeUpdate(-2000, (long) user.worldTime(), false);
         user.connection().send(time);
+    }
+
+    @Override
+    public void openEmptyAnvil(SunscreenUser<?> user) {
+        WrapperPlayServerOpenWindow openWindow = new WrapperPlayServerOpenWindow(-10_000, 8, Component.empty());
+        ArrayList<ItemStack> items = new ArrayList<>(
+            List.of(ItemStack.builder()
+                .type(ItemTypes.PAPER)
+                .component(ComponentTypes.ITEM_MODEL, new ItemModel(ResourceLocation.minecraft("air")))
+                .component(ComponentTypes.ITEM_NAME, Component.empty())
+                .amount(1)
+                .build())
+        );
+        items.addAll(Collections.nCopies(38, ItemStack.EMPTY));
+        WrapperPlayServerWindowItems windowItems = new WrapperPlayServerWindowItems(-10_000, 0, items, null);
+        user.connection().send(openWindow);
+        user.connection().send(windowItems);
     }
 
     private static @NotNull Vector3d loc2Vec3(@NotNull Location location) {
