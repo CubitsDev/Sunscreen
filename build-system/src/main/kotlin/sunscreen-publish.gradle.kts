@@ -6,7 +6,7 @@ publishing {
     repositories {
         maven {
             name = "combimagnetron"
-            url = uri("https://repo.tikite.ch/releases/")
+            url = uri("https://repo.combimagnetron.net/releases/")
             credentials(PasswordCredentials::class)
             authentication {
                 create<BasicAuthentication>("basic")

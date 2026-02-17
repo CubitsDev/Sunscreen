@@ -22,7 +22,7 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven("https://repo.tikite.ch/releases")
+        maven("https://repo.combimagnetron.net/releases")
         maven("https://jitpack.io")
         maven("https://repo.codemc.io/repository/maven-releases/")
         maven("https://repo.nexomc.com/releases")
