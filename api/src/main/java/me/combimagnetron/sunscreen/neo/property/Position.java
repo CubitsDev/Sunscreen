@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Position> implements Property<Vec2i, Position> {
     private static final PropertyHandler<Position> PROPERTY_HANDLER = (element, context, position) -> null;
@@ -22,6 +23,10 @@ public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Po
         super(vec2i);
     }
 
+    public Position(@NotNull Supplier<Vec2i> supplier) {
+        super(supplier);
+    }
+
     public Position(@NotNull RelativeMeasure.Vec2iRelativeMeasureGroup<?> measureGroup) {
         //axisMap.putAll((Map<? extends RelativeMeasure.Axis2d, Vec2iRelativeBuilder<Position>>) measureGroup.axisBuilderMap());
     }
@@ -32,6 +37,10 @@ public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Po
 
     public static @NotNull Position fixed(@NotNull Vec2i vec2i) {
         return new Position(vec2i);
+    }
+
+    public static @NotNull Position supplied(@NotNull Supplier<Vec2i> supplier) {
+        return new Position(supplier);
     }
 
     @Override
