@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  *
@@ -61,9 +62,15 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<?, 
         private final Map<Axis2d, Vec2iRelativeBuilder<C>> axisBuilderMap = Map.of(Axis2d.X, new Vec2iRelativeBuilder<>(this), Axis2d.Y, new Vec2iRelativeBuilder<>(this));
         private final Function<Vec2iRelativeMeasureGroup<C>, C> constructor;
         protected Vec2i vec2i;
+        protected Supplier<Vec2i> supplier;
 
         public Vec2iRelativeMeasureGroup(@NotNull Vec2i vec2i) {
             this.vec2i = vec2i;
+            constructor = (cVec2iRelativeMeasureGroup -> null);
+        }
+
+        public Vec2iRelativeMeasureGroup(@NotNull Supplier<Vec2i> supplier) {
+            this.supplier = supplier;
             constructor = (cVec2iRelativeMeasureGroup -> null);
         }
 
@@ -84,7 +91,7 @@ public interface RelativeMeasure<C, K, I, B extends RuntimeDefinable.Builder<?, 
         }
 
         public @Nullable Vec2i value() {
-            return vec2i;
+            return supplier == null ? vec2i : supplier.get();
         }
 
         public abstract void finish(@NotNull Viewport screenSize);
