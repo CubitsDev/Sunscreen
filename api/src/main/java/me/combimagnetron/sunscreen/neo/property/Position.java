@@ -39,6 +39,10 @@ public final class Position extends RelativeMeasure.Vec2iRelativeMeasureGroup<Po
         return new Position(vec2i);
     }
 
+    public static @NotNull Position supplied(@NotNull Supplier<Vec2i> supplier) {
+        return new Position(supplier);
+    }
+
     @Override
     public @NotNull Class<Vec2i> type() {
         return Vec2i.class;
